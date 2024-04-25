@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "551161931218",
+    "firebase_url": "https://fypquiz-55f06-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "fypquiz-55f06",
+    "storage_bucket": "fypquiz-55f06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551161931218:android:25956a9fec07a168add40b",
+        "android_client_info": {
+          "package_name": "com.example.fyp1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmCYfrD1eScI9aBzl6usFfEEFK9hlk-XU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551161931218:android:5211080e591e9f1fadd40b",
+        "android_client_info": {
+          "package_name": "com.example.fypquiz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmCYfrD1eScI9aBzl6usFfEEFK9hlk-XU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
