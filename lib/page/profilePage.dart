@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp1/page/historyPage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -344,6 +345,18 @@ class _ProfileViewState extends State<ProfileView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => RankView()),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.abc_outlined),
+                      color: Colors.white,
+                      iconSize: 35,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HistoryView()),
                         );
                       },
                     ),

@@ -38,9 +38,8 @@ class _SetListViewState extends State<SetListView> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return SafeArea(
+      child: Scaffold(
         body: SingleChildScrollView(
           child: Column(
             children: [

@@ -79,6 +79,34 @@ class _ResultViewState extends State<ResultView> {
     }
   }
 
+  void _storeInHistory() async {
+    try {
+      // Get the current date and time
+      DateTime now = DateTime.now();
+
+      // Extract the date and time components
+      String currentDate = '${now.year}-${now.month}-${now.day}';
+      String currentTime = '${now.hour}:${now.minute}:${now.second}';
+      // Store the result data in the "history" collection
+      await FirebaseFirestore.instance.collection('history').add({
+        'userId': user.uid,
+        'username': _username,
+        'correctCount': widget.correctCount,
+        'score': widget.score,
+        'wrongCount': widget.wrongCount,
+        'unansweredCount': widget.unansweredCount,
+        'setnum': widget.setnum,
+        'chapter': widget.chapter,
+        'timeSpent': widget.elapsedTime,
+        'currentDate': currentDate,
+        'currentTime': currentTime, // This adds the current timestamp
+      });
+    } catch (error) {
+      // Handle any errors that occur during storing in history
+      print('Error storing in history: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     int answered = 5 - widget.unansweredCount;
@@ -253,6 +281,7 @@ class _ResultViewState extends State<ResultView> {
                                   )),
                               onTap: () {
                                 _updateUserScore(currentScore);
+                                _storeInHistory();
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
