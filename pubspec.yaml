@@ -41,6 +41,7 @@ dependencies:
   get: ^4.6.6
   image_picker: ^0.8.4+2
   firebase_storage: ^11.7.2
+  ionicons: ^0.2.2
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,7 @@ flutter:
   - assets/hysto_logo.png
   - assets/rentap.png
   - assets/hystologo.png
+  - assets/quiz_bulb.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

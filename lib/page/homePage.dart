@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp1/page/LoginPage.dart';
 import 'package:fyp1/page/profilePage.dart';
 import 'package:fyp1/page/rankPage.dart';
 import 'package:fyp1/page/setListPage.dart';
@@ -141,7 +142,7 @@ class _HomeViewState extends State<HomeView> {
                               style: TextStyle(
                                   fontSize: 23, fontWeight: FontWeight.bold),
                             ),
-                            Container(
+                            SizedBox(
                               height: 80,
                               width: 70,
                               child: CircularProgressIndicator(
@@ -160,27 +161,25 @@ class _HomeViewState extends State<HomeView> {
                             )
                           ],
                         )),
-                    Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            'Score',
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            score.toString(),
-                            style: TextStyle(
-                                fontSize: 80, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'pts',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500),
-                          )
-                        ],
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          'Score',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          score.toString(),
+                          style: TextStyle(
+                              fontSize: 80, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'pts',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500),
+                        )
+                      ],
                     )
                   ],
                 ),

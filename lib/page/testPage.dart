@@ -1,21 +1,20 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:fyp1/page/resultPage.dart';
 
-class QuizView extends StatefulWidget {
+class TestView extends StatefulWidget {
   final String setnum;
   final String chapternum;
-
-  const QuizView({Key? key, required this.setnum, required this.chapternum})
+  const TestView({Key? key, required this.setnum, required this.chapternum})
       : super(key: key);
 
   @override
-  State<QuizView> createState() => _QuizViewState();
+  State<TestView> createState() => _TestViewState();
 }
 
-class _QuizViewState extends State<QuizView> {
+class _TestViewState extends State<TestView> {
   late Stream<QuerySnapshot> _questionsStream;
   late int _currentQuestionIndex = 0;
   late List<DocumentSnapshot> _questions = [];
@@ -72,59 +71,19 @@ class _QuizViewState extends State<QuizView> {
     int totalQuestions = _questions.length;
     double progressPercentage = _currentQuestionIndex / totalQuestions;
 
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          color: Colors.blueGrey,
+    return Scaffold(
+      backgroundColor: Colors.blueAccent,
+      body: Center(
+        child: Container(
+          width: 400,
+          height: 700,
+          color: Colors.white,
           child: Column(
             children: [
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.white),
-                      child: IconButton(
-                        icon: Icon(Icons.keyboard_double_arrow_left),
-                        color: Colors.black,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    Text(
-                      'Time Elapsed: $_elapsedTime',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      '${_currentQuestionIndex + 1} of ${_questions.length}',
-                      style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.white),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: 100,
-                      height: 45,
-                      decoration: BoxDecoration(
-                          color: Colors.lightBlue,
-                          borderRadius: BorderRadius.circular(50)),
-                      child: Text(
-                        'Score: $_score',
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
+              Text(
+                'Time Elapsed: $_elapsedTime',
+                style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 10),
               LinearProgressIndicator(
                 value: _progress,
                 minHeight: 20,
@@ -132,7 +91,6 @@ class _QuizViewState extends State<QuizView> {
                 backgroundColor: Colors.grey,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
               ),
-              SizedBox(height: 30),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: _questionsStream,
@@ -179,12 +137,8 @@ class _QuizViewState extends State<QuizView> {
                     },
                     child: Text('Skip'),
                   ),
-                  Text('Correct: $_correctCount'),
-                  Text('Wrong: $_wrongCount'),
-                  Text('Unanswered: $_unansweredCount'),
                 ],
               ),
-              SizedBox(height: 20),
             ],
           ),
         ),

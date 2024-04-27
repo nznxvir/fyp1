@@ -104,7 +104,8 @@ class _SetListViewState extends State<SetListView> {
                             );
 
                           var sets = snapshot.data!.docs;
-                          sets.sort((a, b) => a['setid'].compareTo(b['setid']));
+                          sets.sort(
+                              (a, b) => a['setnum'].compareTo(b['setnum']));
 
                           return ListView.builder(
                             itemCount: sets.length,
@@ -161,7 +162,7 @@ class _SetListViewState extends State<SetListView> {
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(15))),
                                             child: Text(
-                                              setDoc['setid'],
+                                              setDoc['setnum'],
                                               style: TextStyle(
                                                   fontSize: 52,
                                                   fontWeight: FontWeight.bold),
@@ -184,12 +185,6 @@ class _SetListViewState extends State<SetListView> {
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w900,
                                               ),
-                                            ),
-                                            Text(
-                                              'Tahap: ' + setDoc['difficulty'],
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w900),
                                             ),
                                             Text(
                                               'Masa: ' +
@@ -216,8 +211,10 @@ class _SetListViewState extends State<SetListView> {
                                                       MaterialPageRoute(
                                                         builder: (context) =>
                                                             QuizView(
-                                                                setId: setDoc[
-                                                                    'setid']),
+                                                                setnum: setDoc[
+                                                                    'setnum'],
+                                                                chapternum: setDoc[
+                                                                    'chapter']),
                                                       ),
                                                     );
                                                   },
