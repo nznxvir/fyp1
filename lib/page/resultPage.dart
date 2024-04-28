@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fyp1/page/homePage.dart';
+import 'package:lottie/lottie.dart';
 
 class ResultView extends StatefulWidget {
   final int correctCount;
@@ -295,6 +296,7 @@ class _ResultViewState extends State<ResultView> {
                     ),
                   ),
                 ),
+                Lottie.asset('assets/animation/congrat.json', repeat: false),
                 Positioned(
                   top: 0,
                   left: 0,

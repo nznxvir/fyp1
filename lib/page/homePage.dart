@@ -91,14 +91,16 @@ class _HomeViewState extends State<HomeView> {
                               style: TextStyle(
                                   color: Color(0xFFC6A969),
                                   fontSize: 18,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: 'Ubuntu'),
                             ),
                             Text(
                               username,
                               style: TextStyle(
                                   color: Color(0xFFC6A969),
                                   fontSize: 33,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Ubuntu'),
                             ),
                           ],
                         )

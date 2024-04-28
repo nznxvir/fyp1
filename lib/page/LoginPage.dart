@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp1/page/RegisterPage.dart';
-import 'package:fyp1/page/homePage.dart';
+
+import 'package:fyp1/page/verifySplash.dart';
 
 import '../Constructor/AuthService.dart';
 import '../Constructor/appvalidator.dart';
@@ -49,7 +50,7 @@ class _SignInPageState extends State<SignInPage> {
         Future.delayed(Duration(seconds: 1), () {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeView()),
+            MaterialPageRoute(builder: (context) => VerifySplash()),
           );
         });
       });
