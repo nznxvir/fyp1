@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp1/page/historyPage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,6 +23,8 @@ class _ProfileViewState extends State<ProfileView> {
   final user = FirebaseAuth.instance.currentUser!;
   late String username = '';
   late String age = '';
+  late String email = '';
+  late int score = 0;
   late String password;
   String? imageurl;
   File? _image;
@@ -44,6 +47,8 @@ class _ProfileViewState extends State<ProfileView> {
       username = userDoc['username'];
       age = userDoc['age'];
       imageurl = userDoc['imageurl'];
+      score = userDoc['score'];
+      email = userDoc['email'];
     });
   }
 
@@ -155,236 +160,423 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Container(
-                padding: EdgeInsets.only(top: 50),
-                width: double.infinity,
-                height: 300,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.horizontal(
-                      right: Radius.circular(30), left: Radius.circular(30)),
-                  color: Color(0xFF074173),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        _getImage();
-                      },
-                      child: Container(
+              Stack(children: [
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                  width: double.infinity,
+                  height: 330,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(50),
+                        bottomRight: Radius.circular(50)),
+                    color: Color(0xFF074173),
+                  ),
+                  child: Column(
+                    children: [
+                      Stack(children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(100)),
+                              color: Colors.white),
+                          width: 120,
+                          height: 120,
+                          child: ClipOval(
+                            child: imageurl != null
+                                ? Image.network(
+                                    imageurl!,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image(
+                                    image: AssetImage('assets/rentap.png'),
+                                  ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFFFC55A)),
+                            child: IconButton(
+                              icon: Icon(Icons.edit),
+                              color: Color(0xFF074173),
+                              onPressed: () {
+                                _getImage();
+                              },
+                            ),
+                          ),
+                        ),
+                      ]),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Container(
+                        width: 350,
+                        height: 45,
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(100)),
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.5),
+                                spreadRadius: 3,
+                                blurRadius: 10,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              )
+                            ],
                             color: Colors.white),
-                        width: 150,
-                        height: 150,
-                        child: ClipOval(
-                          child: imageurl != null
-                              ? Image.network(
-                                  imageurl!,
-                                  fit: BoxFit.cover,
-                                )
-                              : Image(
-                                  image: AssetImage('assets/rentap.png'),
-                                ),
+                        child: Text(
+                          username,
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Rubik',
+                              color: Color(0xFF074173)),
                         ),
                       ),
-                    ),
-                    Text(
-                      username,
-                      style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Poppins',
-                          color: Color(0xFFC6A969)),
-                    ),
-                    Text(
-                      age,
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Poppins',
-                          color: Color(0xFFC6A969)),
-                    ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(30, 240, 30, 50),
+                  width: 400,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 10,
+                        offset: Offset(0, 3), // changes position of shadow
+                      )
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: 120,
+                        height: 130,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Tukar nama',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'Rubik',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF074173))),
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              color: Color(0xFF074173),
+                              iconSize: 40,
+                              onPressed: () {
+                                _changeName(context);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 130,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Tukar kata laluan',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'Rubik',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF074173))),
+                            IconButton(
+                              icon: Icon(Icons.password_rounded),
+                              color: Color(0xFF074173),
+                              iconSize: 40,
+                              onPressed: () {
+                                _ChangePassword(context);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 120,
+                        height: 130,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            color: Colors.white),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Set semula markah',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'Rubik',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF074173))),
+                            IconButton(
+                              icon: Icon(Icons.refresh),
+                              color: Color(0xFF074173),
+                              iconSize: 40,
+                              onPressed: () {
+                                _ResetScore(context);
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ]),
+              Container(
+                margin: EdgeInsets.only(right: 30, left: 30),
+                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                width: double.infinity,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: Offset(0, 3), // changes position of shadow
+                    )
                   ],
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 40, left: 20, right: 20),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    color: Color(0xFF5F6F52)),
-                width: double.infinity,
-                height: 58,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Edit Username',
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        color: Color(0xFFC6A969),
-                        iconSize: 35,
-                        onPressed: () {
-                          _changeName(context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    color: Color(0xFF5F6F52)),
-                width: double.infinity,
-                height: 58,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Change passsword',
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        color: Color(0xFFC6A969),
-                        iconSize: 35,
-                        onPressed: () {
-                          _ChangePassword(context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin:
-                    EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 40),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    color: Color(0xFF5F6F52)),
-                width: double.infinity,
-                height: 58,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Reset Score',
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        color: Color(0xFFC6A969),
-                        iconSize: 35,
-                        onPressed: () {
-                          _ResetScore(context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  logout();
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStatePropertyAll<Color>(Color(0xFF5F6F52)),
-                  minimumSize: MaterialStateProperty.all<Size>(Size(270, 64)),
-                ),
-                child: Text(
-                  'Logout',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 60, 20, 10),
-                height: 65,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Color(0xFF5F6F52)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Column(
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.leaderboard),
-                      color: Colors.white,
-                      iconSize: 35,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => RankView()),
-                        );
-                      },
+                    Text(
+                      'Maklumat Pengguna',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: 'Rubik',
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.abc_outlined),
-                      color: Colors.white,
-                      iconSize: 35,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HistoryView()),
-                        );
-                      },
+                    SizedBox(
+                      height: 5,
                     ),
-                    IconButton(
-                      icon: Icon(Icons.home_filled),
-                      color: Colors.white,
-                      iconSize: 35,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeView()),
-                        );
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Nama',
+                          style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Text(username,
+                            style: TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.grey))
+                      ],
                     ),
-                    IconButton(
-                      icon: Icon(Icons.person),
-                      color: Color(0xFFC6A969),
-                      iconSize: 35,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileView()),
-                        );
-                      },
+                    SizedBox(
+                      height: 5,
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Email',
+                          style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Text(email,
+                            style: TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.grey))
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Umur',
+                          style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Text(age,
+                            style: TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.grey))
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Skor',
+                          style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Text(score.toString(),
+                            style: TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.grey))
+                      ],
+                    )
                   ],
                 ),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    logout();
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 280,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Color(0xFF074173)),
+                    child: Text(
+                      'Log Keluar',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: 'Rubik',
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+          height: 65,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Color(0xFF074173)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(Icons.leaderboard),
+                color: Colors.white,
+                iconSize: 35,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(milliseconds: 300),
+                      pageBuilder: (_, __, ___) => RankView(),
+                      transitionsBuilder: (_, animation, __, child) {
+                        return Stack(
+                          children: [
+                            SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset.zero,
+                                end: Offset(1.0, 0.0),
+                              ).animate(animation),
+                              child: child,
+                            ),
+                            SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset(-1.0, 0.0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child:
+                                  RankView(), // Replace with your current page content
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.home_filled),
+                color: Colors.white,
+                iconSize: 35,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(milliseconds: 300),
+                      pageBuilder: (_, __, ___) => HomeView(),
+                      transitionsBuilder: (_, animation, __, child) {
+                        return Stack(
+                          children: [
+                            SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset.zero,
+                                end: Offset(1.0, 0.0),
+                              ).animate(animation),
+                              child: child,
+                            ),
+                            SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset(-1.0, 0.0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child:
+                                  HomeView(), // Replace with your current page content
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.person),
+                color: Color(0xFFFFC55A),
+                iconSize: 35,
+                onPressed: () {},
               ),
             ],
           ),

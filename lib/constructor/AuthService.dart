@@ -40,15 +40,7 @@ class AuthService {
         email: data['email'],
         password: data['password'],
       );
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Login Successful"),
-            content: Text("You have successfully logged in."),
-          );
-        },
-      );
+
       onSuccess();
     } catch (e) {
       showDialog(

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fyp1/page/RegisterPage.dart';
 
 import 'package:fyp1/page/verifySplash.dart';
@@ -50,7 +51,23 @@ class _SignInPageState extends State<SignInPage> {
         Future.delayed(Duration(seconds: 1), () {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => VerifySplash()),
+            PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 500),
+              pageBuilder: (_, __, ___) => VerifySplash(),
+              transitionsBuilder: (_, animation, __, child) {
+                var begin = Offset(0.0, 1.0);
+                var end = Offset.zero;
+                var curve = Curves.ease;
+
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
+
+                return SlideTransition(
+                  position: animation.drive(tween),
+                  child: child,
+                );
+              },
+            ),
           );
         });
       });
@@ -69,132 +86,181 @@ class _SignInPageState extends State<SignInPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Form(
             key: _formKey,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 30),
-                decoration: const BoxDecoration(
-                    color: Color(0xFF5F6F52),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30))),
-                alignment: Alignment.center,
-                height: 250,
-                width: double.infinity,
-                child: const Image(
-                  image: AssetImage('assets/hysto_logo.png'),
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  child: Image(
+                    alignment: Alignment.center,
+                    image: AssetImage('assets/login.jpg'),
+                    width: 400,
+                    height: 400,
+                  ),
                 ),
-              ),
-              const Text(
-                'Welcome Back',
-                style: TextStyle(
-                    fontSize: 30,
-                    color: Color(0xFF5F6F52),
-                    fontWeight: FontWeight.bold),
-              ),
-              Container(
-                  margin: EdgeInsets.fromLTRB(20, 10, 20, 5),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 15),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 10, bottom: 10),
-                        child: TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: appValidator.validateEmail,
-                          decoration: InputDecoration(
-                              hoverColor: Color(0xFF5F6F52),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              prefixIcon: Icon(
-                                Icons.email,
-                                color: Color(0xFFC6A969),
-                              ),
-                              hintText: 'Email',
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 2.5, color: Color(0xFF5F6F52)),
-                                  borderRadius: BorderRadius.circular(10))),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Selamat Kembali',
+                          style: TextStyle(
+                              fontFamily: 'Ubuntu',
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black),
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10, bottom: 10),
-                        child: TextFormField(
-                          controller: _passwordController,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: appValidator.validatePassword,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              hoverColor: Color(0xFF5F6F52),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              prefixIcon: Icon(
-                                Icons.password,
-                                color: Color(0xFFC6A969),
-                              ),
-                              hintText: 'Password',
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 2.5, color: Color(0xFF5F6F52)),
-                                  borderRadius: BorderRadius.circular(10))),
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: 20, bottom: 10, right: 70, left: 70),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            isLoader ? print("loading") : _submitForm();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors
-                                .black, // Sets the background color to black
-                          ),
-                          child: isLoader
-                              ? const Center(child: CircularProgressIndicator())
-                              : const Text(
-                                  "Login",
-                                  style: TextStyle(
-                                    color: Colors
-                                        .white, // Sets the text color to white
-                                  ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10, bottom: 10),
+                          child: TextFormField(
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: appValidator.validateEmail,
+                            decoration: InputDecoration(
+                                hoverColor: Color(0xFF074173),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                prefixIcon: Icon(
+                                  Icons.email,
+                                  color: Color(0xFF074173),
                                 ),
+                                hintText: 'Email',
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      width: 4,
+                                      color: Color(0xFF074173),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10))),
+                          ),
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10, right: 40, left: 40),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              'Dont have acconut yet?',
-                              style: TextStyle(fontSize: 15),
+                        Container(
+                          margin: EdgeInsets.only(top: 10, bottom: 10),
+                          child: TextFormField(
+                            controller: _passwordController,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: appValidator.validatePassword,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                                hoverColor: Color(0xFF074173),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                prefixIcon: Icon(
+                                  Icons.password,
+                                  color: Color(0xFF074173),
+                                ),
+                                hintText: 'Password',
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      width: 4,
+                                      color: Color(0xFF074173),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10))),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: 500,
+                          height: 65,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              isLoader ? print("loading") : _submitForm();
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF074173),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)))),
+                            child: isLoader
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                : const Text(
+                                    "Log Masuk",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Center(
+                          child: Text(
+                            "Atau",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontFamily: 'Rubik'),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Container(
+                          width: 500,
+                          height: 65,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  transitionDuration:
+                                      Duration(milliseconds: 300),
+                                  pageBuilder: (_, __, ___) => RegisterPage(),
+                                  transitionsBuilder:
+                                      (_, animation, __, child) {
+                                    return Stack(
+                                      children: [
+                                        SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: Offset.zero,
+                                            end: Offset(-1.0, 0.0),
+                                          ).animate(animation),
+                                          child: child,
+                                        ),
+                                        SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: Offset(1.0, 0.0),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child:
+                                              RegisterPage(), // Replace with your current page content
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF074173),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisterPage()),
-                                );
-                              },
-                              child: Text('Create account',
-                                  style: TextStyle(
-                                      color: Color(0xFF5F6F52),
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold)),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ))
-            ]),
+                            child: Text(
+                              "Daftar Pengguna",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                          ),
+                        )
+                      ]),
+                ),
+              ],
+            ),
           ),
         ),
       ),

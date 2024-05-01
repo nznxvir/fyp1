@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp1/page/apploadsplash.dart';
 import 'package:get/get.dart';
-
 import 'firebase_options.dart';
 
 void main() async {
