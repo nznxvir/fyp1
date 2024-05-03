@@ -145,7 +145,7 @@ class _SetListViewState extends State<SetListView> {
                                         BorderRadius.all(Radius.circular(15)),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
+                                        color: Colors.grey.withOpacity(0.8),
                                         spreadRadius: 2,
                                         blurRadius: 5,
                                         offset: Offset(

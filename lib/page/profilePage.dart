@@ -255,9 +255,9 @@ class _ProfileViewState extends State<ProfileView> {
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.grey.withOpacity(0.8),
                         spreadRadius: 2,
-                        blurRadius: 10,
+                        blurRadius: 5,
                         offset: Offset(0, 3), // changes position of shadow
                       )
                     ],
@@ -284,7 +284,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     color: Color(0xFF074173))),
                             IconButton(
                               icon: Icon(Icons.edit),
-                              color: Color(0xFF074173),
+                              color: Color(0xFFFFC55A),
                               iconSize: 40,
                               onPressed: () {
                                 _changeName(context);
@@ -312,7 +312,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     color: Color(0xFF074173))),
                             IconButton(
                               icon: Icon(Icons.password_rounded),
-                              color: Color(0xFF074173),
+                              color: Color(0xFFFFC55A),
                               iconSize: 40,
                               onPressed: () {
                                 _ChangePassword(context);
@@ -339,7 +339,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     color: Color(0xFF074173))),
                             IconButton(
                               icon: Icon(Icons.refresh),
-                              color: Color(0xFF074173),
+                              color: Color(0xFFFFC55A),
                               iconSize: 40,
                               onPressed: () {
                                 _ResetScore(context);
@@ -362,9 +362,9 @@ class _ProfileViewState extends State<ProfileView> {
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.grey.withOpacity(0.8),
                       spreadRadius: 2,
-                      blurRadius: 10,
+                      blurRadius: 5,
                       offset: Offset(0, 3), // changes position of shadow
                     )
                   ],

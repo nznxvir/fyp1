@@ -231,7 +231,7 @@ class RankTile extends StatelessWidget {
         border: Border.all(color: borderColor, width: 5), // Set border color
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withOpacity(0.8),
             spreadRadius: 1,
             blurRadius: 2,
             offset: Offset(0, 1),
@@ -254,7 +254,6 @@ class RankTile extends StatelessWidget {
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                        border: Border.all(width: 5, color: Color(0xFFFFC55A)),
                         shape: BoxShape.circle,
                         color: Color(0xFFFFC55A),
                         image: DecorationImage(
@@ -266,7 +265,7 @@ class RankTile extends StatelessWidget {
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Rubik',
-                          color: Color(0xFF5F6F52)))
+                          color: Color(0xFF074173)))
                 ],
               ),
               Text(score.toString(),
@@ -274,7 +273,7 @@ class RankTile extends StatelessWidget {
                       fontSize: 40,
                       fontWeight: FontWeight.w700,
                       fontFamily: 'Rubik',
-                      color: Color(0xFF5F6F52))),
+                      color: Color(0xFF074173))),
             ],
           ),
         ],

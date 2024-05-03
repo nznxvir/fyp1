@@ -124,8 +124,6 @@ class _HomeViewState extends State<HomeView> {
                             width: 100,
                             height: 100,
                             decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 5, color: Color(0xFFFFC55A)),
                                 shape: BoxShape.circle,
                                 color: Color(0xFFFFC55A),
                                 image: DecorationImage(
@@ -152,9 +150,9 @@ class _HomeViewState extends State<HomeView> {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.grey.withOpacity(0.8),
                         spreadRadius: 2,
-                        blurRadius: 10,
+                        blurRadius: 5,
                         offset: Offset(0, 3), // changes position of shadow
                       )
                     ],
@@ -271,7 +269,7 @@ class _HomeViewState extends State<HomeView> {
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
+                          color: Colors.grey.withOpacity(0.8),
 
                           spreadRadius: 2,
                           blurRadius: 5,
