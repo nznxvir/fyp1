@@ -89,7 +89,7 @@ class _ProfileViewState extends State<ProfileView> {
             .update({'password': newPassword});
 
         // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Password changed successfully"),
         ));
 
@@ -101,7 +101,7 @@ class _ProfileViewState extends State<ProfileView> {
       print("Error changing password: $error");
 
       // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Failed to change password. Please try again."),
       ));
     }
@@ -152,7 +152,7 @@ class _ProfileViewState extends State<ProfileView> {
         });
       } catch (e) {
         print(e);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('Failed to upload image. Please try again.')));
       }
     }
@@ -168,10 +168,10 @@ class _ProfileViewState extends State<ProfileView> {
             children: [
               Stack(children: [
                 Container(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 10),
                   width: double.infinity,
                   height: 330,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(50),
                         bottomRight: Radius.circular(50)),
@@ -181,7 +181,7 @@ class _ProfileViewState extends State<ProfileView> {
                     children: [
                       Stack(children: [
                         Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(100)),
                               color: Colors.white),
@@ -193,7 +193,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     imageurl!,
                                     fit: BoxFit.cover,
                                   )
-                                : Image(
+                                : const Image(
                                     image: AssetImage('assets/rentap.png'),
                                   ),
                           ),
@@ -202,12 +202,12 @@ class _ProfileViewState extends State<ProfileView> {
                           bottom: 0,
                           right: 0,
                           child: Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Color(0xFFFFC55A)),
                             child: IconButton(
-                              icon: Icon(Icons.edit),
-                              color: Color(0xFF074173),
+                              icon: const Icon(Icons.edit),
+                              color: const Color(0xFF074173),
                               onPressed: () {
                                 _getImage();
                               },
@@ -215,7 +215,7 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                         ),
                       ]),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       Container(
@@ -223,20 +223,21 @@ class _ProfileViewState extends State<ProfileView> {
                         height: 45,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(15)),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.5),
                                 spreadRadius: 3,
                                 blurRadius: 10,
-                                offset:
-                                    Offset(0, 3), // changes position of shadow
+                                offset: const Offset(
+                                    0, 3), // changes position of shadow
                               )
                             ],
                             color: Colors.white),
                         child: Text(
                           username,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Rubik',
@@ -247,18 +248,19 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(30, 240, 30, 50),
+                  margin: const EdgeInsets.fromLTRB(30, 240, 30, 50),
                   width: 400,
                   height: 150,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.8),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
                       )
                     ],
                   ),
@@ -268,14 +270,14 @@ class _ProfileViewState extends State<ProfileView> {
                       Container(
                         width: 120,
                         height: 130,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
                           color: Colors.white,
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Tukar nama',
+                            const Text('Tukar nama',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Rubik',
@@ -283,8 +285,8 @@ class _ProfileViewState extends State<ProfileView> {
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF074173))),
                             IconButton(
-                              icon: Icon(Icons.edit),
-                              color: Color(0xFFFFC55A),
+                              icon: const Icon(Icons.edit),
+                              color: const Color(0xFFFFC55A),
                               iconSize: 40,
                               onPressed: () {
                                 _changeName(context);
@@ -296,14 +298,14 @@ class _ProfileViewState extends State<ProfileView> {
                       Container(
                         width: 100,
                         height: 130,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
                           color: Colors.white,
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Tukar kata laluan',
+                            const Text('Tukar kata laluan',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Rubik',
@@ -311,8 +313,8 @@ class _ProfileViewState extends State<ProfileView> {
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF074173))),
                             IconButton(
-                              icon: Icon(Icons.password_rounded),
-                              color: Color(0xFFFFC55A),
+                              icon: const Icon(Icons.password_rounded),
+                              color: const Color(0xFFFFC55A),
                               iconSize: 40,
                               onPressed: () {
                                 _ChangePassword(context);
@@ -324,13 +326,13 @@ class _ProfileViewState extends State<ProfileView> {
                       Container(
                         width: 120,
                         height: 130,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             color: Colors.white),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Set semula markah',
+                            const Text('Set semula markah',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Rubik',
@@ -338,8 +340,8 @@ class _ProfileViewState extends State<ProfileView> {
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF074173))),
                             IconButton(
-                              icon: Icon(Icons.refresh),
-                              color: Color(0xFFFFC55A),
+                              icon: const Icon(Icons.refresh),
+                              color: const Color(0xFFFFC55A),
                               iconSize: 40,
                               onPressed: () {
                                 _ResetScore(context);
@@ -353,25 +355,25 @@ class _ProfileViewState extends State<ProfileView> {
                 )
               ]),
               Container(
-                margin: EdgeInsets.only(right: 30, left: 30),
-                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                margin: const EdgeInsets.only(right: 30, left: 30),
+                padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                 width: double.infinity,
                 height: 200,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.8),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 3), // changes position of shadow
                     )
                   ],
                 ),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       'Maklumat Pengguna',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -379,13 +381,13 @@ class _ProfileViewState extends State<ProfileView> {
                           fontSize: 20,
                           fontWeight: FontWeight.w700),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Nama',
                           style: TextStyle(
                               fontFamily: 'Rubik',
@@ -393,20 +395,20 @@ class _ProfileViewState extends State<ProfileView> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(username,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Rubik',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.grey))
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Email',
                           style: TextStyle(
                               fontFamily: 'Rubik',
@@ -414,20 +416,20 @@ class _ProfileViewState extends State<ProfileView> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(email,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Rubik',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.grey))
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Umur',
                           style: TextStyle(
                               fontFamily: 'Rubik',
@@ -435,20 +437,20 @@ class _ProfileViewState extends State<ProfileView> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(age,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Rubik',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.grey))
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Skor',
                           style: TextStyle(
                               fontFamily: 'Rubik',
@@ -456,7 +458,7 @@ class _ProfileViewState extends State<ProfileView> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(score.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Rubik',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
@@ -466,7 +468,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               GestureDetector(
@@ -477,10 +479,10 @@ class _ProfileViewState extends State<ProfileView> {
                     alignment: Alignment.center,
                     width: 280,
                     height: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: Color(0xFF074173)),
-                    child: Text(
+                    child: const Text(
                       'Log Keluar',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -494,41 +496,41 @@ class _ProfileViewState extends State<ProfileView> {
           ),
         ),
         bottomNavigationBar: Container(
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+          margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
           height: 65,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: Color(0xFF074173)),
+              color: const Color(0xFF074173)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(
-                icon: Icon(Icons.leaderboard),
+                icon: const Icon(Icons.leaderboard),
                 color: Colors.white,
                 iconSize: 35,
                 onPressed: () {
                   Navigator.push(
                     context,
                     PageRouteBuilder(
-                      transitionDuration: Duration(milliseconds: 300),
-                      pageBuilder: (_, __, ___) => RankView(),
+                      transitionDuration: const Duration(milliseconds: 300),
+                      pageBuilder: (_, __, ___) => const RankView(),
                       transitionsBuilder: (_, animation, __, child) {
                         return Stack(
                           children: [
                             SlideTransition(
                               position: Tween<Offset>(
                                 begin: Offset.zero,
-                                end: Offset(1.0, 0.0),
+                                end: const Offset(0.5, 0.0),
                               ).animate(animation),
                               child: child,
                             ),
                             SlideTransition(
                               position: Tween<Offset>(
-                                begin: Offset(-1.0, 0.0),
+                                begin: const Offset(-0.5, 0.0),
                                 end: Offset.zero,
                               ).animate(animation),
                               child:
-                                  RankView(), // Replace with your current page content
+                                  const RankView(), // Replace with your current page content
                             ),
                           ],
                         );
@@ -538,32 +540,32 @@ class _ProfileViewState extends State<ProfileView> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.home_filled),
+                icon: const Icon(Icons.home_filled),
                 color: Colors.white,
                 iconSize: 35,
                 onPressed: () {
                   Navigator.push(
                     context,
                     PageRouteBuilder(
-                      transitionDuration: Duration(milliseconds: 300),
-                      pageBuilder: (_, __, ___) => HomeView(),
+                      transitionDuration: const Duration(milliseconds: 300),
+                      pageBuilder: (_, __, ___) => const HomeView(),
                       transitionsBuilder: (_, animation, __, child) {
                         return Stack(
                           children: [
                             SlideTransition(
                               position: Tween<Offset>(
                                 begin: Offset.zero,
-                                end: Offset(1.0, 0.0),
+                                end: const Offset(0.5, 0.0),
                               ).animate(animation),
                               child: child,
                             ),
                             SlideTransition(
                               position: Tween<Offset>(
-                                begin: Offset(-1.0, 0.0),
+                                begin: const Offset(-0.5, 0.0),
                                 end: Offset.zero,
                               ).animate(animation),
                               child:
-                                  HomeView(), // Replace with your current page content
+                                  const HomeView(), // Replace with your current page content
                             ),
                           ],
                         );
@@ -573,8 +575,8 @@ class _ProfileViewState extends State<ProfileView> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.person),
-                color: Color(0xFFFFC55A),
+                icon: const Icon(Icons.person),
+                color: const Color(0xFFFFC55A),
                 iconSize: 35,
                 onPressed: () {},
               ),
@@ -590,8 +592,8 @@ class _ProfileViewState extends State<ProfileView> {
     return showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      backgroundColor: Color(0xFF5F6F52),
-      shape: RoundedRectangleBorder(
+      backgroundColor: const Color(0xFF5F6F52),
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Padding(
@@ -603,10 +605,10 @@ class _ProfileViewState extends State<ProfileView> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       'Change Username',
                       style: TextStyle(
                         fontSize: 28,
@@ -624,14 +626,14 @@ class _ProfileViewState extends State<ProfileView> {
                           fillColor: Colors.white,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFFC6A969),
                               width: 3,
                             ),
                           ),
                           hintText: 'New username',
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               width: 3,
                               color: Color.fromRGBO(198, 169, 105, 1),
                             ),
@@ -653,9 +655,9 @@ class _ProfileViewState extends State<ProfileView> {
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   Colors.white),
                               minimumSize: MaterialStateProperty.all<Size>(
-                                  Size(130, 60)),
+                                  const Size(130, 60)),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Cancel',
                               style:
                                   TextStyle(color: Colors.black, fontSize: 18),
@@ -668,11 +670,11 @@ class _ProfileViewState extends State<ProfileView> {
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFFC6A969)),
+                                  const Color(0xFFC6A969)),
                               minimumSize: MaterialStateProperty.all<Size>(
-                                  Size(130, 60)),
+                                  const Size(130, 60)),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Save',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18),
@@ -696,8 +698,8 @@ class _ProfileViewState extends State<ProfileView> {
     return showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      backgroundColor: Color(0xFF5F6F52),
-      shape: RoundedRectangleBorder(
+      backgroundColor: const Color(0xFF5F6F52),
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Padding(
@@ -709,10 +711,10 @@ class _ProfileViewState extends State<ProfileView> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       'Change Password',
                       style: TextStyle(
                         fontSize: 28,
@@ -730,14 +732,14 @@ class _ProfileViewState extends State<ProfileView> {
                           fillColor: Colors.white,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFFC6A969),
                               width: 3,
                             ),
                           ),
                           hintText: 'New password',
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               width: 3,
                               color: Color.fromRGBO(198, 169, 105, 1),
                             ),
@@ -759,9 +761,9 @@ class _ProfileViewState extends State<ProfileView> {
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   Colors.white),
                               minimumSize: MaterialStateProperty.all<Size>(
-                                  Size(130, 60)),
+                                  const Size(130, 60)),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Cancel',
                               style:
                                   TextStyle(color: Colors.black, fontSize: 18),
@@ -774,11 +776,11 @@ class _ProfileViewState extends State<ProfileView> {
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFFC6A969)),
+                                  const Color(0xFFC6A969)),
                               minimumSize: MaterialStateProperty.all<Size>(
-                                  Size(130, 60)),
+                                  const Size(130, 60)),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Save',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18),
@@ -801,8 +803,8 @@ class _ProfileViewState extends State<ProfileView> {
     return showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      backgroundColor: Color(0xFF5F6F52),
-      shape: RoundedRectangleBorder(
+      backgroundColor: const Color(0xFF5F6F52),
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Padding(
@@ -814,10 +816,10 @@ class _ProfileViewState extends State<ProfileView> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       'Reset Score',
                       style: TextStyle(
                         fontSize: 28,
@@ -825,8 +827,8 @@ class _ProfileViewState extends State<ProfileView> {
                         color: Color(0xFFC6A969),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20),
                       child: Text(
                         'Are you sure you want to reset your score?',
                         style: TextStyle(
@@ -848,9 +850,9 @@ class _ProfileViewState extends State<ProfileView> {
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   Colors.white),
                               minimumSize: MaterialStateProperty.all<Size>(
-                                  Size(130, 60)),
+                                  const Size(130, 60)),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Cancel',
                               style:
                                   TextStyle(color: Colors.black, fontSize: 18),
@@ -863,11 +865,11 @@ class _ProfileViewState extends State<ProfileView> {
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFFC6A969)),
+                                  const Color(0xFFC6A969)),
                               minimumSize: MaterialStateProperty.all<Size>(
-                                  Size(130, 60)),
+                                  const Size(130, 60)),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Reset',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18),

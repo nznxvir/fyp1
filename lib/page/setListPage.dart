@@ -1,6 +1,9 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp1/page/fillQuizPage.dart';
+import 'package:fyp1/page/tofQuiz.dart';
 
 import 'quizPage.dart';
 
@@ -14,6 +17,7 @@ class SetListView extends StatefulWidget {
 }
 
 class _SetListViewState extends State<SetListView> {
+  final player = AudioPlayer();
   late String _chapterTitle;
   late String _chapterid = '';
 
@@ -48,14 +52,14 @@ class _SetListViewState extends State<SetListView> {
               width: double.infinity,
               height: 100,
               alignment: Alignment.topCenter,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20)),
                   color: Colors.amber),
               child: Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   GestureDetector(
@@ -65,18 +69,18 @@ class _SetListViewState extends State<SetListView> {
                     child: Container(
                         width: 50,
                         height: 50,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           color: Color(0xFF074173),
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.arrow_back_rounded,
                           size: 30,
                           weight: 5,
                           color: Colors.amber,
                         )),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Container(
                     alignment: Alignment.center,
                     height: 90,
@@ -84,29 +88,29 @@ class _SetListViewState extends State<SetListView> {
                     child: Text(
                       _chapterTitle,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Rubik',
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF074173)),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   )
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 _chapterid.isEmpty
-                    ? Center(
+                    ? const Center(
                         child: CircularProgressIndicator(),
                       )
                     : Container(
@@ -122,7 +126,7 @@ class _SetListViewState extends State<SetListView> {
                               AsyncSnapshot<QuerySnapshot> snapshot) {
                             if (!snapshot.hasData ||
                                 snapshot.data!.docs.isEmpty)
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(),
                               );
 
@@ -135,20 +139,21 @@ class _SetListViewState extends State<SetListView> {
                               itemBuilder: (BuildContext context, int index) {
                                 QueryDocumentSnapshot<Object?> setDoc =
                                     sets[index];
+
                                 return Container(
-                                  margin: EdgeInsets.only(
+                                  margin: const EdgeInsets.only(
                                       bottom: 40, right: 10, left: 10),
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(15)),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.grey.withOpacity(0.8),
                                         spreadRadius: 2,
                                         blurRadius: 5,
-                                        offset: Offset(
+                                        offset: const Offset(
                                             0, 3), // changes position of shadow
                                       )
                                     ],
@@ -159,7 +164,7 @@ class _SetListViewState extends State<SetListView> {
                                       Container(
                                         width: 120,
                                         height: 160,
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                             color: Color(0xFF074173),
                                             borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(15),
@@ -169,7 +174,7 @@ class _SetListViewState extends State<SetListView> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: [
-                                            Text(
+                                            const Text(
                                               'Modul',
                                               style: TextStyle(
                                                   fontFamily: 'Rubik',
@@ -178,18 +183,19 @@ class _SetListViewState extends State<SetListView> {
                                                   color: Colors.amber),
                                             ),
                                             Container(
-                                              margin: EdgeInsets.only(top: 10),
+                                              margin: const EdgeInsets.only(
+                                                  top: 10),
                                               alignment: Alignment.center,
                                               width: 70,
                                               height: 70,
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                   color: Colors.amber,
                                                   borderRadius:
                                                       BorderRadius.all(
                                                           Radius.circular(15))),
                                               child: Text(
                                                 setDoc['setnum'],
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontFamily: 'Rubik',
                                                     fontSize: 52,
                                                     fontWeight:
@@ -211,17 +217,17 @@ class _SetListViewState extends State<SetListView> {
                                                 'Bilangan Soalan: ' +
                                                     setDoc['question']
                                                         .toString(),
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontFamily: 'Rubik',
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w700,
                                                 ),
                                               ),
                                               Text(
-                                                'Masa: ' +
-                                                    setDoc['time'].toString() +
+                                                'Tahap: ' +
+                                                    setDoc['difficulty'] +
                                                     ' min',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontFamily: 'Rubik',
                                                     fontSize: 18,
                                                     fontWeight:
@@ -230,7 +236,7 @@ class _SetListViewState extends State<SetListView> {
                                               Text(
                                                 'Markah: ' +
                                                     setDoc['mark'].toString(),
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontFamily: 'Rubik',
                                                     fontSize: 18,
                                                     fontWeight:
@@ -242,25 +248,61 @@ class _SetListViewState extends State<SetListView> {
                                                 width: 230,
                                                 child: ElevatedButton(
                                                     onPressed: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              QuizView(
+                                                      player.play(AssetSource(
+                                                          'audio/startquiz.mp3'));
+                                                      Future.delayed(
+                                                          Duration(seconds: 1),
+                                                          () {
+                                                        if (setDoc['type'] ==
+                                                            'mcq') {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) => QuizView(
                                                                   setnum: setDoc[
                                                                       'setnum'],
                                                                   chapternum:
                                                                       setDoc[
                                                                           'chapter']),
-                                                        ),
-                                                      );
+                                                            ),
+                                                          );
+                                                        } else if (setDoc[
+                                                                'type'] ==
+                                                            'fb') {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) => FillQuiz(
+                                                                  setnum: setDoc[
+                                                                      'setnum'],
+                                                                  chapternum:
+                                                                      setDoc[
+                                                                          'chapter']),
+                                                            ),
+                                                          );
+                                                        } else if (setDoc[
+                                                                'type'] ==
+                                                            'tof') {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) => tofQuiz(
+                                                                  setnum: setDoc[
+                                                                      'setnum'],
+                                                                  chapternum:
+                                                                      setDoc[
+                                                                          'chapter']),
+                                                            ),
+                                                          );
+                                                        }
+                                                      });
                                                     },
                                                     style: ElevatedButton
                                                         .styleFrom(
-                                                      backgroundColor: Color(
+                                                      backgroundColor: const Color(
                                                           0xFF074173), // Use 0xFF as the prefix
                                                     ),
-                                                    child: Text(
+                                                    child: const Text(
                                                       'Mula',
                                                       style: TextStyle(
                                                           fontFamily: 'Rubik',

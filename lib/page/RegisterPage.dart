@@ -31,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
       // Check if passwords match
       if (_passwordController.text != _confirmpasswordController.text) {
         // Show password mismatch error
-        AlertDialog(
+        const AlertDialog(
           title: Text("Password Confirmation Failed"),
           content: Text("The passwords do not match."),
         );
@@ -53,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       await authService.createUser(data, context, () {
         // Delay navigation to sign-in page by 5 seconds
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(const Duration(seconds: 1), () {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => SignInPage()),
@@ -72,7 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFF074173),
+        backgroundColor: const Color(0xFF074173),
         body: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -81,17 +81,17 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Container(
                     width: 250,
                     height: 250,
-                    child: Image(
+                    child: const Image(
                       image: AssetImage('assets/register.png'),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Daftar Pengguna Baru',
                     style: TextStyle(
                         fontFamily: 'Ubuntu',
@@ -99,11 +99,11 @@ class _RegisterPageState extends State<RegisterPage> {
                         fontWeight: FontWeight.w700,
                         color: Colors.white),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
                     child: TextFormField(
                       controller: _usernameController,
                       keyboardType: TextInputType.emailAddress,
@@ -115,24 +115,24 @@ class _RegisterPageState extends State<RegisterPage> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.person,
                           color: Color(0xFF074173),
                         ),
                         hintText: 'Nama pengguna',
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 4, color: Color(0xFFFFC55A)),
+                          borderSide: const BorderSide(
+                              width: 4, color: Color(0xFFFFC55A)),
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
                     child: TextFormField(
                       controller: _ageController,
                       keyboardType: TextInputType.number,
@@ -141,25 +141,25 @@ class _RegisterPageState extends State<RegisterPage> {
                       decoration: InputDecoration(
                           fillColor: Colors.white,
                           filled: true,
-                          hoverColor: Color(0xFFFFC55A),
+                          hoverColor: const Color(0xFFFFC55A),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.numbers,
                             color: Color(0xFF074173),
                           ),
                           hintText: 'Umur',
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                   width: 4, color: Color(0xFFFFC55A)),
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
                     child: TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -168,25 +168,25 @@ class _RegisterPageState extends State<RegisterPage> {
                       decoration: InputDecoration(
                           fillColor: Colors.white,
                           filled: true,
-                          hoverColor: Color(0xFFFFC55A),
+                          hoverColor: const Color(0xFFFFC55A),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.email,
                             color: Color(0xFF074173),
                           ),
                           hintText: 'Email',
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                   width: 4, color: Color(0xFFFFC55A)),
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
                     child: TextFormField(
                       controller: _passwordController,
                       keyboardType: TextInputType.visiblePassword,
@@ -196,25 +196,25 @@ class _RegisterPageState extends State<RegisterPage> {
                       decoration: InputDecoration(
                           fillColor: Colors.white,
                           filled: true,
-                          hoverColor: Color(0xFFFFC55A),
+                          hoverColor: const Color(0xFFFFC55A),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.password,
                             color: Color(0xFF074173),
                           ),
                           hintText: 'Kata laluan',
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                   width: 4, color: Color(0xFFFFC55A)),
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
                     child: TextFormField(
                       controller: _confirmpasswordController,
                       keyboardType: TextInputType.visiblePassword,
@@ -224,16 +224,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       decoration: InputDecoration(
                           fillColor: Colors.white,
                           filled: true,
-                          hoverColor: Color(0xFFFFC55A),
+                          hoverColor: const Color(0xFFFFC55A),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.password,
                             color: Color(0xFF074173),
                           ),
                           hintText: 'Sahkan kata laluan',
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                   width: 4, color: Color(0xFFFFC55A)),
                               borderRadius: BorderRadius.circular(10))),
                     ),
@@ -243,7 +243,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Navigator.push(
                         context,
                         PageRouteBuilder(
-                          transitionDuration: Duration(milliseconds: 300),
+                          transitionDuration: const Duration(milliseconds: 300),
                           pageBuilder: (_, __, ___) => SignInPage(),
                           transitionsBuilder: (_, animation, __, child) {
                             return Stack(
@@ -251,13 +251,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 SlideTransition(
                                   position: Tween<Offset>(
                                     begin: Offset.zero,
-                                    end: Offset(1.0, 0.0),
+                                    end: const Offset(0.5, 0.0),
                                   ).animate(animation),
                                   child: child,
                                 ),
                                 SlideTransition(
                                   position: Tween<Offset>(
-                                    begin: Offset(-1.0, 0.0),
+                                    begin: const Offset(-0.5, 0.0),
                                     end: Offset.zero,
                                   ).animate(animation),
                                   child:
@@ -269,7 +269,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'Kembali ke log masuk',
                       style: TextStyle(
                           fontFamily: 'Rubik',
@@ -293,12 +293,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: Text("Pengesahan Kata Laluan"),
-                                        content:
-                                            Text("Kata laluan tidak sepadan"),
+                                        title: const Text(
+                                            "Pengesahan Kata Laluan"),
+                                        content: const Text(
+                                            "Kata laluan tidak sepadan"),
                                         actions: <Widget>[
                                           TextButton(
-                                            child: Text("OK"),
+                                            child: const Text("OK"),
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
@@ -312,13 +313,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
+                        shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                       ),
                       child: isLoader
-                          ? Center(child: CircularProgressIndicator())
-                          : Text(
+                          ? const Center(child: CircularProgressIndicator())
+                          : const Text(
                               "Daftar",
                               style: TextStyle(
                                   color: Color(0xFF074173),

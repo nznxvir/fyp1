@@ -1,34 +1,28 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fyp1/page/resultPage.dart';
+import 'resultPage.dart';
 
-class QuizView extends StatefulWidget {
+class FillQuiz extends StatefulWidget {
   final String setnum;
   final String chapternum;
-
-  const QuizView({Key? key, required this.setnum, required this.chapternum})
+  const FillQuiz({Key? key, required this.setnum, required this.chapternum})
       : super(key: key);
 
   @override
-  State<QuizView> createState() => _QuizViewState();
+  State<FillQuiz> createState() => _FillQuizState();
 }
 
-class _QuizViewState extends State<QuizView> {
+class _FillQuizState extends State<FillQuiz> {
   final player = AudioPlayer();
   late Stream<QuerySnapshot> _questionsStream;
   late int _currentQuestionIndex = 0;
   late List<DocumentSnapshot> _questions = [];
-  late String _option1 = '';
-  late String _option2 = '';
-  late String _option3 = '';
-  late String _option4 = '';
   late String _correctAnswer = '';
-  String? _selectedOption;
   int _score = 0;
   int _correctCount = 0;
   int _wrongCount = 0;
@@ -39,9 +33,12 @@ class _QuizViewState extends State<QuizView> {
   String _elapsedTime = '';
   double _progress = 0;
 
+  late bool _showValidationIcon;
+
   @override
   void initState() {
     super.initState();
+    _showValidationIcon = false;
     _questionsStream = FirebaseFirestore.instance
         .collection('questions')
         .where('setnum', isEqualTo: widget.setnum)
@@ -128,7 +125,7 @@ class _QuizViewState extends State<QuizView> {
                           border: Border.all(width: 3, color: Colors.white),
                           borderRadius: BorderRadius.circular(20)),
                       child: Text(
-                        'Skor: $_score',
+                        'Skor: $_unansweredCount',
                         style: const TextStyle(
                             fontFamily: 'Rubik',
                             fontSize: 20,
@@ -160,16 +157,12 @@ class _QuizViewState extends State<QuizView> {
                     _questions = snapshot.data!.docs;
                     var question = _questions[_currentQuestionIndex];
 
-                    _option1 = question['option1'];
-                    _option2 = question['option2'];
-                    _option3 = question['option3'];
-                    _option4 = question['option4'];
                     _correctAnswer = question['answer'];
 
                     return ListView.builder(
                       itemCount: 1,
                       itemBuilder: (context, index) {
-                        return buildQuestionWidget(question);
+                        return buildFillQuestionWidget(question);
                       },
                     );
                   },
@@ -184,8 +177,40 @@ class _QuizViewState extends State<QuizView> {
 
   final TextEditingController fillAnswerController = TextEditingController();
   String answer = "";
+  Widget validateAnswerWidget(String currentAnswer) {
+    IconData icon = CupertinoIcons.add;
+    Color iconColor = Colors.transparent;
+
+    if (currentAnswer.isNotEmpty) {
+      if (_correctAnswer == currentAnswer) {
+        icon = CupertinoIcons.check_mark_circled_solid;
+        iconColor = Colors.green;
+      } else {
+        icon = CupertinoIcons.xmark_circle_fill;
+        iconColor = Colors.red;
+      }
+    }
+
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.transparent,
+      ),
+      child: Center(
+        child: Icon(
+          icon,
+          color: iconColor,
+          size: 40,
+        ),
+      ),
+    );
+  }
 
   Widget buildFillQuestionWidget(DocumentSnapshot<Object?> question) {
+    String currentAnswer = fillAnswerController.text.trim();
+
     return Stack(
       children: [
         Container(
@@ -221,301 +246,138 @@ class _QuizViewState extends State<QuizView> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    answer = value
-                        .trim(); // Update answer variable when text changes
+                    // Update currentAnswer when text field changes
+                    currentAnswer = value.trim();
                   });
                 },
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   setState(() {
-                    String currentAnswer = fillAnswerController.text.trim();
-
+                    _showValidationIcon = true;
                     if (_correctAnswer == currentAnswer) {
+                      player.play(AssetSource('audio/correct.mp3'));
                       _score += 20;
                       _correctCount++;
                     } else {
+                      player.play(AssetSource('audio/wrong.mp3'));
                       _wrongCount++;
                     }
+                    Future.delayed(const Duration(seconds: 2), () {
+                      _navigateToNextQuestion();
+                    });
                   });
                 },
-                child: const Text('Submit'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _navigateToNextQuestion();
-                  });
-                },
-                child: const Text('Next'),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: const Color(0xFF074173),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.keyboard_double_arrow_left),
-                      color: Colors.white,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _unansweredCount++;
-                        });
-                        _navigateToNextQuestion();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 300,
-                        height: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: const Color(0xFF074173)),
-                        child: const Text(
-                          'Soalan Seterusnya',
-                          style: TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 300,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: const Color(0xFF074173),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Semak jawapan',
+                              style: TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                      ))
-                ],
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          top: -5,
-          left: 0,
-          right: 0,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 20),
-            child: LinearProgressIndicator(
-              value: _progress,
-              minHeight: 20,
-              borderRadius: BorderRadius.circular(20),
-              backgroundColor: Colors.grey,
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(Color(0xFFFFC55A)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildQuestionWidget(DocumentSnapshot<Object?> question) {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 750,
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(
-                height: 15,
-              ),
-              Text(
-                question['questString'],
-                style: const TextStyle(
-                    fontFamily: 'Rubik',
-                    fontSize: 20,
-                    color: Color(0xFF074173),
-                    fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 10),
-              buildOptionWidget(_option1),
-              const SizedBox(height: 10),
-              buildOptionWidget(_option2),
-              const SizedBox(height: 10),
-              buildOptionWidget(_option3),
-              const SizedBox(height: 10),
-              buildOptionWidget(_option4),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: const Color(0xFF074173),
+                      ),
                     ),
-                    child: IconButton(
-                      icon: const Icon(Icons.keyboard_double_arrow_left),
-                      color: Colors.white,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _unansweredCount++; // Increment unanswered count
-                        });
-                        _navigateToNextQuestion();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 300,
-                        height: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: const Color(0xFF074173)),
-                        child: const Text(
-                          'Soalan Seterusnya',
-                          style: TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white),
-                        ),
-                      ))
-                ],
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          top: -5,
-          left: 0,
-          right: 0,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 20),
-            child: LinearProgressIndicator(
-              value: _progress,
-              minHeight: 20,
-              borderRadius: BorderRadius.circular(20),
-              backgroundColor: Colors.grey,
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(Color(0xFFFFC55A)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildOptionWidget(String option) {
-    bool isSelected = _selectedOption == option;
-    bool isCorrect = _correctAnswer == option;
-
-    Color borderColor = const Color(0xFF074173);
-    Color color = Colors.transparent;
-    IconData iconData = CupertinoIcons.add;
-    Color iconColor = Colors.transparent;
-
-    if (_selectedOption != null) {
-      iconData = isCorrect
-          ? CupertinoIcons.check_mark_circled_solid
-          : isSelected
-              ? CupertinoIcons.xmark_circle_fill
-              : CupertinoIcons.add;
-      iconColor = isCorrect
-          ? Colors.green
-          : isSelected
-              ? Colors.red
-              : Colors.transparent;
-      color = isCorrect
-          ? const Color.fromRGBO(232, 245, 233, 1)
-          : isSelected
-              ? const Color.fromRGBO(255, 235, 238, 1)
-              : Colors.transparent;
-      borderColor = isCorrect
-          ? Colors.green
-          : isSelected
-              ? Colors.red
-              : const Color(0xFF074173);
-    }
-
-    // Define the icon based on the isCorrect condition
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedOption = option;
-          if (isCorrect) {
-            player.play(AssetSource('audio/correct.mp3'));
-            _score += 10;
-            _correctCount++;
-          } else {
-            player.play(AssetSource('audio/wrong.mp3'));
-            _wrongCount++;
-          }
-          Future.delayed(const Duration(seconds: 1), () {
-            _selectedOption = null;
-            _navigateToNextQuestion();
-          });
-        });
-      },
-      child: Container(
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.only(left: 15),
-        width: 400,
-        height: 80,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          border: Border.all(
-            width: 3,
-            color: borderColor,
-          ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 300,
-              color: Colors.transparent,
-              child: Text(
-                option,
-                style: const TextStyle(
-                    fontFamily: 'Rubik',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-            Container(
-              width: 60,
-              height: 60,
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.transparent),
-              child: Center(
-                child: Icon(
-                  iconData,
-                  color: iconColor,
-                  size: 40, // Adjust size as needed
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                              width: 3, color: const Color(0xFF074173)),
+                          color: Colors.transparent),
+                      child: _showValidationIcon
+                          ? validateAnswerWidget(currentAnswer)
+                          : const SizedBox(),
+                    )
+                  ],
                 ),
               ),
-            )
-          ],
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: const Color(0xFF074173),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.keyboard_double_arrow_left),
+                      color: Colors.white,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _unansweredCount++;
+                      });
+                      _navigateToNextQuestion();
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 300,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: const Color(0xFF074173),
+                      ),
+                      child: const Text(
+                        'Soalan Seterusnya',
+                        style: TextStyle(
+                          fontFamily: 'Rubik',
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
+        Positioned(
+          top: -5,
+          left: 0,
+          right: 0,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 20),
+            child: LinearProgressIndicator(
+              value: _progress,
+              minHeight: 20,
+              borderRadius: BorderRadius.circular(20),
+              backgroundColor: Colors.grey,
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(Color(0xFFFFC55A)),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

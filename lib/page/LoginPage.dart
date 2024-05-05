@@ -48,14 +48,14 @@ class _SignInPageState extends State<SignInPage> {
 
       await authService.validateUser(data, context, () {
         // Delay navigation to sign-in page by 5 seconds
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(const Duration(seconds: 1), () {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              transitionDuration: Duration(milliseconds: 500),
-              pageBuilder: (_, __, ___) => VerifySplash(),
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (_, __, ___) => const VerifySplash(),
               transitionsBuilder: (_, animation, __, child) {
-                var begin = Offset(0.0, 1.0);
+                var begin = const Offset(0.0, 1.0);
                 var end = Offset.zero;
                 var curve = Curves.ease;
 
@@ -94,7 +94,7 @@ class _SignInPageState extends State<SignInPage> {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  child: Image(
+                  child: const Image(
                     alignment: Alignment.center,
                     image: AssetImage('assets/login.jpg'),
                     width: 400,
@@ -106,7 +106,7 @@ class _SignInPageState extends State<SignInPage> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Selamat Kembali',
                           style: TextStyle(
                               fontFamily: 'Ubuntu',
@@ -114,11 +114,11 @@ class _SignInPageState extends State<SignInPage> {
                               fontWeight: FontWeight.w700,
                               color: Colors.black),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 10, bottom: 10),
+                          margin: const EdgeInsets.only(top: 10, bottom: 10),
                           child: TextFormField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -126,16 +126,16 @@ class _SignInPageState extends State<SignInPage> {
                                 AutovalidateMode.onUserInteraction,
                             validator: appValidator.validateEmail,
                             decoration: InputDecoration(
-                                hoverColor: Color(0xFF074173),
+                                hoverColor: const Color(0xFF074173),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.email,
                                   color: Color(0xFF074173),
                                 ),
                                 hintText: 'Email',
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                       width: 4,
                                       color: Color(0xFF074173),
                                     ),
@@ -143,7 +143,7 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 10, bottom: 10),
+                          margin: const EdgeInsets.only(top: 10, bottom: 10),
                           child: TextFormField(
                             controller: _passwordController,
                             autovalidateMode:
@@ -151,23 +151,23 @@ class _SignInPageState extends State<SignInPage> {
                             validator: appValidator.validatePassword,
                             obscureText: true,
                             decoration: InputDecoration(
-                                hoverColor: Color(0xFF074173),
+                                hoverColor: const Color(0xFF074173),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.password,
                                   color: Color(0xFF074173),
                                 ),
                                 hintText: 'Password',
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                       width: 4,
                                       color: Color(0xFF074173),
                                     ),
                                     borderRadius: BorderRadius.circular(10))),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Container(
@@ -178,8 +178,8 @@ class _SignInPageState extends State<SignInPage> {
                               isLoader ? print("loading") : _submitForm();
                             },
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFF074173),
-                                shape: RoundedRectangleBorder(
+                                backgroundColor: const Color(0xFF074173),
+                                shape: const RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)))),
                             child: isLoader
@@ -192,10 +192,10 @@ class _SignInPageState extends State<SignInPage> {
                                   ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 25,
                         ),
-                        Center(
+                        const Center(
                           child: Text(
                             "Atau",
                             style: TextStyle(
@@ -204,7 +204,7 @@ class _SignInPageState extends State<SignInPage> {
                                 fontFamily: 'Rubik'),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 25,
                         ),
                         Container(
@@ -216,8 +216,9 @@ class _SignInPageState extends State<SignInPage> {
                                 context,
                                 PageRouteBuilder(
                                   transitionDuration:
-                                      Duration(milliseconds: 300),
-                                  pageBuilder: (_, __, ___) => RegisterPage(),
+                                      const Duration(milliseconds: 300),
+                                  pageBuilder: (_, __, ___) =>
+                                      const RegisterPage(),
                                   transitionsBuilder:
                                       (_, animation, __, child) {
                                     return Stack(
@@ -225,17 +226,17 @@ class _SignInPageState extends State<SignInPage> {
                                         SlideTransition(
                                           position: Tween<Offset>(
                                             begin: Offset.zero,
-                                            end: Offset(-1.0, 0.0),
+                                            end: const Offset(-0.5, 0.0),
                                           ).animate(animation),
                                           child: child,
                                         ),
                                         SlideTransition(
                                           position: Tween<Offset>(
-                                            begin: Offset(1.0, 0.0),
+                                            begin: const Offset(0.5, 0.0),
                                             end: Offset.zero,
                                           ).animate(animation),
                                           child:
-                                              RegisterPage(), // Replace with your current page content
+                                              const RegisterPage(), // Replace with your current page content
                                         ),
                                       ],
                                     );
@@ -244,13 +245,13 @@ class _SignInPageState extends State<SignInPage> {
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF074173),
-                              shape: RoundedRectangleBorder(
+                              backgroundColor: const Color(0xFF074173),
+                              shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               "Daftar Pengguna",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20),

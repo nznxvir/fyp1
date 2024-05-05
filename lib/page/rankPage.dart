@@ -78,13 +78,13 @@ class RankView extends StatelessWidget {
                             SlideTransition(
                               position: Tween<Offset>(
                                 begin: Offset.zero,
-                                end: Offset(-1, 0.0),
+                                end: Offset(-0.5, 0.0),
                               ).animate(animation),
                               child: child,
                             ),
                             SlideTransition(
                               position: Tween<Offset>(
-                                begin: Offset(1, 0.0),
+                                begin: Offset(0.5, 0.0),
                                 end: Offset.zero,
                               ).animate(animation),
                               child:
@@ -113,13 +113,13 @@ class RankView extends StatelessWidget {
                             SlideTransition(
                               position: Tween<Offset>(
                                 begin: Offset.zero,
-                                end: Offset(-1, 0.0),
+                                end: Offset(-0.5, 0.0),
                               ).animate(animation),
                               child: child,
                             ),
                             SlideTransition(
                               position: Tween<Offset>(
-                                begin: Offset(1, 0.0),
+                                begin: Offset(0.5, 0.0),
                                 end: Offset.zero,
                               ).animate(animation),
                               child:
