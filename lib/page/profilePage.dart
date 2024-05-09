@@ -8,8 +8,8 @@ import 'package:fyp1/page/historyPage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
+import 'Leaderboard/rankPage.dart';
 import 'homePage.dart';
-import 'rankPage.dart';
 import 'LoginPage.dart';
 
 class ProfileView extends StatefulWidget {

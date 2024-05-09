@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:fyp1/page/historyPage.dart';
 import 'package:fyp1/page/profilePage.dart';
-import 'package:fyp1/page/rankPage.dart';
+import 'package:fyp1/page/Leaderboard/rankPage.dart';
 import 'package:fyp1/page/setListPage.dart';
 
 class HomeView extends StatefulWidget {
@@ -20,6 +20,7 @@ class _HomeViewState extends State<HomeView> {
   late String username = '';
   late num score = 0;
   late String image = '';
+  late num rank = 0;
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _HomeViewState extends State<HomeView> {
       username = userDoc['username'];
       score = userDoc['score'];
       image = userDoc['imageurl'];
+      rank = userDoc['rank'];
     });
     updateChapterUnlockStatus();
   }
@@ -97,7 +99,7 @@ class _HomeViewState extends State<HomeView> {
                               const Text(
                                 'Selamat Datang ',
                                 style: TextStyle(
-                                    color: Color(0xFFFFC55A),
+                                    color: Color(0xFFFFEBB2),
                                     fontSize: 16,
                                     fontWeight: FontWeight.w900,
                                     fontFamily: 'Rubik'),
@@ -108,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
                               Text(
                                 username,
                                 style: const TextStyle(
-                                    color: Color(0xFFFFC55A),
+                                    color: Color(0xFFFFEBB2),
                                     fontSize: 40,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Rubik'),
@@ -123,7 +125,7 @@ class _HomeViewState extends State<HomeView> {
                             height: 100,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: const Color(0xFFFFC55A),
+                                color: const Color(0xFFFFEBB2),
                                 image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(image))),
@@ -166,7 +168,7 @@ class _HomeViewState extends State<HomeView> {
                         alignment: Alignment.topCenter,
                         width: 135,
                         height: 150,
-                        child: const Column(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             Text(
@@ -176,7 +178,7 @@ class _HomeViewState extends State<HomeView> {
                                   fontSize: 23, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              '5',
+                              rank.toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontFamily: 'Rubik',
@@ -400,7 +402,7 @@ class _HomeViewState extends State<HomeView> {
                                                       fontSize: 42,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      color: Color(0xFFFFC55A),
+                                                      color: Color(0xFFFFEBB2),
                                                     ),
                                                   ),
                                                 )
@@ -492,7 +494,7 @@ class _HomeViewState extends State<HomeView> {
               ),
               IconButton(
                 icon: const Icon(Icons.home_filled),
-                color: const Color(0xFFFFC55A),
+                color: const Color(0xFFFFEBB2),
                 iconSize: 35,
                 onPressed: () {},
               ),
@@ -661,7 +663,7 @@ class _HomeViewState extends State<HomeView> {
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20)),
-                            color: Colors.amber),
+                            color: Color(0xFFFFEBB2)),
                         child: const Text(
                           'Pilih modul',
                           style: TextStyle(
