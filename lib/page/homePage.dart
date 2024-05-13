@@ -21,6 +21,7 @@ class _HomeViewState extends State<HomeView> {
   late num score = 0;
   late String image = '';
   late num rank = 0;
+  late String chapterID = '';
 
   @override
   void initState() {
@@ -75,7 +76,7 @@ class _HomeViewState extends State<HomeView> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
                   decoration: const BoxDecoration(
-                      color: Color(0xFF074173),
+                      color: Color(0xFF6F131E),
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(15),
                           bottomRight: Radius.circular(15))),
@@ -99,7 +100,7 @@ class _HomeViewState extends State<HomeView> {
                               const Text(
                                 'Selamat Datang ',
                                 style: TextStyle(
-                                    color: Color(0xFFFFEBB2),
+                                    color: Color(0xFFEEE0C9),
                                     fontSize: 16,
                                     fontWeight: FontWeight.w900,
                                     fontFamily: 'Rubik'),
@@ -110,7 +111,7 @@ class _HomeViewState extends State<HomeView> {
                               Text(
                                 username,
                                 style: const TextStyle(
-                                    color: Color(0xFFFFEBB2),
+                                    color: Color(0xFFEEE0C9),
                                     fontSize: 40,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Rubik'),
@@ -125,7 +126,7 @@ class _HomeViewState extends State<HomeView> {
                             height: 100,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: const Color(0xFFFFEBB2),
+                                color: const Color(0xFFEEE0C9),
                                 image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(image))),
@@ -146,6 +147,7 @@ class _HomeViewState extends State<HomeView> {
                       top:
                           170), // Adjust top margin to position the white container inside the blue container
                   decoration: BoxDecoration(
+                    border: Border.all(width: 10, color: Color(0xFFEEE0C9)),
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
@@ -266,7 +268,7 @@ class _HomeViewState extends State<HomeView> {
                     width: double.infinity,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF074173),
+                      color: const Color(0xFF6F131E),
                       borderRadius: const BorderRadius.all(Radius.circular(15)),
                       boxShadow: [
                         BoxShadow(
@@ -285,7 +287,7 @@ class _HomeViewState extends State<HomeView> {
                           fontFamily: 'Rubik',
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                          color: Color(0xFFEEE0C9)),
                     ),
                   ),
                 ),
@@ -333,7 +335,7 @@ class _HomeViewState extends State<HomeView> {
                                         : Colors.black.withOpacity(0.8),
                                     border: Border.all(
                                         width: 10,
-                                        color: const Color(0xFF074173)),
+                                        color: const Color(0xFF6F131E)),
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(20)),
                                     boxShadow: [
@@ -392,7 +394,7 @@ class _HomeViewState extends State<HomeView> {
                                                         BorderRadius.all(
                                                             Radius.circular(
                                                                 15)),
-                                                    color: Color(0xFF074173),
+                                                    color: Color(0xFF6F131E),
                                                   ),
                                                   child: Text(
                                                     chapter['chapter'],
@@ -402,7 +404,7 @@ class _HomeViewState extends State<HomeView> {
                                                       fontSize: 42,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      color: Color(0xFFFFEBB2),
+                                                      color: Color(0xFFEEE0C9),
                                                     ),
                                                   ),
                                                 )
@@ -453,7 +455,7 @@ class _HomeViewState extends State<HomeView> {
           height: 65,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: const Color(0xFF074173)),
+              color: const Color(0xFF6F131E)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -494,7 +496,7 @@ class _HomeViewState extends State<HomeView> {
               ),
               IconButton(
                 icon: const Icon(Icons.home_filled),
-                color: const Color(0xFFFFEBB2),
+                color: const Color(0xFFEEE0C9),
                 iconSize: 35,
                 onPressed: () {},
               ),
@@ -552,7 +554,7 @@ class _HomeViewState extends State<HomeView> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20)),
-                  color: Color(0xFF074173),
+                  color: Color(0xFF6F131E),
                 ),
                 width: double.infinity,
                 height: 350,
@@ -663,7 +665,7 @@ class _HomeViewState extends State<HomeView> {
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20)),
-                            color: Color(0xFFFFEBB2)),
+                            color: Color(0xFFEEE0C9)),
                         child: const Text(
                           'Pilih modul',
                           style: TextStyle(

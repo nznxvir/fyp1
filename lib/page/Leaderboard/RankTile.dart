@@ -69,7 +69,7 @@ class RankTile extends StatelessWidget {
                     height: 60,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Color(0xFFFFEBB2),
+                        color: Color(0xFFEEE0C9),
                         image: DecorationImage(
                             fit: BoxFit.cover, image: NetworkImage(image))),
                   ),

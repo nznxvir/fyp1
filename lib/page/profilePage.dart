@@ -204,7 +204,7 @@ class _ProfileViewState extends State<ProfileView> {
                           child: Container(
                             decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Color(0xFFFFC55A)),
+                                color: Color(0xFFEEE0C9)),
                             child: IconButton(
                               icon: const Icon(Icons.edit),
                               color: const Color(0xFF074173),
@@ -286,7 +286,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     color: Color(0xFF074173))),
                             IconButton(
                               icon: const Icon(Icons.edit),
-                              color: const Color(0xFFFFC55A),
+                              color: const Color(0xFFEEE0C9),
                               iconSize: 40,
                               onPressed: () {
                                 _changeName(context);
@@ -314,7 +314,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     color: Color(0xFF074173))),
                             IconButton(
                               icon: const Icon(Icons.password_rounded),
-                              color: const Color(0xFFFFC55A),
+                              color: const Color(0xFFEEE0C9),
                               iconSize: 40,
                               onPressed: () {
                                 _ChangePassword(context);
@@ -341,7 +341,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     color: Color(0xFF074173))),
                             IconButton(
                               icon: const Icon(Icons.refresh),
-                              color: const Color(0xFFFFC55A),
+                              color: const Color(0xFFEEE0C9),
                               iconSize: 40,
                               onPressed: () {
                                 _ResetScore(context);
@@ -576,7 +576,7 @@ class _ProfileViewState extends State<ProfileView> {
               ),
               IconButton(
                 icon: const Icon(Icons.person),
-                color: const Color(0xFFFFC55A),
+                color: const Color(0xFFEEE0C9),
                 iconSize: 35,
                 onPressed: () {},
               ),
@@ -613,7 +613,7 @@ class _ProfileViewState extends State<ProfileView> {
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFC6A969),
+                        color: Color(0xFFEEE0C9),
                       ),
                     ),
                     Padding(
@@ -627,7 +627,7 @@ class _ProfileViewState extends State<ProfileView> {
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: const BorderSide(
-                              color: Color(0xFFC6A969),
+                              color: Color(0xFFEEE0C9),
                               width: 3,
                             ),
                           ),
@@ -635,7 +635,7 @@ class _ProfileViewState extends State<ProfileView> {
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
                               width: 3,
-                              color: Color.fromRGBO(198, 169, 105, 1),
+                              color: Color(0xFFEEE0C9),
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -670,7 +670,7 @@ class _ProfileViewState extends State<ProfileView> {
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color(0xFFC6A969)),
+                                  const Color(0xFFEEE0C9)),
                               minimumSize: MaterialStateProperty.all<Size>(
                                   const Size(130, 60)),
                             ),
@@ -719,7 +719,7 @@ class _ProfileViewState extends State<ProfileView> {
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFC6A969),
+                        color: Color(0xFFEEE0C9),
                       ),
                     ),
                     Padding(
@@ -733,7 +733,7 @@ class _ProfileViewState extends State<ProfileView> {
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: const BorderSide(
-                              color: Color(0xFFC6A969),
+                              color: Color(0xFFEEE0C9),
                               width: 3,
                             ),
                           ),
@@ -741,7 +741,7 @@ class _ProfileViewState extends State<ProfileView> {
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
                               width: 3,
-                              color: Color.fromRGBO(198, 169, 105, 1),
+                              color: Color(0xFFEEE0C9),
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -776,7 +776,7 @@ class _ProfileViewState extends State<ProfileView> {
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color(0xFFC6A969)),
+                                  const Color(0xFFEEE0C9)),
                               minimumSize: MaterialStateProperty.all<Size>(
                                   const Size(130, 60)),
                             ),
@@ -824,7 +824,7 @@ class _ProfileViewState extends State<ProfileView> {
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFC6A969),
+                        color: Color(0xFFEEE0C9),
                       ),
                     ),
                     const Padding(
@@ -865,7 +865,7 @@ class _ProfileViewState extends State<ProfileView> {
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color(0xFFC6A969)),
+                                  const Color(0xFFEEE0C9)),
                               minimumSize: MaterialStateProperty.all<Size>(
                                   const Size(130, 60)),
                             ),

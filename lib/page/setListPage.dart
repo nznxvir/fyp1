@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp1/page/fillQuizPage.dart';
+import 'package:fyp1/page/noteView.dart';
 import 'package:fyp1/page/tofQuiz.dart';
 
 import 'quizPage.dart';
@@ -18,8 +19,9 @@ class SetListView extends StatefulWidget {
 
 class _SetListViewState extends State<SetListView> {
   final player = AudioPlayer();
-  late String _chapterTitle;
+  late String _chapterTitle = '';
   late String _chapterid = '';
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -41,292 +43,451 @@ class _SetListViewState extends State<SetListView> {
     }
   }
 
+  Widget _buildNotesList() {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('notes')
+          .where('chapter', isEqualTo: _chapterid)
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Center(
+            child: Text('No notes available'),
+          );
+        }
+
+        var notes = snapshot.data!.docs;
+        notes.sort((a, b) => a['sub'].compareTo(b['sub']));
+
+        return ListView.builder(
+            itemCount: notes.length,
+            itemBuilder: (BuildContext context, int index) {
+              QueryDocumentSnapshot<Object?> noteDoc = notes[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NoteView(
+                          chapterid: noteDoc['chapter'], sub: noteDoc['sub']),
+                    ),
+                  );
+                },
+                child: Container(
+                    margin:
+                        const EdgeInsets.only(bottom: 40, right: 10, left: 10),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.8),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        )
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 120,
+                          decoration: const BoxDecoration(
+                              color: Color(0xFF6F131E),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15))),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'SubTopik',
+                                style: TextStyle(
+                                    fontFamily: 'Rubik',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w900,
+                                    color: Color(0xFFEEE0C9)),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 10),
+                                alignment: Alignment.center,
+                                width: 70,
+                                height: 60,
+                                decoration: const BoxDecoration(
+                                    color: Color(0xFFEEE0C9),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15))),
+                                child: Text(
+                                  noteDoc['chapter'] + '.' + noteDoc['sub'],
+                                  style: const TextStyle(
+                                      fontFamily: 'Rubik',
+                                      fontSize: 42,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          width: 260,
+                          child: Text(
+                            noteDoc['title'],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        )
+                      ],
+                    )),
+              );
+            });
+      },
+    );
+  }
+
+  Widget _buildQuizList() {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('sets')
+          .where('chapter', isEqualTo: _chapterid)
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Center(
+            child: Text('No quiz sets available'),
+          );
+        }
+
+        var sets = snapshot.data!.docs;
+        // Handle sets where "setnum" field is missing or invalid
+
+        sets.sort((a, b) => a['setnum'].compareTo(b['setnum']));
+
+        return ListView.builder(
+          itemCount: sets.length,
+          itemBuilder: (BuildContext context, int index) {
+            QueryDocumentSnapshot<Object?> setDoc = sets[index];
+            // Build each list item here
+            return Container(
+              margin: const EdgeInsets.only(bottom: 40, right: 10, left: 10),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.8),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  )
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 120,
+                    height: 160,
+                    decoration: const BoxDecoration(
+                        color: Color(0xFF6F131E),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15))),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Modul',
+                          style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xFFEEE0C9)),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          alignment: Alignment.center,
+                          width: 70,
+                          height: 70,
+                          decoration: const BoxDecoration(
+                              color: Color(0xFFEEE0C9),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          child: Text(
+                            setDoc['setnum'],
+                            style: const TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: 52,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Bilangan Soalan: ' + setDoc['question'].toString(),
+                            style: const TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            'Tahap: ' + setDoc['difficulty'] + ' min',
+                            style: const TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Text(
+                            'Markah: ' + setDoc['mark'].toString(),
+                            style: const TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Container(
+                            alignment: Alignment.bottomRight,
+                            width: 230,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  player
+                                      .play(AssetSource('audio/startquiz.mp3'));
+                                  Future.delayed(Duration(seconds: 1), () {
+                                    if (setDoc['type'] == 'mcq') {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => QuizView(
+                                              setnum: setDoc['setnum'],
+                                              chapternum: setDoc['chapter']),
+                                        ),
+                                      );
+                                    } else if (setDoc['type'] == 'fb') {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => FillQuiz(
+                                              setnum: setDoc['setnum'],
+                                              chapternum: setDoc['chapter']),
+                                        ),
+                                      );
+                                    } else if (setDoc['type'] == 'tof') {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => tofQuiz(
+                                              setnum: setDoc['setnum'],
+                                              chapternum: setDoc['chapter']),
+                                        ),
+                                      );
+                                    }
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF6F131E)),
+                                child: const Text(
+                                  'Mula',
+                                  style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFEEE0C9)),
+                                )),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(children: [
-            Container(
-              width: double.infinity,
-              height: 100,
-              alignment: Alignment.topCenter,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20)),
-                  color: Colors.amber),
-              child: Row(
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: Color(0xFF074173),
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_rounded,
-                          size: 30,
-                          weight: 5,
-                          color: Colors.amber,
-                        )),
-                  ),
-                  const SizedBox(width: 10),
                   Container(
-                    alignment: Alignment.center,
+                    width: double.infinity,
                     height: 90,
-                    width: 300,
-                    child: Text(
-                      _chapterTitle,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontFamily: 'Rubik',
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF074173)),
+                    alignment: Alignment.topCenter,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20)),
+                        color: Color(0xFFEEE0C9)),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                color: Color(0xFF6F131E),
+                              ),
+                              child: const Icon(
+                                Icons.arrow_back_rounded,
+                                size: 30,
+                                weight: 5,
+                                color: Color(0xFFEEE0C9),
+                              )),
+                        ),
+                        const SizedBox(width: 10),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 90,
+                          width: 300,
+                          child: Text(
+                            _chapterTitle,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF6F131E)),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        )
+                      ],
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 10,
-                  )
+                  ),
+                  Column(
+                    children: [
+                      _chapterid.isEmpty
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Container(
+                              width: double.infinity,
+                              height: 765,
+                              color: Colors.white,
+                              child: _selectedIndex == 0
+                                  ? _buildQuizList()
+                                  : _buildNotesList(),
+                            ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 50,
-            ),
-            Column(
-              children: [
-                const SizedBox(
-                  width: 20,
-                ),
-                _chapterid.isEmpty
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Container(
-                        width: double.infinity,
-                        height: 700,
-                        color: Colors.white,
-                        child: StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('sets')
-                              .where('chapter', isEqualTo: _chapterid)
-                              .snapshots(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (!snapshot.hasData ||
-                                snapshot.data!.docs.isEmpty)
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-
-                            var sets = snapshot.data!.docs;
-                            sets.sort(
-                                (a, b) => a['setnum'].compareTo(b['setnum']));
-
-                            return ListView.builder(
-                              itemCount: sets.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                QueryDocumentSnapshot<Object?> setDoc =
-                                    sets[index];
-
-                                return Container(
-                                  margin: const EdgeInsets.only(
-                                      bottom: 40, right: 10, left: 10),
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(15)),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.8),
-                                        spreadRadius: 2,
-                                        blurRadius: 5,
-                                        offset: const Offset(
-                                            0, 3), // changes position of shadow
-                                      )
-                                    ],
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 120,
-                                        height: 160,
-                                        decoration: const BoxDecoration(
-                                            color: Color(0xFF074173),
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(15),
-                                                bottomLeft:
-                                                    Radius.circular(15))),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              'Modul',
-                                              style: TextStyle(
-                                                  fontFamily: 'Rubik',
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Colors.amber),
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 10),
-                                              alignment: Alignment.center,
-                                              width: 70,
-                                              height: 70,
-                                              decoration: const BoxDecoration(
-                                                  color: Colors.amber,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(15))),
-                                              child: Text(
-                                                setDoc['setnum'],
-                                                style: const TextStyle(
-                                                    fontFamily: 'Rubik',
-                                                    fontSize: 52,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Container(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Bilangan Soalan: ' +
-                                                    setDoc['question']
-                                                        .toString(),
-                                                style: const TextStyle(
-                                                  fontFamily: 'Rubik',
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
-                                              Text(
-                                                'Tahap: ' +
-                                                    setDoc['difficulty'] +
-                                                    ' min',
-                                                style: const TextStyle(
-                                                    fontFamily: 'Rubik',
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                              Text(
-                                                'Markah: ' +
-                                                    setDoc['mark'].toString(),
-                                                style: const TextStyle(
-                                                    fontFamily: 'Rubik',
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                              Container(
-                                                alignment:
-                                                    Alignment.bottomRight,
-                                                width: 230,
-                                                child: ElevatedButton(
-                                                    onPressed: () {
-                                                      player.play(AssetSource(
-                                                          'audio/startquiz.mp3'));
-                                                      Future.delayed(
-                                                          Duration(seconds: 1),
-                                                          () {
-                                                        if (setDoc['type'] ==
-                                                            'mcq') {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) => QuizView(
-                                                                  setnum: setDoc[
-                                                                      'setnum'],
-                                                                  chapternum:
-                                                                      setDoc[
-                                                                          'chapter']),
-                                                            ),
-                                                          );
-                                                        } else if (setDoc[
-                                                                'type'] ==
-                                                            'fb') {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) => FillQuiz(
-                                                                  setnum: setDoc[
-                                                                      'setnum'],
-                                                                  chapternum:
-                                                                      setDoc[
-                                                                          'chapter']),
-                                                            ),
-                                                          );
-                                                        } else if (setDoc[
-                                                                'type'] ==
-                                                            'tof') {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) => tofQuiz(
-                                                                  setnum: setDoc[
-                                                                      'setnum'],
-                                                                  chapternum:
-                                                                      setDoc[
-                                                                          'chapter']),
-                                                            ),
-                                                          );
-                                                        }
-                                                      });
-                                                    },
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      backgroundColor: const Color(
-                                                          0xFF074173), // Use 0xFF as the prefix
-                                                    ),
-                                                    child: const Text(
-                                                      'Mula',
-                                                      style: TextStyle(
-                                                          fontFamily: 'Rubik',
-                                                          fontSize: 17,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.amber),
-                                                    )),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(30, 0, 30, 10),
+                height: 80,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 5, color: Color(0xFFEEE0C9)),
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color(0xFF6F131E)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.quiz),
+                          onPressed: () {
+                            setState(() {
+                              _selectedIndex = 0;
+                            });
                           },
+                          color: _selectedIndex == 0
+                              ? Color(0xFFEEE0C9)
+                              : Colors
+                                  .grey, // Change color based on current index
                         ),
-                      )
-              ],
+                        if (_selectedIndex == 0)
+                          Text('Kuiz',
+                              style: TextStyle(
+                                  color: Color(
+                                      0xFFEEE0C9))), // Show label if selected
+                      ],
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.note),
+                          onPressed: () {
+                            setState(() {
+                              _selectedIndex = 1;
+                            });
+                          },
+                          color: _selectedIndex == 1
+                              ? Color(0xFFEEE0C9)
+                              : Colors
+                                  .grey, // Change color based on current index
+                        ),
+                        if (_selectedIndex == 1)
+                          Text('Nota',
+                              style: TextStyle(
+                                  color: Color(
+                                      0xFFEEE0C9))), // Show label if selected
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ]),
+          ],
         ),
       ),
     );

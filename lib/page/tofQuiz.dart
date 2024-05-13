@@ -36,6 +36,8 @@ class _tofQuizState extends State<tofQuiz> {
   late bool _showValidationIcon;
   late bool currentAnswer = false;
 
+  late PageController _pageController;
+
   @override
   void initState() {
     super.initState();
@@ -51,11 +53,13 @@ class _tofQuizState extends State<tofQuiz> {
       });
     });
     _startTimer();
+    _pageController = PageController();
   }
 
   @override
   void dispose() {
     _timer.cancel();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -137,8 +141,22 @@ class _tofQuizState extends State<tofQuiz> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 40,
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                child: LinearProgressIndicator(
+                  value: _progress,
+                  minHeight: 20,
+                  borderRadius: BorderRadius.circular(10),
+                  backgroundColor: Colors.grey,
+                  valueColor:
+                      const AlwaysStoppedAnimation<Color>(Color(0xFFFFC55A)),
+                ),
+              ),
+              SizedBox(
+                height: 35,
               ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
@@ -160,10 +178,19 @@ class _tofQuizState extends State<tofQuiz> {
                     var question = _questions[_currentQuestionIndex];
                     _correctAnswer = question['answer'];
 
-                    return ListView.builder(
-                      itemCount: 1,
+                    return PageView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _pageController,
+                      itemCount: _questions.length,
                       itemBuilder: (context, index) {
-                        return buildQuestionWidget(question);
+                        return buildQuestionWidget(_questions[index]);
+                      },
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentQuestionIndex = index;
+                          _progress = (index) / _questions.length;
+                          _showValidationIcon = false;
+                        });
                       },
                     );
                   },
@@ -205,213 +232,222 @@ class _tofQuizState extends State<tofQuiz> {
   }
 
   Widget buildQuestionWidget(DocumentSnapshot<Object?> question) {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 750,
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(
+            height: 55,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Text(
+            question['questString'],
+            style: const TextStyle(
+                fontFamily: 'Rubik',
+                fontSize: 20,
+                color: Color(0xFF074173),
+                fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 10),
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const SizedBox(
-                height: 15,
-              ),
-              Text(
-                question['questString'],
-                style: const TextStyle(
-                    fontFamily: 'Rubik',
-                    fontSize: 20,
-                    color: Color(0xFF074173),
-                    fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 10),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _showValidationIcon = true;
-                            currentAnswer = true;
-                            if (_correctAnswer == currentAnswer) {
-                              player.play(AssetSource('audio/correct.mp3'));
-                              _score += 5;
-                              _correctCount++;
-                            } else {
-                              player.play(AssetSource('audio/wrong.mp3'));
-                              _wrongCount++;
-                            }
-                            Future.delayed(const Duration(seconds: 2), () {
-                              _navigateToNextQuestion();
-                            });
-                          });
-                        },
-                        child: Container(
-                          width: 170,
-                          alignment: Alignment.center,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.amber[100]),
-                          child: const Text('Betul',
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontFamily: 'Rubik', fontSize: 23)),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _showValidationIcon = true;
-                            currentAnswer = false;
-                            if (_correctAnswer == currentAnswer) {
-                              player.play(AssetSource('audio/correct.mp3'));
-                              _score += 5;
-                              _correctCount++;
-                            } else {
-                              player.play(AssetSource('audio/wrong.mp3'));
-                              _wrongCount++;
-                            }
-                            Future.delayed(const Duration(seconds: 3), () {
-                              _navigateToNextQuestion();
-                            });
-                          });
-                        },
-                        child: Container(
-                          width: 170,
-                          alignment: Alignment.center,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.amber[100]),
-                          child: const Text('Salah',
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontFamily: 'Rubik', fontSize: 23)),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                            width: 5, color: const Color(0xFF074173)),
-                        color: Colors.transparent),
-                    child: _showValidationIcon
-                        ? validateAnswer(currentAnswer)
-                        : const SizedBox(),
-                  ),
-                ],
-              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: const Color(0xFF074173),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.keyboard_double_arrow_left),
-                      color: Colors.white,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showValidationIcon = true;
+                        currentAnswer = true;
+                        if (_correctAnswer == currentAnswer) {
+                          player.play(AssetSource('audio/correct.mp3'));
+                          _score += 5;
+                          _correctCount++;
+                        } else {
+                          player.play(AssetSource('audio/wrong.mp3'));
+                          _wrongCount++;
+                        }
+                        Future.delayed(const Duration(seconds: 1), () {
+                          if (_currentQuestionIndex < _questions.length - 1) {
+                            _pageController.nextPage(
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeInOut);
+                          } else {
+                            // Final question, navigate to result page
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ResultView(
+                                    score: _score,
+                                    correctCount: _correctCount,
+                                    wrongCount: _wrongCount,
+                                    unansweredCount: _unansweredCount,
+                                    setnum: widget.setnum,
+                                    chapter: widget.chapternum,
+                                    elapsedTime: _elapsedTime),
+                              ),
+                            );
+                          }
+                        });
+                      });
+                    },
+                    child: Container(
+                      width: 150,
+                      alignment: Alignment.center,
+                      height: 70,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.amber[100]),
+                      child: const Text('Betul',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontFamily: 'Rubik', fontSize: 23)),
                     ),
                   ),
                   const SizedBox(
-                    width: 10,
+                    width: 30,
                   ),
                   GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _unansweredCount++; // Increment unanswered count
+                    onTap: () {
+                      setState(() {
+                        _showValidationIcon = true;
+                        currentAnswer = false;
+                        if (_correctAnswer == currentAnswer) {
+                          player.play(AssetSource('audio/correct.mp3'));
+                          _score += 5;
+                          _correctCount++;
+                        } else {
+                          player.play(AssetSource('audio/wrong.mp3'));
+                          _wrongCount++;
+                        }
+                        Future.delayed(const Duration(seconds: 1), () {
+                          if (_currentQuestionIndex < _questions.length - 1) {
+                            _pageController.nextPage(
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeInOut);
+                          } else {
+                            // Final question, navigate to result page
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ResultView(
+                                    score: _score,
+                                    correctCount: _correctCount,
+                                    wrongCount: _wrongCount,
+                                    unansweredCount: _unansweredCount,
+                                    setnum: widget.setnum,
+                                    chapter: widget.chapternum,
+                                    elapsedTime: _elapsedTime),
+                              ),
+                            );
+                          }
                         });
-                        _navigateToNextQuestion();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 300,
-                        height: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: const Color(0xFF074173)),
-                        child: const Text(
-                          'Soalan Seterusnya',
-                          style: TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white),
-                        ),
-                      ))
+                      });
+                    },
+                    child: Container(
+                      width: 150,
+                      alignment: Alignment.center,
+                      height: 70,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.amber[100]),
+                      child: const Text('Salah',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontFamily: 'Rubik', fontSize: 23)),
+                    ),
+                  )
                 ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border:
+                        Border.all(width: 5, color: const Color(0xFF074173)),
+                    color: Colors.transparent),
+                child: _showValidationIcon
+                    ? validateAnswer(currentAnswer)
+                    : const SizedBox(),
               ),
             ],
           ),
-        ),
-        Positioned(
-          top: -5,
-          left: 0,
-          right: 0,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 20),
-            child: LinearProgressIndicator(
-              value: _progress,
-              minHeight: 20,
-              borderRadius: BorderRadius.circular(20),
-              backgroundColor: Colors.grey,
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(Color(0xFFFFC55A)),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: const Color(0xFF074173),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.keyboard_double_arrow_left),
+                  color: Colors.white,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _unansweredCount++; // Increment unanswered count
+                      if (_currentQuestionIndex < _questions.length - 1) {
+                        _pageController.nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut);
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ResultView(
+                                score: _score,
+                                correctCount: _correctCount,
+                                wrongCount: _wrongCount,
+                                unansweredCount: _unansweredCount,
+                                setnum: widget.setnum,
+                                chapter: widget.chapternum,
+                                elapsedTime: _elapsedTime),
+                          ),
+                        );
+                      }
+                    });
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 250,
+                    height: 70,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: const Color(0xFF074173)),
+                    child: const Text(
+                      'Soalan Seterusnya',
+                      style: TextStyle(
+                          fontFamily: 'Rubik',
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ),
+                  ))
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
-  }
-
-  void _navigateToNextQuestion() {
-    setState(() {
-      if (_currentQuestionIndex < _questions.length - 1) {
-        _currentQuestionIndex++;
-        _progress = (_currentQuestionIndex) / _questions.length;
-      } else {
-        print('Quiz completed!');
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResultView(
-                score: _score,
-                correctCount: _correctCount,
-                wrongCount: _wrongCount,
-                unansweredCount: _unansweredCount,
-                setnum: widget.setnum,
-                chapter: widget.chapternum,
-                elapsedTime: _elapsedTime),
-          ),
-        );
-        return;
-      }
-    });
   }
 }

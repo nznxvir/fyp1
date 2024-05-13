@@ -47,6 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
         "password": _passwordController.text,
         "age": _ageController.text,
         "score": 0,
+        "rank": 0,
         'imageurl':
             'https://firebasestorage.googleapis.com/v0/b/fypquiz-55f06.appspot.com/o/userProfileImages%2Fphoto_2024-04-21_17-07-43.jpg?alt=media&token=25f75f03-58e6-4cb9-afab-d3d944c97960'
       };
