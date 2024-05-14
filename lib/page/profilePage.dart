@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp1/bottomnav.dart';
 import 'package:fyp1/page/historyPage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -160,6 +161,27 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    void _onTap(int index) {
+      setState(() {
+        switch (index) {
+          case 0:
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => RankView()),
+            );
+            break;
+          case 1:
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeView()),
+            );
+            break;
+          case 2:
+            break;
+        }
+      });
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -492,94 +514,6 @@ class _ProfileViewState extends State<ProfileView> {
                           color: Colors.white),
                     ),
                   )),
-            ],
-          ),
-        ),
-        bottomNavigationBar: Container(
-          margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-          height: 65,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: const Color(0xFF074173)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.leaderboard),
-                color: Colors.white,
-                iconSize: 35,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 300),
-                      pageBuilder: (_, __, ___) => const RankView(),
-                      transitionsBuilder: (_, animation, __, child) {
-                        return Stack(
-                          children: [
-                            SlideTransition(
-                              position: Tween<Offset>(
-                                begin: Offset.zero,
-                                end: const Offset(0.5, 0.0),
-                              ).animate(animation),
-                              child: child,
-                            ),
-                            SlideTransition(
-                              position: Tween<Offset>(
-                                begin: const Offset(-0.5, 0.0),
-                                end: Offset.zero,
-                              ).animate(animation),
-                              child:
-                                  const RankView(), // Replace with your current page content
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.home_filled),
-                color: Colors.white,
-                iconSize: 35,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 300),
-                      pageBuilder: (_, __, ___) => const HomeView(),
-                      transitionsBuilder: (_, animation, __, child) {
-                        return Stack(
-                          children: [
-                            SlideTransition(
-                              position: Tween<Offset>(
-                                begin: Offset.zero,
-                                end: const Offset(0.5, 0.0),
-                              ).animate(animation),
-                              child: child,
-                            ),
-                            SlideTransition(
-                              position: Tween<Offset>(
-                                begin: const Offset(-0.5, 0.0),
-                                end: Offset.zero,
-                              ).animate(animation),
-                              child:
-                                  const HomeView(), // Replace with your current page content
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.person),
-                color: const Color(0xFFEEE0C9),
-                iconSize: 35,
-                onPressed: () {},
-              ),
             ],
           ),
         ),
