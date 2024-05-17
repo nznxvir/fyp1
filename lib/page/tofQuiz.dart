@@ -1,11 +1,10 @@
-// ignore_for_file: camel_case_types
-
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp1/page/Colors.dart';
 import 'resultPage.dart';
 
 class tofQuiz extends StatefulWidget {
@@ -35,6 +34,11 @@ class _tofQuizState extends State<tofQuiz> {
 
   late bool _showValidationIcon;
   late bool currentAnswer = false;
+
+  late Color _betulColor = AppColors.thirdColor;
+  late Color _salahColor = AppColors.thirdColor;
+  late Color _selectedBetulColor = AppColors.thirdColor;
+  late Color _selectedSalahColor = AppColors.thirdColor;
 
   late PageController _pageController;
 
@@ -79,7 +83,7 @@ class _tofQuizState extends State<tofQuiz> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          color: const Color(0xFF074173),
+          color: AppColors.primaryColor,
           child: Column(
             children: [
               const SizedBox(height: 15),
@@ -94,12 +98,14 @@ class _tofQuizState extends State<tofQuiz> {
                       height: 50,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          border: Border.all(width: 3, color: Colors.white),
+                          border: Border.all(
+                              width: 3, color: AppColors.backgroundColor),
                           color: Colors.transparent),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.timer, color: Colors.white),
+                          const Icon(Icons.timer,
+                              color: AppColors.backgroundColor),
                           const SizedBox(
                             width: 5,
                           ),
@@ -109,7 +115,7 @@ class _tofQuizState extends State<tofQuiz> {
                                 fontFamily: 'Rubik',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.white),
+                                color: AppColors.backgroundColor),
                           ),
                         ],
                       ),
@@ -120,7 +126,7 @@ class _tofQuizState extends State<tofQuiz> {
                           fontFamily: 'Rubik',
                           fontSize: 23,
                           fontWeight: FontWeight.normal,
-                          color: Colors.white),
+                          color: AppColors.backgroundColor),
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -128,20 +134,21 @@ class _tofQuizState extends State<tofQuiz> {
                       height: 45,
                       decoration: BoxDecoration(
                           color: Colors.transparent,
-                          border: Border.all(width: 3, color: Colors.white),
+                          border: Border.all(
+                              width: 3, color: AppColors.backgroundColor),
                           borderRadius: BorderRadius.circular(20)),
                       child: Text(
                         'Skor: $_unansweredCount',
                         style: const TextStyle(
                             fontFamily: 'Rubik',
                             fontSize: 20,
-                            color: Colors.white),
+                            color: AppColors.backgroundColor),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Padding(
@@ -150,15 +157,18 @@ class _tofQuizState extends State<tofQuiz> {
                   value: _progress,
                   minHeight: 20,
                   borderRadius: BorderRadius.circular(10),
-                  backgroundColor: Colors.grey,
-                  valueColor:
-                      const AlwaysStoppedAnimation<Color>(Color(0xFFFFC55A)),
+                  backgroundColor: AppColors.backgroundColor,
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                      AppColors.secondaryColor),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 35,
               ),
-              Expanded(
+              Container(
+                width: double.infinity,
+                height: 600,
+                color: AppColors.primaryColor,
                 child: StreamBuilder<QuerySnapshot>(
                   stream: _questionsStream,
                   builder: (context, snapshot) {
@@ -190,6 +200,8 @@ class _tofQuizState extends State<tofQuiz> {
                           _currentQuestionIndex = index;
                           _progress = (index) / _questions.length;
                           _showValidationIcon = false;
+                          _selectedBetulColor = AppColors.thirdColor;
+                          _selectedSalahColor = AppColors.thirdColor;
                         });
                       },
                     );
@@ -203,41 +215,13 @@ class _tofQuizState extends State<tofQuiz> {
     );
   }
 
-  Widget validateAnswer(bool currentAnswer) {
-    IconData icon = CupertinoIcons.add;
-    Color iconColor = Colors.transparent;
-
-    if (_correctAnswer == currentAnswer) {
-      icon = CupertinoIcons.check_mark_circled_solid;
-      iconColor = Colors.green;
-    } else {
-      icon = CupertinoIcons.xmark_circle_fill;
-      iconColor = Colors.red;
-    }
-
-    return Container(
-      width: 80,
-      height: 80,
-      decoration: const BoxDecoration(
-        color: Colors.transparent,
-      ),
-      child: Center(
-        child: Icon(
-          icon,
-          color: iconColor,
-          size: 50,
-        ),
-      ),
-    );
-  }
-
   Widget buildQuestionWidget(DocumentSnapshot<Object?> question) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      margin: EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -252,133 +236,138 @@ class _tofQuizState extends State<tofQuiz> {
             style: const TextStyle(
                 fontFamily: 'Rubik',
                 fontSize: 20,
-                color: Color(0xFF074173),
+                color: AppColors.primaryColor,
                 fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 10),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _showValidationIcon = true;
-                        currentAnswer = true;
-                        if (_correctAnswer == currentAnswer) {
-                          player.play(AssetSource('audio/correct.mp3'));
-                          _score += 5;
-                          _correctCount++;
-                        } else {
-                          player.play(AssetSource('audio/wrong.mp3'));
-                          _wrongCount++;
-                        }
-                        Future.delayed(const Duration(seconds: 1), () {
-                          if (_currentQuestionIndex < _questions.length - 1) {
-                            _pageController.nextPage(
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.easeInOut);
-                          } else {
-                            // Final question, navigate to result page
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ResultView(
-                                    score: _score,
-                                    correctCount: _correctCount,
-                                    wrongCount: _wrongCount,
-                                    unansweredCount: _unansweredCount,
-                                    setnum: widget.setnum,
-                                    chapter: widget.chapternum,
-                                    elapsedTime: _elapsedTime),
-                              ),
-                            );
-                          }
-                        });
-                      });
-                    },
-                    child: Container(
-                      width: 150,
-                      alignment: Alignment.center,
-                      height: 70,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.amber[100]),
-                      child: const Text('Betul',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontFamily: 'Rubik', fontSize: 23)),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _showValidationIcon = true;
-                        currentAnswer = false;
-                        if (_correctAnswer == currentAnswer) {
-                          player.play(AssetSource('audio/correct.mp3'));
-                          _score += 5;
-                          _correctCount++;
-                        } else {
-                          player.play(AssetSource('audio/wrong.mp3'));
-                          _wrongCount++;
-                        }
-                        Future.delayed(const Duration(seconds: 1), () {
-                          if (_currentQuestionIndex < _questions.length - 1) {
-                            _pageController.nextPage(
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.easeInOut);
-                          } else {
-                            // Final question, navigate to result page
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ResultView(
-                                    score: _score,
-                                    correctCount: _correctCount,
-                                    wrongCount: _wrongCount,
-                                    unansweredCount: _unansweredCount,
-                                    setnum: widget.setnum,
-                                    chapter: widget.chapternum,
-                                    elapsedTime: _elapsedTime),
-                              ),
-                            );
-                          }
-                        });
-                      });
-                    },
-                    child: Container(
-                      width: 150,
-                      alignment: Alignment.center,
-                      height: 70,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.amber[100]),
-                      child: const Text('Salah',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontFamily: 'Rubik', fontSize: 23)),
-                    ),
-                  )
-                ],
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _showValidationIcon = true;
+                    currentAnswer = true;
+                    if (_correctAnswer == currentAnswer) {
+                      player.play(AssetSource('audio/correct.mp3'));
+                      _score += 5;
+                      _correctCount++;
+                      _selectedBetulColor = Colors.green;
+                    } else {
+                      player.play(AssetSource('audio/wrong.mp3'));
+                      _wrongCount++;
+                      _selectedBetulColor = Colors.red;
+                    }
+                    Future.delayed(const Duration(seconds: 1), () {
+                      if (_currentQuestionIndex < _questions.length - 1) {
+                        _pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut);
+                      } else {
+                        // Final question, navigate to result page
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ResultView(
+                                score: _score,
+                                correctCount: _correctCount,
+                                wrongCount: _wrongCount,
+                                unansweredCount: _unansweredCount,
+                                setnum: widget.setnum,
+                                chapter: widget.chapternum,
+                                elapsedTime: _elapsedTime),
+                          ),
+                        );
+                      }
+                    });
+                  });
+                },
+                child: Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  height: 70,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              width: 7, color: AppColors.primaryColor),
+                          left: BorderSide(
+                              width: 4, color: AppColors.primaryColor)),
+                      borderRadius: BorderRadius.circular(20),
+                      color: _selectedBetulColor),
+                  child: const Text('Betul',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: 'Rubik',
+                          fontSize: 23,
+                          fontWeight: FontWeight.w600)),
+                ),
+              ),
+              const SizedBox(
+                width: 50,
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _showValidationIcon = true;
+                    currentAnswer = false;
+                    if (_correctAnswer == currentAnswer) {
+                      player.play(AssetSource('audio/correct.mp3'));
+                      _score += 5;
+                      _correctCount++;
+                      _selectedSalahColor = Colors.green;
+                    } else {
+                      player.play(AssetSource('audio/wrong.mp3'));
+                      _wrongCount++;
+                      _selectedSalahColor = Colors.red;
+                    }
+                    Future.delayed(const Duration(seconds: 1), () {
+                      if (_currentQuestionIndex < _questions.length - 1) {
+                        _pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut);
+                      } else {
+                        // Final question, navigate to result page
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ResultView(
+                                score: _score,
+                                correctCount: _correctCount,
+                                wrongCount: _wrongCount,
+                                unansweredCount: _unansweredCount,
+                                setnum: widget.setnum,
+                                chapter: widget.chapternum,
+                                elapsedTime: _elapsedTime),
+                          ),
+                        );
+                      }
+                    });
+                  });
+                },
+                child: Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  height: 70,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              width: 7, color: AppColors.primaryColor),
+                          left: BorderSide(
+                              width: 4, color: AppColors.primaryColor)),
+                      borderRadius: BorderRadius.circular(20),
+                      color: _selectedSalahColor),
+                  child: const Text('Salah',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: 'Rubik',
+                          fontSize: 23,
+                          fontWeight: FontWeight.w600)),
+                ),
               ),
               const SizedBox(
                 height: 20,
-              ),
-              Container(
-                width: 70,
-                height: 70,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border:
-                        Border.all(width: 5, color: const Color(0xFF074173)),
-                    color: Colors.transparent),
-                child: _showValidationIcon
-                    ? validateAnswer(currentAnswer)
-                    : const SizedBox(),
               ),
             ],
           ),
@@ -389,12 +378,12 @@ class _tofQuizState extends State<tofQuiz> {
                 width: 70,
                 height: 70,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: const Color(0xFF074173),
+                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.secondaryColor,
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.keyboard_double_arrow_left),
-                  color: Colors.white,
+                  color: AppColors.backgroundColor,
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -409,7 +398,7 @@ class _tofQuizState extends State<tofQuiz> {
                       _unansweredCount++; // Increment unanswered count
                       if (_currentQuestionIndex < _questions.length - 1) {
                         _pageController.nextPage(
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut);
                       } else {
                         Navigator.pushReplacement(
@@ -433,15 +422,15 @@ class _tofQuizState extends State<tofQuiz> {
                     width: 250,
                     height: 70,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: const Color(0xFF074173)),
+                        borderRadius: BorderRadius.circular(20),
+                        color: AppColors.secondaryColor),
                     child: const Text(
                       'Soalan Seterusnya',
                       style: TextStyle(
                           fontFamily: 'Rubik',
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white),
+                          color: AppColors.backgroundColor),
                     ),
                   ))
             ],

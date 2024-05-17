@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp1/page/Colors.dart';
 
 class RankTile extends StatelessWidget {
   final String username;
@@ -19,14 +20,13 @@ class RankTile extends StatelessWidget {
   Color _getBorderColor(int rank) {
     switch (rank) {
       case 1:
-        return Color(0xFFd4af37); // Gold color for the first rank
+        return Color(0xFFd4af37);
       case 2:
-        return Color(0xffC0C0C0); // Silver color for the second rank
+        return Color(0xffC0C0C0);
       case 3:
-        return Color.fromARGB(
-            255, 182, 113, 44); // Bronze color for the third rank
+        return Color.fromARGB(255, 182, 113, 44);
       default:
-        return Colors.transparent; // Transparent for other ranks
+        return AppColors.secondaryColor;
     }
   }
 
@@ -41,8 +41,8 @@ class RankTile extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(20)),
-        color: Colors.white,
-        border: Border.all(color: borderColor, width: 5), // Set border color
+        color: AppColors.backgroundColor,
+        border: Border.all(color: borderColor, width: 5),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.8),
@@ -57,7 +57,10 @@ class RankTile extends StatelessWidget {
           Text(
             'Rank ${rank == userRank ? userRank : rank}',
             style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Rubik'),
+                fontSize: 23,
+                fontWeight: FontWeight.bold,
+                color: borderColor,
+                fontFamily: 'Rubik'),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,17 +72,17 @@ class RankTile extends StatelessWidget {
                     height: 60,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Color(0xFFEEE0C9),
+                        color: AppColors.secondaryColor,
                         image: DecorationImage(
                             fit: BoxFit.cover, image: NetworkImage(image))),
                   ),
                   SizedBox(width: 15),
                   Text(username,
                       style: TextStyle(
-                          fontSize: 25,
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Rubik',
-                          color: Color(0xFF074173)))
+                          color: AppColors.primaryColor))
                 ],
               ),
               Text(score.toString(),
@@ -87,7 +90,7 @@ class RankTile extends StatelessWidget {
                       fontSize: 40,
                       fontWeight: FontWeight.w700,
                       fontFamily: 'Rubik',
-                      color: Color(0xFF074173))),
+                      color: AppColors.primaryColor)),
             ],
           ),
         ],

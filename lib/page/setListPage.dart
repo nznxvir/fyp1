@@ -2,6 +2,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:fyp1/page/Colors.dart';
 import 'package:fyp1/page/fillQuizPage.dart';
 import 'package:fyp1/page/noteView.dart';
 import 'package:fyp1/page/tofQuiz.dart';
@@ -86,7 +88,7 @@ class _SetListViewState extends State<SetListView> {
                         const EdgeInsets.only(bottom: 40, right: 10, left: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.backgroundColor,
                       borderRadius: const BorderRadius.all(Radius.circular(15)),
                       boxShadow: [
                         BoxShadow(
@@ -104,7 +106,7 @@ class _SetListViewState extends State<SetListView> {
                           width: 120,
                           height: 120,
                           decoration: const BoxDecoration(
-                              color: Color(0xFF6F131E),
+                              color: AppColors.secondaryColor,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(15),
                                   bottomLeft: Radius.circular(15))),
@@ -117,7 +119,7 @@ class _SetListViewState extends State<SetListView> {
                                     fontFamily: 'Rubik',
                                     fontSize: 20,
                                     fontWeight: FontWeight.w900,
-                                    color: Color(0xFFEEE0C9)),
+                                    color: AppColors.thirdColor),
                               ),
                               Container(
                                 margin: const EdgeInsets.only(top: 10),
@@ -125,7 +127,7 @@ class _SetListViewState extends State<SetListView> {
                                 width: 70,
                                 height: 60,
                                 decoration: const BoxDecoration(
-                                    color: Color(0xFFEEE0C9),
+                                    color: AppColors.thirdColor,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(15))),
                                 child: Text(
@@ -133,6 +135,7 @@ class _SetListViewState extends State<SetListView> {
                                   style: const TextStyle(
                                       fontFamily: 'Rubik',
                                       fontSize: 42,
+                                      color: AppColors.primaryColor,
                                       fontWeight: FontWeight.bold),
                                 ),
                               )
@@ -145,10 +148,11 @@ class _SetListViewState extends State<SetListView> {
                           width: 260,
                           child: Text(
                             noteDoc['title'],
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontFamily: 'Rubik',
                                 fontSize: 20,
+                                color: AppColors.primaryColor,
                                 fontWeight: FontWeight.w600),
                           ),
                         )
@@ -195,7 +199,7 @@ class _SetListViewState extends State<SetListView> {
               margin: const EdgeInsets.only(bottom: 40, right: 10, left: 10),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.backgroundColor,
                 borderRadius: const BorderRadius.all(Radius.circular(15)),
                 boxShadow: [
                   BoxShadow(
@@ -213,7 +217,7 @@ class _SetListViewState extends State<SetListView> {
                     width: 120,
                     height: 160,
                     decoration: const BoxDecoration(
-                        color: Color(0xFF6F131E),
+                        color: AppColors.secondaryColor,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(15),
                             bottomLeft: Radius.circular(15))),
@@ -226,7 +230,7 @@ class _SetListViewState extends State<SetListView> {
                               fontFamily: 'Rubik',
                               fontSize: 20,
                               fontWeight: FontWeight.w900,
-                              color: Color(0xFFEEE0C9)),
+                              color: AppColors.thirdColor),
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 10),
@@ -234,7 +238,7 @@ class _SetListViewState extends State<SetListView> {
                           width: 70,
                           height: 70,
                           decoration: const BoxDecoration(
-                              color: Color(0xFFEEE0C9),
+                              color: AppColors.thirdColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15))),
                           child: Text(
@@ -242,6 +246,7 @@ class _SetListViewState extends State<SetListView> {
                             style: const TextStyle(
                                 fontFamily: 'Rubik',
                                 fontSize: 52,
+                                color: AppColors.primaryColor,
                                 fontWeight: FontWeight.bold),
                           ),
                         )
@@ -259,6 +264,7 @@ class _SetListViewState extends State<SetListView> {
                             style: const TextStyle(
                               fontFamily: 'Rubik',
                               fontSize: 18,
+                              color: AppColors.primaryColor,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -267,6 +273,7 @@ class _SetListViewState extends State<SetListView> {
                             style: const TextStyle(
                                 fontFamily: 'Rubik',
                                 fontSize: 18,
+                                color: AppColors.primaryColor,
                                 fontWeight: FontWeight.w700),
                           ),
                           Text(
@@ -274,56 +281,60 @@ class _SetListViewState extends State<SetListView> {
                             style: const TextStyle(
                                 fontFamily: 'Rubik',
                                 fontSize: 18,
+                                color: AppColors.primaryColor,
                                 fontWeight: FontWeight.w700),
                           ),
-                          Container(
-                            alignment: Alignment.bottomRight,
-                            width: 230,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  player
-                                      .play(AssetSource('audio/startquiz.mp3'));
-                                  Future.delayed(Duration(seconds: 1), () {
-                                    if (setDoc['type'] == 'mcq') {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => QuizView(
-                                              setnum: setDoc['setnum'],
-                                              chapternum: setDoc['chapter']),
-                                        ),
-                                      );
-                                    } else if (setDoc['type'] == 'fb') {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => FillQuiz(
-                                              setnum: setDoc['setnum'],
-                                              chapternum: setDoc['chapter']),
-                                        ),
-                                      );
-                                    } else if (setDoc['type'] == 'tof') {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => tofQuiz(
-                                              setnum: setDoc['setnum'],
-                                              chapternum: setDoc['chapter']),
-                                        ),
-                                      );
-                                    }
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF6F131E)),
-                                child: const Text(
-                                  'Mula',
-                                  style: TextStyle(
-                                      fontFamily: 'Rubik',
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFEEE0C9)),
-                                )),
+                          GestureDetector(
+                            onTap: () {
+                              player.play(AssetSource('audio/startquiz.mp3'));
+                              Future.delayed(Duration(seconds: 1), () {
+                                if (setDoc['type'] == 'mcq') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => QuizView(
+                                          setnum: setDoc['setnum'],
+                                          chapternum: setDoc['chapter']),
+                                    ),
+                                  );
+                                } else if (setDoc['type'] == 'fb') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FillQuiz(
+                                          setnum: setDoc['setnum'],
+                                          chapternum: setDoc['chapter']),
+                                    ),
+                                  );
+                                } else if (setDoc['type'] == 'tof') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => tofQuiz(
+                                          setnum: setDoc['setnum'],
+                                          chapternum: setDoc['chapter']),
+                                    ),
+                                  );
+                                }
+                              });
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(top: 10),
+                              alignment: Alignment.center,
+                              width: 230,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(13),
+                                  color: AppColors.secondaryColor),
+                              child: const Text(
+                                'Mula',
+                                style: TextStyle(
+                                    fontFamily: 'Rubik',
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.thirdColor),
+                              ),
+                            ),
                           )
                         ],
                       ),
@@ -342,7 +353,7 @@ class _SetListViewState extends State<SetListView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.backgroundColor,
         body: Stack(
           children: [
             SingleChildScrollView(
@@ -350,14 +361,15 @@ class _SetListViewState extends State<SetListView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
+                    margin: EdgeInsets.only(top: 10, right: 10, left: 10),
                     width: double.infinity,
-                    height: 90,
+                    height: 80,
                     alignment: Alignment.topCenter,
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20)),
-                        color: Color(0xFFEEE0C9)),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 4, color: AppColors.secondaryColor),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: AppColors.thirdColor),
                     child: Row(
                       children: [
                         const SizedBox(
@@ -373,13 +385,13 @@ class _SetListViewState extends State<SetListView> {
                               decoration: const BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
-                                color: Color(0xFF6F131E),
+                                color: AppColors.secondaryColor,
                               ),
                               child: const Icon(
                                 Icons.arrow_back_rounded,
                                 size: 30,
                                 weight: 5,
-                                color: Color(0xFFEEE0C9),
+                                color: AppColors.thirdColor,
                               )),
                         ),
                         const SizedBox(width: 10),
@@ -392,9 +404,9 @@ class _SetListViewState extends State<SetListView> {
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontFamily: 'Rubik',
-                                fontSize: 25,
+                                fontSize: 23,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF6F131E)),
+                                color: AppColors.primaryColor),
                           ),
                         ),
                         const SizedBox(
@@ -415,7 +427,7 @@ class _SetListViewState extends State<SetListView> {
                           : Container(
                               width: double.infinity,
                               height: 765,
-                              color: Colors.white,
+                              color: AppColors.backgroundColor,
                               child: _selectedIndex == 0
                                   ? _buildQuizList()
                                   : _buildNotesList(),
@@ -433,54 +445,52 @@ class _SetListViewState extends State<SetListView> {
                 margin: const EdgeInsets.fromLTRB(30, 0, 30, 10),
                 height: 80,
                 decoration: BoxDecoration(
-                    border: Border.all(width: 5, color: Color(0xFFEEE0C9)),
+                    border: Border.all(width: 5, color: AppColors.primaryColor),
                     borderRadius: BorderRadius.circular(20),
-                    color: const Color(0xFF6F131E)),
+                    color: AppColors.thirdColor),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Column(
-                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         IconButton(
-                          icon: Icon(Icons.quiz),
-                          onPressed: () {
-                            setState(() {
-                              _selectedIndex = 0;
-                            });
-                          },
-                          color: _selectedIndex == 0
-                              ? Color(0xFFEEE0C9)
-                              : Colors
-                                  .grey, // Change color based on current index
-                        ),
+                            icon: Icon(Icons.quiz),
+                            onPressed: () {
+                              setState(() {
+                                _selectedIndex = 0;
+                              });
+                            },
+                            color: _selectedIndex == 0
+                                ? AppColors.primaryColor
+                                : AppColors.backgroundColor),
                         if (_selectedIndex == 0)
                           Text('Kuiz',
                               style: TextStyle(
-                                  color: Color(
-                                      0xFFEEE0C9))), // Show label if selected
+                                  color: AppColors.primaryColor,
+                                  fontFamily: 'Rubik',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold)),
                       ],
                     ),
                     Column(
-                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         IconButton(
-                          icon: Icon(Icons.note),
-                          onPressed: () {
-                            setState(() {
-                              _selectedIndex = 1;
-                            });
-                          },
-                          color: _selectedIndex == 1
-                              ? Color(0xFFEEE0C9)
-                              : Colors
-                                  .grey, // Change color based on current index
-                        ),
+                            icon: Icon(Icons.note),
+                            onPressed: () {
+                              setState(() {
+                                _selectedIndex = 1;
+                              });
+                            },
+                            color: _selectedIndex == 1
+                                ? AppColors.primaryColor
+                                : AppColors.backgroundColor),
                         if (_selectedIndex == 1)
                           Text('Nota',
                               style: TextStyle(
-                                  color: Color(
-                                      0xFFEEE0C9))), // Show label if selected
+                                  color: AppColors.primaryColor,
+                                  fontFamily: 'Rubik',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ],

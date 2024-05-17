@@ -4,8 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp1/bottomnav.dart';
-import 'package:fyp1/page/historyPage.dart';
+import 'package:flutter/widgets.dart';
+import 'package:fyp1/page/Colors.dart';
+import 'package:fyp1/page/rankUtils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -27,6 +28,7 @@ class _ProfileViewState extends State<ProfileView> {
   late String email = '';
   late int score = 0;
   late String password;
+  late String pass = '';
   String? imageurl;
   File? _image;
 
@@ -50,6 +52,7 @@ class _ProfileViewState extends State<ProfileView> {
       imageurl = userDoc['imageurl'];
       score = userDoc['score'];
       email = userDoc['email'];
+      pass = userDoc['password'];
     });
   }
 
@@ -64,15 +67,61 @@ class _ProfileViewState extends State<ProfileView> {
 
   Future<void> changeUsername(String newUsername) async {
     final User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await user.updateDisplayName(newUsername);
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .update({'username': newUsername});
-      setState(() {
-        username = newUsername;
-      });
+    try {
+      if (user != null) {
+        await user.updateDisplayName(newUsername);
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({'username': newUsername});
+        setState(() {
+          username = newUsername;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0),
+              topRight: Radius.circular(10.0),
+            ),
+            side: BorderSide(width: 4, color: AppColors.secondaryColor),
+          ),
+          content: Text(
+            'Proses berjaya',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Rubik',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: AppColors.secondaryColor,
+            ),
+          ),
+        ));
+      }
+    } catch (error) {
+      print("Error changing password: $error");
+
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
+          ),
+          side: BorderSide(width: 4, color: AppColors.secondaryColor),
+        ),
+        content: Text(
+          'Gagal untuk menukar nama, Sila cuba lagi',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Rubik',
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: AppColors.secondaryColor,
+          ),
+        ),
+      ));
     }
   }
 
@@ -80,20 +129,39 @@ class _ProfileViewState extends State<ProfileView> {
     final User? user = FirebaseAuth.instance.currentUser;
     try {
       if (user != null) {
-        // Update password in FirebaseAuth
-        await user.updatePassword(newPassword);
-
+        print(user);
         // Update password in Firestore
         await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
             .update({'password': newPassword});
 
+        // Update password in FirebaseAuth
+        await user.updatePassword(newPassword);
+
         // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Password changed successfully"),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0),
+              topRight: Radius.circular(10.0),
+            ),
+            side: BorderSide(width: 4, color: AppColors.secondaryColor),
+          ),
+          content: Text(
+            'Proses berjaya',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Rubik',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: AppColors.secondaryColor,
+            ),
+          ),
         ));
 
+        // Update local password variable
         setState(() {
           password = newPassword;
         });
@@ -102,8 +170,25 @@ class _ProfileViewState extends State<ProfileView> {
       print("Error changing password: $error");
 
       // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Failed to change password. Please try again."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
+          ),
+          side: BorderSide(width: 4, color: AppColors.secondaryColor),
+        ),
+        content: Text(
+          'Gagal untuk menukar kata laluan, Sila cuba lagi',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Rubik',
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: AppColors.secondaryColor,
+          ),
+        ),
       ));
     }
   }
@@ -184,7 +269,7 @@ class _ProfileViewState extends State<ProfileView> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.backgroundColor,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -197,7 +282,7 @@ class _ProfileViewState extends State<ProfileView> {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(50),
                         bottomRight: Radius.circular(50)),
-                    color: Color(0xFF074173),
+                    color: AppColors.secondaryColor,
                   ),
                   child: Column(
                     children: [
@@ -206,7 +291,7 @@ class _ProfileViewState extends State<ProfileView> {
                           decoration: const BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(100)),
-                              color: Colors.white),
+                              color: AppColors.backgroundColor),
                           width: 120,
                           height: 120,
                           child: ClipOval(
@@ -226,10 +311,10 @@ class _ProfileViewState extends State<ProfileView> {
                           child: Container(
                             decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Color(0xFFEEE0C9)),
+                                color: AppColors.thirdColor),
                             child: IconButton(
                               icon: const Icon(Icons.edit),
-                              color: const Color(0xFF074173),
+                              color: AppColors.primaryColor,
                               onPressed: () {
                                 _getImage();
                               },
@@ -238,7 +323,7 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                       ]),
                       const SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
                       Container(
                         width: 350,
@@ -252,8 +337,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 color: Colors.black.withOpacity(0.5),
                                 spreadRadius: 3,
                                 blurRadius: 10,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
+                                offset: const Offset(0, 3),
                               )
                             ],
                             color: Colors.white),
@@ -263,126 +347,130 @@ class _ProfileViewState extends State<ProfileView> {
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Rubik',
-                              color: Color(0xFF074173)),
+                              color: AppColors.primaryColor),
                         ),
                       ),
                     ],
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(30, 240, 30, 50),
-                  width: 400,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.8),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: 120,
-                        height: 130,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Tukar nama',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: 'Rubik',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF074173))),
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              color: const Color(0xFFEEE0C9),
-                              iconSize: 40,
-                              onPressed: () {
-                                _changeName(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 130,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Tukar kata laluan',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: 'Rubik',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF074173))),
-                            IconButton(
-                              icon: const Icon(Icons.password_rounded),
-                              color: const Color(0xFFEEE0C9),
-                              iconSize: 40,
-                              onPressed: () {
-                                _ChangePassword(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 120,
-                        height: 130,
-                        decoration: const BoxDecoration(
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(30, 230, 30, 30),
+                    width: 400,
+                    height: 130,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      color: AppColors.backgroundColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        )
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 130,
+                          decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
-                            color: Colors.white),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Set semula markah',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: 'Rubik',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF074173))),
-                            IconButton(
-                              icon: const Icon(Icons.refresh),
-                              color: const Color(0xFFEEE0C9),
-                              iconSize: 40,
-                              onPressed: () {
-                                _ResetScore(context);
-                              },
-                            ),
-                          ],
+                            color: AppColors.backgroundColor,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('Tukar nama',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.primaryColor)),
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                color: AppColors.secondaryColor,
+                                iconSize: 40,
+                                onPressed: () {
+                                  _changeName(context);
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      )
-                    ],
+                        Container(
+                          width: 100,
+                          height: 130,
+                          decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              color: AppColors.backgroundColor),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('Tukar kata laluan',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.primaryColor)),
+                              IconButton(
+                                icon: const Icon(Icons.password_rounded),
+                                color: AppColors.secondaryColor,
+                                iconSize: 40,
+                                onPressed: () {
+                                  _ChangePassword(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 120,
+                          height: 130,
+                          decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              color: AppColors.backgroundColor),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('Set semula markah',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.primaryColor)),
+                              IconButton(
+                                icon: const Icon(Icons.refresh),
+                                color: AppColors.secondaryColor,
+                                iconSize: 40,
+                                onPressed: () {
+                                  _ResetScore(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 )
               ]),
               Container(
-                margin: const EdgeInsets.only(right: 30, left: 30),
+                margin: const EdgeInsets.only(right: 35, left: 35),
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                 width: double.infinity,
-                height: 200,
+                height: 280,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.backgroundColor,
+                  border: Border.all(width: 7, color: AppColors.secondaryColor),
                   borderRadius: const BorderRadius.all(Radius.circular(15)),
                   boxShadow: [
                     BoxShadow(
@@ -394,6 +482,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ],
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const Text(
                       'Maklumat Pengguna',
@@ -403,9 +492,6 @@ class _ProfileViewState extends State<ProfileView> {
                           fontSize: 20,
                           fontWeight: FontWeight.w700),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -413,19 +499,16 @@ class _ProfileViewState extends State<ProfileView> {
                           'Nama',
                           style: TextStyle(
                               fontFamily: 'Rubik',
-                              fontSize: 17,
+                              fontSize: 19,
                               fontWeight: FontWeight.w500),
                         ),
                         Text(username,
                             style: const TextStyle(
                                 fontFamily: 'Rubik',
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.grey))
                       ],
-                    ),
-                    const SizedBox(
-                      height: 5,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -434,19 +517,16 @@ class _ProfileViewState extends State<ProfileView> {
                           'Email',
                           style: TextStyle(
                               fontFamily: 'Rubik',
-                              fontSize: 17,
+                              fontSize: 19,
                               fontWeight: FontWeight.w500),
                         ),
                         Text(email,
                             style: const TextStyle(
                                 fontFamily: 'Rubik',
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.grey))
                       ],
-                    ),
-                    const SizedBox(
-                      height: 5,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -455,19 +535,16 @@ class _ProfileViewState extends State<ProfileView> {
                           'Umur',
                           style: TextStyle(
                               fontFamily: 'Rubik',
-                              fontSize: 17,
+                              fontSize: 19,
                               fontWeight: FontWeight.w500),
                         ),
                         Text(age,
                             style: const TextStyle(
                                 fontFamily: 'Rubik',
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.grey))
                       ],
-                    ),
-                    const SizedBox(
-                      height: 5,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -476,13 +553,13 @@ class _ProfileViewState extends State<ProfileView> {
                           'Skor',
                           style: TextStyle(
                               fontFamily: 'Rubik',
-                              fontSize: 17,
+                              fontSize: 19,
                               fontWeight: FontWeight.w500),
                         ),
                         Text(score.toString(),
                             style: const TextStyle(
                                 fontFamily: 'Rubik',
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.grey))
                       ],
@@ -491,29 +568,30 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               ),
               const SizedBox(
-                height: 40,
+                height: 20,
               ),
               GestureDetector(
-                  onTap: () {
-                    logout();
-                  },
-                  child: Container(
+                onTap: () {
+                  logout();
+                },
+                child: Container(
                     alignment: Alignment.center,
                     width: 280,
                     height: 60,
                     decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: Color(0xFF074173)),
+                        color: AppColors.secondaryColor),
                     child: const Text(
                       'Log Keluar',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontFamily: 'Rubik',
-                          fontSize: 25,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white),
-                    ),
-                  )),
+                        fontFamily: 'Rubik',
+                        fontSize: 25,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.backgroundColor,
+                      ),
+                    )),
+              )
             ],
           ),
         ),
@@ -526,7 +604,7 @@ class _ProfileViewState extends State<ProfileView> {
     return showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      backgroundColor: const Color(0xFF5F6F52),
+      backgroundColor: AppColors.backgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -534,21 +612,45 @@ class _ProfileViewState extends State<ProfileView> {
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
-          height: 300,
+          height: 330,
           width: double.infinity,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            border: Border(
+                top: BorderSide(width: 8, color: AppColors.secondaryColor)),
+          ),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.cancel_rounded),
+                          iconSize: 40,
+                          color: AppColors.secondaryColor,
+                          alignment: Alignment.topRight,
+                        ),
+                      ],
+                    ),
                     const Text(
-                      'Change Username',
+                      'Tukar nama pengguna',
                       style: TextStyle(
-                        fontSize: 28,
+                        fontFamily: 'Rubik',
+                        fontSize: 30,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEEE0C9),
+                        color: AppColors.secondaryColor,
                       ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Padding(
                       padding:
@@ -557,64 +659,49 @@ class _ProfileViewState extends State<ProfileView> {
                         controller: newUsernameController,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: AppColors.backgroundColor,
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(15),
                             borderSide: const BorderSide(
-                              color: Color(0xFFEEE0C9),
+                              color: AppColors.secondaryColor,
                               width: 3,
                             ),
                           ),
-                          hintText: 'New username',
+                          hintText: 'Masukkan nama',
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              width: 3,
-                              color: Color(0xFFEEE0C9),
+                              width: 5,
+                              color: AppColors.secondaryColor,
                             ),
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              minimumSize: MaterialStateProperty.all<Size>(
-                                  const Size(130, 60)),
-                            ),
-                            child: const Text(
-                              'Cancel',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              changeUsername(newUsernameController.text);
-                              Navigator.pop(context);
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color(0xFFEEE0C9)),
-                              minimumSize: MaterialStateProperty.all<Size>(
-                                  const Size(130, 60)),
-                            ),
-                            child: const Text(
-                              'Save',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                        ],
+                    SizedBox(
+                      height: 30,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        changeUsername(newUsernameController.text);
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 200,
+                        height: 65,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: AppColors.secondaryColor),
+                        child: Text(
+                          'Sahkan',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.backgroundColor),
+                        ),
                       ),
                     ),
                   ],
@@ -632,7 +719,7 @@ class _ProfileViewState extends State<ProfileView> {
     return showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      backgroundColor: const Color(0xFF5F6F52),
+      backgroundColor: AppColors.backgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -640,21 +727,45 @@ class _ProfileViewState extends State<ProfileView> {
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
-          height: 300,
+          height: 330,
           width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            border: Border(
+                top: BorderSide(width: 8, color: AppColors.secondaryColor)),
+          ),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.cancel_rounded),
+                          iconSize: 40,
+                          color: AppColors.secondaryColor,
+                          alignment: Alignment.topRight,
+                        ),
+                      ],
+                    ),
                     const Text(
-                      'Change Password',
+                      'Tukar kata laluan',
                       style: TextStyle(
-                        fontSize: 28,
+                        fontFamily: 'Rubik',
+                        fontSize: 30,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEEE0C9),
+                        color: AppColors.secondaryColor,
                       ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Padding(
                       padding:
@@ -663,66 +774,52 @@ class _ProfileViewState extends State<ProfileView> {
                         controller: newPasswordController,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: AppColors.backgroundColor,
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(20),
                             borderSide: const BorderSide(
-                              color: Color(0xFFEEE0C9),
+                              color: AppColors.secondaryColor,
                               width: 3,
                             ),
                           ),
-                          hintText: 'New password',
+                          hintText: 'Masukkan kata laluan baru',
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              width: 3,
-                              color: Color(0xFFEEE0C9),
+                              width: 5,
+                              color: AppColors.secondaryColor,
                             ),
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              minimumSize: MaterialStateProperty.all<Size>(
-                                  const Size(130, 60)),
-                            ),
-                            child: const Text(
-                              'Cancel',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              changePassword(newPasswordController.text);
-                              Navigator.pop(context);
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color(0xFFEEE0C9)),
-                              minimumSize: MaterialStateProperty.all<Size>(
-                                  const Size(130, 60)),
-                            ),
-                            child: const Text(
-                              'Save',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                        ],
-                      ),
+                    SizedBox(
+                      height: 30,
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        changePassword(newPasswordController.text);
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 200,
+                        height: 65,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: AppColors.secondaryColor),
+                        child: Text(
+                          'Sahkan',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Rubik',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.backgroundColor,
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -737,7 +834,7 @@ class _ProfileViewState extends State<ProfileView> {
     return showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      backgroundColor: const Color(0xFF5F6F52),
+      backgroundColor: AppColors.backgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -745,73 +842,87 @@ class _ProfileViewState extends State<ProfileView> {
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
-          height: 200,
+          height: 330,
           width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            border: Border(
+                top: BorderSide(width: 8, color: AppColors.secondaryColor)),
+          ),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.cancel_rounded),
+                          iconSize: 40,
+                          color: AppColors.secondaryColor,
+                          alignment: Alignment.topRight,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     const Text(
-                      'Reset Score',
+                      'Set semula markah',
                       style: TextStyle(
-                        fontSize: 28,
+                        fontFamily: 'Rubik',
+                        fontSize: 30,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEEE0C9),
+                        color: AppColors.secondaryColor,
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Text(
-                        'Are you sure you want to reset your score?',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
+                    SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'Adakah anda pasti untuk set semula markah?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Rubik',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.secondaryColor,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        resetScore();
+                        await updateRank();
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 200,
+                        height: 65,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: AppColors.secondaryColor),
+                        child: Text(
+                          'Sahkan',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Rubik',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.backgroundColor,
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              minimumSize: MaterialStateProperty.all<Size>(
-                                  const Size(130, 60)),
-                            ),
-                            child: const Text(
-                              'Cancel',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              resetScore();
-                              Navigator.pop(context);
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color(0xFFEEE0C9)),
-                              minimumSize: MaterialStateProperty.all<Size>(
-                                  const Size(130, 60)),
-                            ),
-                            child: const Text(
-                              'Reset',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    )
                   ],
                 ),
               ),

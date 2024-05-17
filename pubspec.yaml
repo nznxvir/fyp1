@@ -95,6 +95,8 @@ flutter:
   - assets/audio/wrong.mp3
   - assets/audio/startquiz.mp3
   - assets/hystobg.jpg
+  - assets/scroll.png
+  - assets/history.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

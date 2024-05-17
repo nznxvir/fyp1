@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp1/bottomnav.dart';
+import 'package:fyp1/page/Colors.dart';
 import '../homePage.dart';
 import '../profilePage.dart';
 import 'Leaderboard.dart';
@@ -12,13 +13,10 @@ class RankView extends StatefulWidget {
 }
 
 class _RankViewState extends State<RankView> {
-  int _currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     void _onTap(int index) {
       setState(() {
-        _currentIndex = index;
         switch (index) {
           case 0:
             break;
@@ -40,7 +38,7 @@ class _RankViewState extends State<RankView> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.backgroundColor,
         body: Stack(
           children: [
             Column(
@@ -51,7 +49,7 @@ class _RankViewState extends State<RankView> {
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     width: double.infinity,
                     height: 740,
-                    color: Colors.white,
+                    color: AppColors.backgroundColor,
                     child: Leaderboard(key: UniqueKey()),
                   ),
                 ),
@@ -69,7 +67,7 @@ class _RankViewState extends State<RankView> {
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),
                   ),
-                  color: Color(0xFF6F131E),
+                  color: AppColors.primaryColor,
                 ),
                 child: Text(
                   'Leaderboard',
@@ -77,7 +75,7 @@ class _RankViewState extends State<RankView> {
                     fontFamily: 'Rubik',
                     fontSize: 35,
                     fontWeight: FontWeight.w900,
-                    color: Colors.white,
+                    color: AppColors.thirdColor,
                   ),
                 ),
               ),

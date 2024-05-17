@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp1/page/Colors.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
@@ -22,26 +23,32 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       height: 65,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color(0xFF6F131E),
+        color: AppColors.secondaryColor,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
             icon: Icon(Icons.leaderboard),
-            color: widget.currentIndex == 0 ? Colors.white : Colors.grey,
+            color: widget.currentIndex == 0
+                ? AppColors.thirdColor
+                : AppColors.backgroundColor,
             iconSize: 35,
             onPressed: () => widget.onTap(0),
           ),
           IconButton(
             icon: Icon(Icons.home_filled),
-            color: widget.currentIndex == 1 ? Colors.white : Colors.grey,
+            color: widget.currentIndex == 1
+                ? AppColors.thirdColor
+                : AppColors.backgroundColor,
             iconSize: 35,
             onPressed: () => widget.onTap(1),
           ),
           IconButton(
             icon: Icon(Icons.person),
-            color: widget.currentIndex == 2 ? Colors.white : Colors.grey,
+            color: widget.currentIndex == 2
+                ? AppColors.thirdColor
+                : AppColors.backgroundColor,
             iconSize: 35,
             onPressed: () => widget.onTap(2),
           ),

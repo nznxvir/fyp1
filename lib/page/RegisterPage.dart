@@ -3,7 +3,10 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fyp1/page/Colors.dart';
 import 'package:fyp1/page/LoginPage.dart';
+import 'package:fyp1/page/homePage.dart';
+import 'package:fyp1/page/verifySplash.dart';
 
 import '../Constructor/AuthService.dart';
 import '../Constructor/appvalidator.dart';
@@ -32,8 +35,8 @@ class _RegisterPageState extends State<RegisterPage> {
       if (_passwordController.text != _confirmpasswordController.text) {
         // Show password mismatch error
         const AlertDialog(
-          title: Text("Password Confirmation Failed"),
-          content: Text("The passwords do not match."),
+          title: Text("Pengesahan kata laluan gagal"),
+          content: Text("Kata laluan tidak sepadan."),
         );
         return; // Do not proceed further
       }
@@ -55,9 +58,9 @@ class _RegisterPageState extends State<RegisterPage> {
       await authService.createUser(data, context, () {
         // Delay navigation to sign-in page by 5 seconds
         Future.delayed(const Duration(seconds: 1), () {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SignInPage()),
+            MaterialPageRoute(builder: (context) => VerifySplash()),
           );
         });
       });
@@ -73,7 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFF074173),
+        backgroundColor: AppColors.backgroundColor,
         body: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -86,11 +89,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 10,
                   ),
                   Container(
-                    width: 250,
-                    height: 250,
+                    width: 200,
+                    height: 200,
                     child: const Image(
-                      image: AssetImage('assets/register.png'),
+                      image: AssetImage('assets/scroll.png'),
                     ),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   const Text(
                     'Daftar Pengguna Baru',
@@ -98,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         fontFamily: 'Ubuntu',
                         fontSize: 30,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white),
+                        color: AppColors.primaryColor),
                   ),
                   const SizedBox(
                     height: 10,
@@ -111,19 +117,19 @@ class _RegisterPageState extends State<RegisterPage> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: appValidator.validateUserName,
                       decoration: InputDecoration(
-                        fillColor: Colors.white,
+                        fillColor: AppColors.backgroundColor,
                         filled: true,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         prefixIcon: const Icon(
                           Icons.person,
-                          color: Color(0xFF074173),
+                          color: AppColors.secondaryColor,
                         ),
                         hintText: 'Nama pengguna',
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
-                              width: 4, color: Color(0xFFFFC55A)),
+                              width: 4, color: AppColors.secondaryColor),
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
@@ -140,19 +146,19 @@ class _RegisterPageState extends State<RegisterPage> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: appValidator.validateAge,
                       decoration: InputDecoration(
-                          fillColor: Colors.white,
+                          fillColor: AppColors.backgroundColor,
                           filled: true,
-                          hoverColor: const Color(0xFFFFC55A),
+                          hoverColor: AppColors.secondaryColor,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                           prefixIcon: const Icon(
                             Icons.numbers,
-                            color: Color(0xFF074173),
+                            color: AppColors.secondaryColor,
                           ),
                           hintText: 'Umur',
                           focusedBorder: OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  width: 4, color: Color(0xFFFFC55A)),
+                                  width: 4, color: AppColors.secondaryColor),
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
@@ -167,19 +173,19 @@ class _RegisterPageState extends State<RegisterPage> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: appValidator.validateEmail,
                       decoration: InputDecoration(
-                          fillColor: Colors.white,
+                          fillColor: AppColors.backgroundColor,
                           filled: true,
-                          hoverColor: const Color(0xFFFFC55A),
+                          hoverColor: AppColors.secondaryColor,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                           prefixIcon: const Icon(
                             Icons.email,
-                            color: Color(0xFF074173),
+                            color: AppColors.secondaryColor,
                           ),
                           hintText: 'Email',
                           focusedBorder: OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  width: 4, color: Color(0xFFFFC55A)),
+                                  width: 4, color: AppColors.secondaryColor),
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
@@ -195,19 +201,19 @@ class _RegisterPageState extends State<RegisterPage> {
                       validator: appValidator.validatePassword,
                       obscureText: true,
                       decoration: InputDecoration(
-                          fillColor: Colors.white,
+                          fillColor: AppColors.backgroundColor,
                           filled: true,
-                          hoverColor: const Color(0xFFFFC55A),
+                          hoverColor: AppColors.secondaryColor,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                           prefixIcon: const Icon(
                             Icons.password,
-                            color: Color(0xFF074173),
+                            color: AppColors.secondaryColor,
                           ),
                           hintText: 'Kata laluan',
                           focusedBorder: OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  width: 4, color: Color(0xFFFFC55A)),
+                                  width: 4, color: AppColors.secondaryColor),
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
@@ -223,21 +229,24 @@ class _RegisterPageState extends State<RegisterPage> {
                       validator: appValidator.validatePassword,
                       obscureText: true,
                       decoration: InputDecoration(
-                          fillColor: Colors.white,
+                          fillColor: AppColors.backgroundColor,
                           filled: true,
-                          hoverColor: const Color(0xFFFFC55A),
+                          hoverColor: AppColors.secondaryColor,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                           prefixIcon: const Icon(
                             Icons.password,
-                            color: Color(0xFF074173),
+                            color: AppColors.secondaryColor,
                           ),
                           hintText: 'Sahkan kata laluan',
                           focusedBorder: OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  width: 4, color: Color(0xFFFFC55A)),
+                                  width: 4, color: AppColors.secondaryColor),
                               borderRadius: BorderRadius.circular(10))),
                     ),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -275,8 +284,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       style: TextStyle(
                           fontFamily: 'Rubik',
                           fontSize: 16,
-                          color: Colors.white),
+                          color: AppColors.primaryColor),
                     ),
+                  ),
+                  SizedBox(
+                    height: 5,
                   ),
                   Container(
                     width: 500,
@@ -313,7 +325,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                             },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.secondaryColor,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
@@ -323,7 +335,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           : const Text(
                               "Daftar",
                               style: TextStyle(
-                                  color: Color(0xFF074173),
+                                  color: AppColors.backgroundColor,
                                   fontFamily: 'Rubik',
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fyp1/Constructor/AuthGate.dart';
+import 'package:fyp1/page/Colors.dart';
 import 'package:get/get.dart';
 
 class SplashView extends StatelessWidget {
@@ -14,7 +15,7 @@ class SplashView extends StatelessWidget {
     });
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFF074173),
+        backgroundColor: AppColors.primaryColor,
         body: const Center(
           child: Image(
             image: AssetImage('assets/hystologo.png'),

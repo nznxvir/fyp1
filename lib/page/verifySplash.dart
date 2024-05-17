@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fyp1/page/Colors.dart';
 import 'package:fyp1/page/homePage.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -19,7 +20,7 @@ class _VerifySplashState extends State<VerifySplash> {
       Get.to(HomeView());
     });
     return Scaffold(
-      backgroundColor: Color(0xFF074173),
+      backgroundColor: AppColors.secondaryColor,
       body: Center(
         child: Lottie.asset(
           'assets/animation/test.json',

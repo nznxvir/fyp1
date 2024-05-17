@@ -15,8 +15,8 @@ class AuthService {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Register Successful"),
-            content: Text("New User Created"),
+            title: Text("Akaun Berjaya Dicipta"),
+            content: Text("Selamat Datang"),
           );
         },
       );
@@ -26,7 +26,7 @@ class AuthService {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Sign Up Failed"),
+            title: Text("Pendaftaran gagal"),
             content: Text(e.toString()),
           );
         },
@@ -47,7 +47,7 @@ class AuthService {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text("Login Failed"),
+              title: Text("Log masuk gagal"),
               content: Text(e.toString()),
             );
           });

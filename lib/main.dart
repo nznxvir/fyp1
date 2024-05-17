@@ -21,7 +21,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme: ThemeData(),
+        theme: ThemeData(
+          primaryColor: Color(0xFF222831),
+        ),
         home: const SplashView());
   }
 }

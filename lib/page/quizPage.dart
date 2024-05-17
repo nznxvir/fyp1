@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fyp1/page/Colors.dart';
 import 'package:fyp1/page/resultPage.dart';
 
 class QuizView extends StatefulWidget {
@@ -81,7 +82,7 @@ class _QuizViewState extends State<QuizView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFF6F131E),
+        backgroundColor: AppColors.primaryColor,
         body: Column(
           children: [
             const SizedBox(height: 15),
@@ -96,12 +97,14 @@ class _QuizViewState extends State<QuizView> {
                     height: 50,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        border: Border.all(width: 3, color: Colors.white),
+                        border: Border.all(
+                            width: 4, color: AppColors.backgroundColor),
                         color: Colors.transparent),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.timer, color: Colors.white),
+                        const Icon(Icons.timer,
+                            color: AppColors.backgroundColor),
                         const SizedBox(
                           width: 5,
                         ),
@@ -111,7 +114,7 @@ class _QuizViewState extends State<QuizView> {
                               fontFamily: 'Rubik',
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white),
+                              color: AppColors.backgroundColor),
                         ),
                       ],
                     ),
@@ -121,8 +124,8 @@ class _QuizViewState extends State<QuizView> {
                     style: const TextStyle(
                         fontFamily: 'Rubik',
                         fontSize: 23,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.white),
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.backgroundColor),
                   ),
                   Container(
                     alignment: Alignment.center,
@@ -130,14 +133,15 @@ class _QuizViewState extends State<QuizView> {
                     height: 45,
                     decoration: BoxDecoration(
                         color: Colors.transparent,
-                        border: Border.all(width: 3, color: Colors.white),
+                        border: Border.all(
+                            width: 3, color: AppColors.backgroundColor),
                         borderRadius: BorderRadius.circular(20)),
                     child: Text(
                       'Skor: $_score',
                       style: const TextStyle(
                           fontFamily: 'Rubik',
                           fontSize: 20,
-                          color: Colors.white),
+                          color: AppColors.backgroundColor),
                     ),
                   ),
                 ],
@@ -149,12 +153,18 @@ class _QuizViewState extends State<QuizView> {
                 value: _progress,
                 minHeight: 20,
                 borderRadius: BorderRadius.circular(10),
-                backgroundColor: Colors.grey,
+                backgroundColor: AppColors.backgroundColor,
                 valueColor:
-                    const AlwaysStoppedAnimation<Color>(Color(0xFFFFC55A)),
+                    const AlwaysStoppedAnimation<Color>(Colors.tealAccent),
               ),
             ),
-            Expanded(
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 700,
+              width: double.infinity,
+              color: AppColors.primaryColor,
               child: StreamBuilder<QuerySnapshot>(
                 stream: _questionsStream,
                 builder: (context, snapshot) {
@@ -207,7 +217,7 @@ class _QuizViewState extends State<QuizView> {
       margin: EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -222,7 +232,7 @@ class _QuizViewState extends State<QuizView> {
             style: const TextStyle(
                 fontFamily: 'Rubik',
                 fontSize: 20,
-                color: Color(0xFF6F131E),
+                color: AppColors.secondaryColor,
                 fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 10),
@@ -242,11 +252,11 @@ class _QuizViewState extends State<QuizView> {
                 height: 70,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: const Color(0xFF6F131E),
+                  color: AppColors.secondaryColor,
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.keyboard_double_arrow_left),
-                  color: Colors.white,
+                  color: AppColors.backgroundColor,
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -286,14 +296,14 @@ class _QuizViewState extends State<QuizView> {
                   height: 70,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: const Color(0xFF6F131E)),
+                      color: AppColors.secondaryColor),
                   child: const Text(
                     'Soalan Seterusnya',
                     style: TextStyle(
                         fontFamily: 'Rubik',
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white),
+                        color: AppColors.backgroundColor),
                   ),
                 ),
               )
@@ -308,7 +318,7 @@ class _QuizViewState extends State<QuizView> {
     bool isSelected = _selectedOption == option;
     bool isCorrect = _correctAnswer == option;
 
-    Color borderColor = const Color(0xFF6F131E);
+    Color borderColor = AppColors.secondaryColor;
     Color color = Colors.transparent;
     IconData iconData = CupertinoIcons.add;
     Color iconColor = Colors.transparent;
@@ -333,7 +343,7 @@ class _QuizViewState extends State<QuizView> {
           ? Colors.green
           : isSelected
               ? Colors.red
-              : const Color(0xFF6F131E);
+              : AppColors.secondaryColor;
     }
 
     // Define the icon based on the isCorrect condition
@@ -382,9 +392,9 @@ class _QuizViewState extends State<QuizView> {
         height: 80,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
           border: Border.all(
-            width: 3,
+            width: 4,
             color: borderColor,
           ),
         ),
@@ -410,7 +420,7 @@ class _QuizViewState extends State<QuizView> {
                 child: Icon(
                   iconData,
                   color: iconColor,
-                  size: 40, // Adjust size as needed
+                  size: 40,
                 ),
               ),
             )

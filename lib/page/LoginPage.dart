@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fyp1/page/Colors.dart';
 import 'package:fyp1/page/RegisterPage.dart';
 
 import 'package:fyp1/page/verifySplash.dart';
@@ -83,22 +84,24 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
         body: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               children: [
+                SizedBox(
+                  height: 30,
+                ),
                 Container(
                   alignment: Alignment.center,
                   child: const Image(
                     alignment: Alignment.center,
-                    image: AssetImage('assets/login.jpg'),
-                    width: 400,
-                    height: 400,
+                    image: AssetImage('assets/history.png'),
+                    width: 300,
+                    height: 300,
                   ),
                 ),
                 Padding(
@@ -112,7 +115,7 @@ class _SignInPageState extends State<SignInPage> {
                               fontFamily: 'Ubuntu',
                               fontSize: 40,
                               fontWeight: FontWeight.w700,
-                              color: Colors.black),
+                              color: AppColors.primaryColor),
                         ),
                         const SizedBox(
                           height: 10,
@@ -126,18 +129,18 @@ class _SignInPageState extends State<SignInPage> {
                                 AutovalidateMode.onUserInteraction,
                             validator: appValidator.validateEmail,
                             decoration: InputDecoration(
-                                hoverColor: const Color(0xFF074173),
+                                hoverColor: AppColors.secondaryColor,
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 prefixIcon: const Icon(
                                   Icons.email,
-                                  color: Color(0xFF074173),
+                                  color: AppColors.secondaryColor,
                                 ),
                                 hintText: 'Email',
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                       width: 4,
-                                      color: Color(0xFF074173),
+                                      color: AppColors.secondaryColor,
                                     ),
                                     borderRadius: BorderRadius.circular(10))),
                           ),
@@ -156,13 +159,13 @@ class _SignInPageState extends State<SignInPage> {
                                     borderRadius: BorderRadius.circular(10)),
                                 prefixIcon: const Icon(
                                   Icons.password,
-                                  color: Color(0xFF074173),
+                                  color: AppColors.secondaryColor,
                                 ),
                                 hintText: 'Password',
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                       width: 4,
-                                      color: Color(0xFF074173),
+                                      color: AppColors.secondaryColor,
                                     ),
                                     borderRadius: BorderRadius.circular(10))),
                           ),
@@ -178,7 +181,7 @@ class _SignInPageState extends State<SignInPage> {
                               isLoader ? print("loading") : _submitForm();
                             },
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF074173),
+                                backgroundColor: AppColors.secondaryColor,
                                 shape: const RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)))),
@@ -188,7 +191,8 @@ class _SignInPageState extends State<SignInPage> {
                                 : const Text(
                                     "Log Masuk",
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
+                                        color: AppColors.backgroundColor,
+                                        fontSize: 20),
                                   ),
                           ),
                         ),
@@ -199,8 +203,9 @@ class _SignInPageState extends State<SignInPage> {
                           child: Text(
                             "Atau",
                             style: TextStyle(
-                                color: Colors.black,
+                                color: AppColors.primaryColor,
                                 fontSize: 20,
+                                fontWeight: FontWeight.w600,
                                 fontFamily: 'Rubik'),
                           ),
                         ),
@@ -245,7 +250,7 @@ class _SignInPageState extends State<SignInPage> {
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF074173),
+                              backgroundColor: AppColors.secondaryColor,
                               shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -253,8 +258,9 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                             child: const Text(
                               "Daftar Pengguna",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+                              style: TextStyle(
+                                  color: AppColors.backgroundColor,
+                                  fontSize: 20),
                             ),
                           ),
                         )

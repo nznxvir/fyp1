@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp1/page/Colors.dart';
 
 class HistoryView extends StatefulWidget {
   const HistoryView({super.key});
@@ -64,53 +65,86 @@ class _HistoryViewState extends State<HistoryView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: AppColors.backgroundColor,
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Container(
+              margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
               width: double.infinity,
-              height: 70,
+              height: 80,
+              alignment: Alignment.topCenter,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15)),
-                  color: Colors.amber[200]),
+                  border: Border.all(width: 4, color: AppColors.secondaryColor),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: AppColors.thirdColor),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
+                  GestureDetector(
+                    onTap: () {
                       Navigator.pop(context);
                     },
+                    child: Container(
+                        margin: const EdgeInsets.only(left: 20),
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: AppColors.secondaryColor,
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_rounded,
+                          size: 20,
+                          weight: 5,
+                          color: AppColors.thirdColor,
+                        )),
                   ),
-                  SizedBox(width: 5),
                   Container(
-                    width: 300,
-                    child: Text(
-                      'Rekod ',
+                    margin: const EdgeInsets.only(left: 20),
+                    alignment: Alignment.center,
+                    height: 90,
+                    width: 200,
+                    child: const Text(
+                      'Rekod pengguna',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 50,
+                          fontFamily: 'Rubik',
+                          fontSize: 23,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF5F6F52)),
+                          color: AppColors.primaryColor),
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  )
                 ],
               ),
             ),
             SizedBox(
               height: 20,
             ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 25,
-                ),
-                Text(
-                  'Log Permainan',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Log Permainan',
+                    style: TextStyle(
+                        fontFamily: 'Rubik',
+                        fontWeight: FontWeight.w800,
+                        fontSize: 25),
+                  ),
+                  Text(
+                    'User',
+                    style: TextStyle(
+                        fontFamily: 'Rubik',
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryColor),
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: 20,
@@ -121,17 +155,21 @@ class _HistoryViewState extends State<HistoryView> {
                 itemBuilder: (context, index) {
                   return Container(
                     padding: EdgeInsets.all(30),
-                    margin: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    margin: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+                      border: Border(
+                          bottom: BorderSide(
+                              width: 10, color: AppColors.secondaryColor),
+                          left: BorderSide(
+                              width: 7, color: AppColors.secondaryColor)),
+                      color: AppColors.backgroundColor,
+                      borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2), // Shadow color
-                          spreadRadius: 2, // Spread radius
-                          blurRadius: 5, // Blur radius
-                          offset: Offset(
-                              0, 3), // Offset in the positive direction (down)
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
                         ),
                       ],
                     ),

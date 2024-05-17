@@ -6,6 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'package:fyp1/page/homePage.dart';
 import 'package:lottie/lottie.dart';
 
+import 'rankUtils.dart';
+
 class ResultView extends StatefulWidget {
   final int correctCount;
   final int score;
@@ -39,7 +41,6 @@ class _ResultViewState extends State<ResultView> {
   @override
   void initState() {
     super.initState();
-    // Call function to fetch user data when the widget is initialized
     _fetchUserData();
   }
 
@@ -280,8 +281,9 @@ class _ResultViewState extends State<ResultView> {
                                     color: Colors.amber,
                                     size: 40,
                                   )),
-                              onTap: () {
+                              onTap: () async {
                                 _updateUserScore(currentScore);
+                                await updateRank();
                                 _storeInHistory();
                                 Navigator.push(
                                   context,

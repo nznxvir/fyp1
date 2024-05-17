@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fyp1/page/homePage.dart';
+import 'package:fyp1/page/verifySplash.dart';
 
 import '../page/LoginPage.dart';
 
@@ -15,7 +16,7 @@ class AuthGate extends StatelessWidget {
           if (!snapshot.hasData) {
             return SignInPage();
           }
-          return HomeView();
+          return VerifySplash();
         });
   }
 }

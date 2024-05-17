@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:fyp1/page/Colors.dart';
 
 class NoteView extends StatefulWidget {
   final String chapterid;
@@ -47,17 +48,18 @@ class _NoteViewState extends State<NoteView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
         body: Column(
           children: [
             Container(
+              margin: EdgeInsets.only(top: 15, left: 10, right: 10),
               width: double.infinity,
-              height: 90,
+              height: 80,
               alignment: Alignment.topCenter,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20)),
-                  color: Color(0xFF6F131E)),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 4, color: AppColors.secondaryColor),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: AppColors.thirdColor),
               child: Row(
                 children: [
                   const SizedBox(
@@ -67,14 +69,21 @@ class _NoteViewState extends State<NoteView> {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: const Icon(
-                      Icons.arrow_back_rounded,
-                      size: 30,
-                      weight: 20,
-                      color: Color(0xFFEEE0C9),
-                    ),
+                    child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: AppColors.secondaryColor,
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_rounded,
+                          size: 20,
+                          weight: 5,
+                          color: AppColors.thirdColor,
+                        )),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 5),
                   Container(
                     alignment: Alignment.center,
                     height: 90,
@@ -84,9 +93,9 @@ class _NoteViewState extends State<NoteView> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontFamily: 'Rubik',
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFFEEE0C9)),
+                          color: AppColors.primaryColor),
                     ),
                   ),
                   const SizedBox(
