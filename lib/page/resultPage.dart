@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fyp1/page/Colors.dart';
 import 'package:fyp1/page/homePage.dart';
 import 'package:lottie/lottie.dart';
 
@@ -34,9 +35,10 @@ class ResultView extends StatefulWidget {
 
 class _ResultViewState extends State<ResultView> {
   final user = FirebaseAuth.instance.currentUser!;
-  late String _userId = ''; // Variable to store user ID
-  late String _username = ''; // Variable to store username
-  late int _score = 0; // Variable to store user score
+  late String _userId = '';
+  late String _username = '';
+  late int _score = 0;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -115,7 +117,7 @@ class _ResultViewState extends State<ResultView> {
     int currentScore = widget.score + _score;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFF074173),
+        backgroundColor: AppColors.secondaryColor,
         body: Column(
           children: [
             Stack(
@@ -124,10 +126,10 @@ class _ResultViewState extends State<ResultView> {
                   padding: const EdgeInsets.only(top: 130, left: 15, right: 15),
                   child: Container(
                     width: 600,
-                    height: 670,
+                    height: 640,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: AppColors.backgroundColor),
                     child: Column(
                       children: [
                         SizedBox(
@@ -136,22 +138,31 @@ class _ResultViewState extends State<ResultView> {
                         Text(
                           'Tahniah',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 50),
+                          style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: 50,
+                              fontWeight: FontWeight.w700),
                         ),
                         Text(
                           'Markah Diperoleh',
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
                           widget.score.toString(),
-                          style: TextStyle(fontSize: 130),
+                          style: TextStyle(fontSize: 110, fontFamily: 'Rubik'),
                         ),
                         Text(
                           'Masa menjawab: ${widget.elapsedTime}',
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Rubik',
+                              fontWeight: FontWeight.w700),
                         ),
                         SizedBox(
                           height: 20,
@@ -163,7 +174,7 @@ class _ResultViewState extends State<ResultView> {
                                 width: 110,
                                 height: 130,
                                 decoration: BoxDecoration(
-                                    color: Colors.amber[200],
+                                    color: Color.fromARGB(255, 244, 216, 138),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20))),
                                 child: Column(
@@ -172,14 +183,18 @@ class _ResultViewState extends State<ResultView> {
                                   children: [
                                     Text(
                                       answered.toString(),
-                                      style: TextStyle(fontSize: 60),
+                                      style: TextStyle(
+                                          fontSize: 50, fontFamily: 'Rubik'),
                                     ),
                                     Container(
                                       width: 60,
                                       child: Text(
                                         'Soalan Dijawab',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 14),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'Rubik',
+                                            fontWeight: FontWeight.w500),
                                       ),
                                     )
                                   ],
@@ -197,14 +212,18 @@ class _ResultViewState extends State<ResultView> {
                                   children: [
                                     Text(
                                       widget.correctCount.toString(),
-                                      style: TextStyle(fontSize: 60),
+                                      style: TextStyle(
+                                          fontSize: 50, fontFamily: 'Rubik'),
                                     ),
                                     Container(
                                       width: 60,
                                       child: Text(
                                         'Betul',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 14),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'Rubik',
+                                            fontWeight: FontWeight.w500),
                                       ),
                                     )
                                   ],
@@ -222,14 +241,18 @@ class _ResultViewState extends State<ResultView> {
                                   children: [
                                     Text(
                                       widget.wrongCount.toString(),
-                                      style: TextStyle(fontSize: 60),
+                                      style: TextStyle(
+                                          fontSize: 50, fontFamily: 'Rubik'),
                                     ),
                                     Container(
                                       width: 60,
                                       child: Text(
                                         'Salah',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 14),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'Rubik',
+                                            fontWeight: FontWeight.w500),
                                       ),
                                     )
                                   ],
@@ -245,21 +268,28 @@ class _ResultViewState extends State<ResultView> {
                               width: 250,
                               height: 80,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      width: 5, color: Colors.black)),
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          width: 7,
+                                          color: AppColors.primaryColor),
+                                      left: BorderSide(
+                                          width: 5,
+                                          color: AppColors.primaryColor)),
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: AppColors.thirdColor),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
                                     'Skor terkini',
-                                    style: TextStyle(fontSize: 25),
+                                    style: TextStyle(
+                                        fontSize: 23, fontFamily: 'Rubik'),
                                   ),
                                   Text(
                                     currentScore.toString(),
-                                    style: TextStyle(fontSize: 45),
+                                    style: TextStyle(
+                                        fontSize: 40, fontFamily: 'Rubik'),
                                   ),
                                 ],
                               ),
@@ -269,26 +299,61 @@ class _ResultViewState extends State<ResultView> {
                             ),
                             GestureDetector(
                               child: Container(
-                                  alignment: Alignment.center,
-                                  width: 100,
-                                  height: 55,
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      color: Color(0xFF074173)),
-                                  child: Icon(
-                                    Icons.home,
-                                    color: Colors.amber,
-                                    size: 40,
-                                  )),
+                                alignment: Alignment.center,
+                                width: 100,
+                                height: 55,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  color: AppColors.secondaryColor,
+                                ),
+                                child: _isLoading
+                                    ? CircularProgressIndicator(
+                                        color: AppColors.thirdColor)
+                                    : Icon(
+                                        Icons.home,
+                                        color: AppColors.thirdColor,
+                                        size: 40,
+                                      ),
+                              ),
                               onTap: () async {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+
                                 _updateUserScore(currentScore);
                                 await updateRank();
                                 _storeInHistory();
-                                Navigator.push(
+
+                                setState(() {
+                                  _isLoading = false;
+                                });
+
+                                Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomeView()),
+                                  PageRouteBuilder(
+                                    transitionDuration:
+                                        const Duration(milliseconds: 500),
+                                    pageBuilder: (_, __, ___) =>
+                                        const HomeView(),
+                                    transitionsBuilder:
+                                        (_, animation, __, child) {
+                                      return ScaleTransition(
+                                        scale:
+                                            Tween<double>(begin: 0.0, end: 1.0)
+                                                .animate(
+                                          CurvedAnimation(
+                                            parent: animation,
+                                            curve: Curves.fastOutSlowIn,
+                                          ),
+                                        ),
+                                        child: FadeTransition(
+                                          opacity: animation,
+                                          child: child,
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 );
                               },
                             )

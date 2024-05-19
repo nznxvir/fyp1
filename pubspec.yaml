@@ -97,6 +97,8 @@ flutter:
   - assets/hystobg.jpg
   - assets/scroll.png
   - assets/history.png
+  - assets/record.png
+  - assets/fact.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

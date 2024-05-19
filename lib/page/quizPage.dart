@@ -78,6 +78,29 @@ class _QuizViewState extends State<QuizView> {
     return "$twoDigitMinutes:$twoDigitSeconds";
   }
 
+  _navigateResult() {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 500),
+        pageBuilder: (_, __, ___) => ResultView(
+            score: _score,
+            correctCount: _correctCount,
+            wrongCount: _wrongCount,
+            unansweredCount: _unansweredCount,
+            setnum: widget.setnum,
+            chapter: widget.chapternum,
+            elapsedTime: _elapsedTime),
+        transitionsBuilder: (_, animation, __, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -274,19 +297,7 @@ class _QuizViewState extends State<QuizView> {
                           duration: Duration(milliseconds: 300),
                           curve: Curves.easeInOut);
                     } else {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ResultView(
-                              score: _score,
-                              correctCount: _correctCount,
-                              wrongCount: _wrongCount,
-                              unansweredCount: _unansweredCount,
-                              setnum: widget.setnum,
-                              chapter: widget.chapternum,
-                              elapsedTime: _elapsedTime),
-                        ),
-                      );
+                      _navigateResult();
                     }
                   });
                 },
@@ -367,20 +378,7 @@ class _QuizViewState extends State<QuizView> {
                   duration: Duration(milliseconds: 300),
                   curve: Curves.easeInOut);
             } else {
-              // Final question, navigate to result page
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ResultView(
-                      score: _score,
-                      correctCount: _correctCount,
-                      wrongCount: _wrongCount,
-                      unansweredCount: _unansweredCount,
-                      setnum: widget.setnum,
-                      chapter: widget.chapternum,
-                      elapsedTime: _elapsedTime),
-                ),
-              );
+              _navigateResult();
             }
           });
         });

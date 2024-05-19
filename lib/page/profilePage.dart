@@ -31,6 +31,7 @@ class _ProfileViewState extends State<ProfileView> {
   late String pass = '';
   String? imageurl;
   File? _image;
+  bool _isConfirming = false;
 
   final picker = ImagePicker();
 
@@ -58,10 +59,26 @@ class _ProfileViewState extends State<ProfileView> {
 
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => SignInPage()),
-      (route) => false,
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 500),
+        pageBuilder: (_, __, ___) => SignInPage(),
+        transitionsBuilder: (_, animation, __, child) {
+          return ScaleTransition(
+            scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.fastOutSlowIn,
+              ),
+            ),
+            child: FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -277,12 +294,12 @@ class _ProfileViewState extends State<ProfileView> {
                 Container(
                   padding: const EdgeInsets.only(top: 10),
                   width: double.infinity,
-                  height: 330,
+                  height: 240,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(50),
-                        bottomRight: Radius.circular(50)),
-                    color: AppColors.secondaryColor,
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15)),
+                    color: AppColors.primaryColor,
                   ),
                   child: Column(
                     children: [
@@ -323,7 +340,7 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                       ]),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       Container(
                         width: 350,
@@ -331,7 +348,7 @@ class _ProfileViewState extends State<ProfileView> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(15)),
+                                const BorderRadius.all(Radius.circular(20)),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.5),
@@ -340,7 +357,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 offset: const Offset(0, 3),
                               )
                             ],
-                            color: Colors.white),
+                            color: AppColors.backgroundColor),
                         child: Text(
                           username,
                           style: const TextStyle(
@@ -355,11 +372,11 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
                 Center(
                   child: Container(
-                    margin: const EdgeInsets.fromLTRB(30, 230, 30, 30),
-                    width: 400,
+                    margin: const EdgeInsets.fromLTRB(30, 205, 30, 30),
+                    width: 390,
                     height: 130,
                     decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
                       color: AppColors.backgroundColor,
                       boxShadow: [
                         BoxShadow(
@@ -467,7 +484,7 @@ class _ProfileViewState extends State<ProfileView> {
                 margin: const EdgeInsets.only(right: 35, left: 35),
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                 width: double.infinity,
-                height: 280,
+                height: 300,
                 decoration: BoxDecoration(
                   color: AppColors.backgroundColor,
                   border: Border.all(width: 7, color: AppColors.secondaryColor),
@@ -568,7 +585,7 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 30,
               ),
               GestureDetector(
                 onTap: () {
@@ -579,7 +596,7 @@ class _ProfileViewState extends State<ProfileView> {
                     width: 280,
                     height: 60,
                     decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
                         color: AppColors.secondaryColor),
                     child: const Text(
                       'Log Keluar',
@@ -844,7 +861,7 @@ class _ProfileViewState extends State<ProfileView> {
         child: Container(
           height: 330,
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             border: Border(
                 top: BorderSide(width: 8, color: AppColors.secondaryColor)),
@@ -863,14 +880,14 @@ class _ProfileViewState extends State<ProfileView> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          icon: Icon(Icons.cancel_rounded),
+                          icon: const Icon(Icons.cancel_rounded),
                           iconSize: 40,
                           color: AppColors.secondaryColor,
                           alignment: Alignment.topRight,
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     const Text(
@@ -895,13 +912,22 @@ class _ProfileViewState extends State<ProfileView> {
                         color: AppColors.secondaryColor,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     GestureDetector(
                       onTap: () async {
+                        setState(() {
+                          _isConfirming = true;
+                        });
+
                         resetScore();
                         await updateRank();
+
+                        setState(() {
+                          _isConfirming = false;
+                        });
+
                         Navigator.pop(context);
                       },
                       child: Container(
@@ -909,18 +935,22 @@ class _ProfileViewState extends State<ProfileView> {
                         height: 65,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: AppColors.secondaryColor),
-                        child: Text(
-                          'Sahkan',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Rubik',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.backgroundColor,
-                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          color: AppColors.secondaryColor,
                         ),
+                        child: _isConfirming
+                            ? CircularProgressIndicator(
+                                color: AppColors.primaryColor)
+                            : Text(
+                                'Sahkan',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'Rubik',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.backgroundColor,
+                                ),
+                              ),
                       ),
                     )
                   ],

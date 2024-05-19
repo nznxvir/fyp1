@@ -75,11 +75,18 @@ class _SetListViewState extends State<SetListView> {
               QueryDocumentSnapshot<Object?> noteDoc = notes[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => NoteView(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (_, __, ___) => NoteView(
                           chapterid: noteDoc['chapter'], sub: noteDoc['sub']),
+                      transitionsBuilder: (_, animation, __, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
                     ),
                   );
                 },
@@ -265,16 +272,16 @@ class _SetListViewState extends State<SetListView> {
                               fontFamily: 'Rubik',
                               fontSize: 18,
                               color: AppColors.primaryColor,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
-                            'Tahap: ' + setDoc['difficulty'] + ' min',
+                            'Tahap: ' + setDoc['difficulty'],
                             style: const TextStyle(
                                 fontFamily: 'Rubik',
                                 fontSize: 18,
                                 color: AppColors.primaryColor,
-                                fontWeight: FontWeight.w700),
+                                fontWeight: FontWeight.w600),
                           ),
                           Text(
                             'Markah: ' + setDoc['mark'].toString(),
@@ -282,37 +289,97 @@ class _SetListViewState extends State<SetListView> {
                                 fontFamily: 'Rubik',
                                 fontSize: 18,
                                 color: AppColors.primaryColor,
-                                fontWeight: FontWeight.w700),
+                                fontWeight: FontWeight.w600),
                           ),
                           GestureDetector(
                             onTap: () {
                               player.play(AssetSource('audio/startquiz.mp3'));
                               Future.delayed(Duration(seconds: 1), () {
                                 if (setDoc['type'] == 'mcq') {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context,
-                                    MaterialPageRoute(
-                                      builder: (context) => QuizView(
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          const Duration(milliseconds: 500),
+                                      pageBuilder: (_, __, ___) => QuizView(
                                           setnum: setDoc['setnum'],
                                           chapternum: setDoc['chapter']),
+                                      transitionsBuilder:
+                                          (_, animation, __, child) {
+                                        var begin = const Offset(1.0, 0.0);
+                                        var end = Offset.zero;
+                                        var curve = Curves.easeInOut;
+
+                                        var tween = Tween(
+                                                begin: begin, end: end)
+                                            .chain(CurveTween(curve: curve));
+
+                                        return SlideTransition(
+                                          position: animation.drive(tween),
+                                          child: FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   );
                                 } else if (setDoc['type'] == 'fb') {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                      builder: (context) => FillQuiz(
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          const Duration(milliseconds: 500),
+                                      pageBuilder: (_, __, ___) => FillQuiz(
                                           setnum: setDoc['setnum'],
                                           chapternum: setDoc['chapter']),
+                                      transitionsBuilder:
+                                          (_, animation, __, child) {
+                                        var begin = const Offset(1.0, 0.0);
+                                        var end = Offset.zero;
+                                        var curve = Curves.easeInOut;
+
+                                        var tween = Tween(
+                                                begin: begin, end: end)
+                                            .chain(CurveTween(curve: curve));
+
+                                        return SlideTransition(
+                                          position: animation.drive(tween),
+                                          child: FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   );
                                 } else if (setDoc['type'] == 'tof') {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                      builder: (context) => tofQuiz(
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          const Duration(milliseconds: 500),
+                                      pageBuilder: (_, __, ___) => tofQuiz(
                                           setnum: setDoc['setnum'],
                                           chapternum: setDoc['chapter']),
+                                      transitionsBuilder:
+                                          (_, animation, __, child) {
+                                        var begin = const Offset(1.0, 0.0);
+                                        var end = Offset.zero;
+                                        var curve = Curves.easeInOut;
+
+                                        var tween = Tween(
+                                                begin: begin, end: end)
+                                            .chain(CurveTween(curve: curve));
+
+                                        return SlideTransition(
+                                          position: animation.drive(tween),
+                                          child: FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   );
                                 }
@@ -445,7 +512,8 @@ class _SetListViewState extends State<SetListView> {
                 margin: const EdgeInsets.fromLTRB(30, 0, 30, 10),
                 height: 80,
                 decoration: BoxDecoration(
-                    border: Border.all(width: 5, color: AppColors.primaryColor),
+                    border:
+                        Border.all(width: 5, color: AppColors.secondaryColor),
                     borderRadius: BorderRadius.circular(20),
                     color: AppColors.thirdColor),
                 child: Row(
@@ -462,7 +530,7 @@ class _SetListViewState extends State<SetListView> {
                             },
                             color: _selectedIndex == 0
                                 ? AppColors.primaryColor
-                                : AppColors.backgroundColor),
+                                : Colors.grey),
                         if (_selectedIndex == 0)
                           Text('Kuiz',
                               style: TextStyle(
@@ -483,7 +551,7 @@ class _SetListViewState extends State<SetListView> {
                             },
                             color: _selectedIndex == 1
                                 ? AppColors.primaryColor
-                                : AppColors.backgroundColor),
+                                : Colors.grey),
                         if (_selectedIndex == 1)
                           Text('Nota',
                               style: TextStyle(

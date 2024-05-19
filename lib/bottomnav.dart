@@ -22,8 +22,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       height: 65,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: AppColors.secondaryColor,
+        borderRadius: BorderRadius.circular(30),
+        color: AppColors.primaryColor,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

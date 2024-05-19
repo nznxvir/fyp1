@@ -56,11 +56,19 @@ class _RegisterPageState extends State<RegisterPage> {
       };
 
       await authService.createUser(data, context, () {
-        // Delay navigation to sign-in page by 5 seconds
         Future.delayed(const Duration(seconds: 1), () {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => VerifySplash()),
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (_, __, ___) => const VerifySplash(),
+              transitionsBuilder: (_, animation, __, child) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+            ),
           );
         });
       });
@@ -250,32 +258,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 300),
-                          pageBuilder: (_, __, ___) => SignInPage(),
-                          transitionsBuilder: (_, animation, __, child) {
-                            return Stack(
-                              children: [
-                                SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset.zero,
-                                    end: const Offset(0.5, 0.0),
-                                  ).animate(animation),
-                                  child: child,
-                                ),
-                                SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: const Offset(-0.5, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child:
-                                      SignInPage(), // Replace with your current page content
-                                ),
-                              ],
-                            );
-                          },
+                        CupertinoPageRoute(
+                          builder: (_) => SignInPage(),
                         ),
                       );
                     },

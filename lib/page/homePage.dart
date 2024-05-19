@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fyp1/page/Colors.dart';
+import 'package:fyp1/page/funFact.dart';
 
 import 'package:fyp1/page/historyPage.dart';
 import 'package:fyp1/page/profilePage.dart';
@@ -80,7 +81,7 @@ class _HomeViewState extends State<HomeView> {
     setState(() {
       _pageController.animateToPage(
         index,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     });
@@ -90,11 +91,36 @@ class _HomeViewState extends State<HomeView> {
     Navigator.push(
       context,
       PageRouteBuilder(
-        transitionDuration: Duration(milliseconds: 400),
-        reverseTransitionDuration: Duration(milliseconds: 400),
+        transitionDuration: const Duration(milliseconds: 400),
+        reverseTransitionDuration: const Duration(milliseconds: 400),
         pageBuilder: (_, __, ___) => const HistoryView(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          final begin = Offset(0.0, 1.0);
+          final begin = const Offset(0.0, 1.0);
+          final end = Offset.zero;
+          final curve = Curves.easeInOut;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      ),
+    );
+  }
+
+  void _navigateToFactsView() {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 400),
+        reverseTransitionDuration: const Duration(milliseconds: 400),
+        pageBuilder: (_, __, ___) => const FactsView(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final begin = const Offset(0.0, 1.0);
           final end = Offset.zero;
           final curve = Curves.easeInOut;
 
@@ -125,14 +151,14 @@ class _HomeViewState extends State<HomeView> {
           backgroundColor: AppColors.backgroundColor,
           body: PageView(
             controller: _pageController,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (index) {
               setState(() {
                 _currentIndex = index;
               });
             },
             children: [
-              RankView(),
+              const RankView(),
               Container(
                 child: SingleChildScrollView(
                   child: Column(
@@ -242,7 +268,7 @@ class _HomeViewState extends State<HomeView> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: <Widget>[
-                                    Text(
+                                    const Text(
                                       'Ranking',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
@@ -252,7 +278,7 @@ class _HomeViewState extends State<HomeView> {
                                     Text(
                                       currrank.toString(),
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontFamily: 'Rubik',
                                           fontSize: 60,
                                           fontWeight: FontWeight.bold),
@@ -307,46 +333,121 @@ class _HomeViewState extends State<HomeView> {
                         height: 20,
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        child: GestureDetector(
-                          onTap: () {
-                            _navigateToHistoryView();
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: double.infinity,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      width: 7,
-                                      color: AppColors.secondaryColor),
-                                  left: BorderSide(
-                                      width: 4,
-                                      color: AppColors.secondaryColor)),
-                              color: AppColors.thirdColor,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(15)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.9),
+                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _navigateToFactsView();
+                              },
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  width: 140,
+                                  height: 180,
+                                  decoration: BoxDecoration(
+                                    border: const Border(
+                                        bottom: BorderSide(
+                                            width: 10,
+                                            color: AppColors.secondaryColor),
+                                        left: BorderSide(
+                                            width: 6,
+                                            color: AppColors.secondaryColor)),
+                                    color: AppColors.backgroundColor,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(15)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.9),
 
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                )
-                              ],
+                                        spreadRadius: 2,
+                                        blurRadius: 5,
+                                        offset: const Offset(
+                                            0, 3), // changes position of shadow
+                                      )
+                                    ],
+                                  ),
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image(
+                                        alignment: Alignment.center,
+                                        width: 80,
+                                        height: 80,
+                                        image: AssetImage(
+                                          'assets/fact.png',
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        'Fakta',
+                                        style: TextStyle(
+                                            fontFamily: 'Rubik',
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.primaryColor),
+                                      ),
+                                    ],
+                                  )),
                             ),
-                            child: const Text(
-                              'Lihat log permainan',
-                              style: TextStyle(
-                                  fontFamily: 'Rubik',
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primaryColor),
+                            GestureDetector(
+                              onTap: () {
+                                _navigateToHistoryView();
+                              },
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  width: 140,
+                                  height: 180,
+                                  decoration: BoxDecoration(
+                                    border: const Border(
+                                        bottom: BorderSide(
+                                            width: 10,
+                                            color: AppColors.secondaryColor),
+                                        left: BorderSide(
+                                            width: 6,
+                                            color: AppColors.secondaryColor)),
+                                    color: AppColors.backgroundColor,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(15)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.9),
+
+                                        spreadRadius: 2,
+                                        blurRadius: 5,
+                                        offset: const Offset(
+                                            0, 3), // changes position of shadow
+                                      )
+                                    ],
+                                  ),
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image(
+                                        alignment: Alignment.center,
+                                        width: 80,
+                                        height: 80,
+                                        image: AssetImage(
+                                          'assets/record.png',
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        'Rekod',
+                                        style: TextStyle(
+                                            fontFamily: 'Rubik',
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.primaryColor),
+                                      ),
+                                    ],
+                                  )),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                       Container(
@@ -389,13 +490,13 @@ class _HomeViewState extends State<HomeView> {
                                                     .withAlpha(200),
                                                 border: Border.all(
                                                     width: 10,
-                                                    color: AppColors
-                                                        .secondaryColor),
+                                                    color:
+                                                        AppColors.primaryColor),
                                                 borderRadius:
                                                     const BorderRadius.all(
                                                         Radius.circular(20)),
                                               ),
-                                              child: Center(
+                                              child: const Center(
                                                 child: Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
@@ -433,10 +534,15 @@ class _HomeViewState extends State<HomeView> {
                                                 width: 370,
                                                 decoration: BoxDecoration(
                                                   color: Colors.transparent,
-                                                  border: Border.all(
-                                                      width: 10,
-                                                      color: AppColors
-                                                          .secondaryColor),
+                                                  border: const Border(
+                                                      bottom: BorderSide(
+                                                          width: 12,
+                                                          color: AppColors
+                                                              .primaryColor),
+                                                      left: BorderSide(
+                                                          width: 9,
+                                                          color: AppColors
+                                                              .primaryColor)),
                                                   borderRadius:
                                                       const BorderRadius.all(
                                                           Radius.circular(20)),
@@ -568,7 +674,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
               ),
-              ProfileView(),
+              const ProfileView(),
             ],
           ),
           bottomNavigationBar: CustomBottomNavigationBar(
@@ -586,11 +692,11 @@ Future _chapterDescribe(BuildContext context, DocumentSnapshot chapter) {
     Navigator.push(
       context,
       PageRouteBuilder(
-        transitionDuration: Duration(milliseconds: 400),
-        reverseTransitionDuration: Duration(milliseconds: 400),
+        transitionDuration: const Duration(milliseconds: 400),
+        reverseTransitionDuration: const Duration(milliseconds: 400),
         pageBuilder: (_, __, ___) => SetListView(chapterId: chapter.id),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          final begin = Offset(0.0, 1.0);
+          final begin = const Offset(0.0, 1.0);
           final end = Offset.zero;
           final curve = Curves.easeInOut;
 
@@ -618,14 +724,14 @@ Future _chapterDescribe(BuildContext context, DocumentSnapshot chapter) {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20)),
-                color: AppColors.secondaryColor,
+                color: AppColors.primaryColor,
               ),
               width: double.infinity,
               height: 350,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 1,
                   ),
                   Container(
@@ -644,18 +750,18 @@ Future _chapterDescribe(BuildContext context, DocumentSnapshot chapter) {
                           chapter['title'],
                           style: const TextStyle(
                               fontFamily: 'Rubik',
-                              fontSize: 40,
+                              fontSize: 30,
                               fontWeight: FontWeight.bold,
                               color: AppColors.backgroundColor),
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         Text(
                           chapter['description'],
                           style: const TextStyle(
                               fontFamily: 'Rubik',
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: AppColors.backgroundColor),
                         ),
@@ -673,7 +779,7 @@ Future _chapterDescribe(BuildContext context, DocumentSnapshot chapter) {
                                     color: AppColors.backgroundColor),
                               ),
                               SizedBox(
-                                height: 80,
+                                height: 60,
                               ),
                               Row(
                                 children: [
@@ -707,7 +813,7 @@ Future _chapterDescribe(BuildContext context, DocumentSnapshot chapter) {
                     },
                     child: Container(
                       width: double.infinity,
-                      height: 70,
+                      height: 55,
                       alignment: Alignment.center,
                       decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(

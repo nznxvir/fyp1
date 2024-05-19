@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fyp1/page/Colors.dart';
 
 class HistoryView extends StatefulWidget {
@@ -123,45 +124,19 @@ class _HistoryViewState extends State<HistoryView> {
             SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Log Permainan',
-                    style: TextStyle(
-                        fontFamily: 'Rubik',
-                        fontWeight: FontWeight.w800,
-                        fontSize: 25),
-                  ),
-                  Text(
-                    'User',
-                    style: TextStyle(
-                        fontFamily: 'Rubik',
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
             Expanded(
               child: ListView.builder(
                 itemCount: _historyList.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    padding: EdgeInsets.all(30),
-                    margin: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                    padding: EdgeInsets.all(15),
+                    margin: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                     decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
-                              width: 10, color: AppColors.secondaryColor),
+                              width: 11, color: AppColors.secondaryColor),
                           left: BorderSide(
-                              width: 7, color: AppColors.secondaryColor)),
+                              width: 8, color: AppColors.secondaryColor)),
                       color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
@@ -174,43 +149,243 @@ class _HistoryViewState extends State<HistoryView> {
                       ],
                     ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Tarikh: ${_historyList[index]['currentDate']}',
-                          style: TextStyle(fontSize: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _historyList[index]['currentDate'],
+                              style: TextStyle(
+                                  fontFamily: 'Rubik',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              _historyList[index]['currentTime'],
+                              style: TextStyle(
+                                  fontFamily: 'Rubik',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Masa: ${_historyList[index]['currentTime']}',
-                          style: TextStyle(fontSize: 16),
+                        SizedBox(
+                          height: 10,
                         ),
-                        Text(
-                          'Bab: ${_historyList[index]['chapter']}',
-                          style: TextStyle(fontSize: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  'Topik',
+                                  style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColors.secondaryColor),
+                                  child: Text(
+                                    _historyList[index]['chapter'],
+                                    style: TextStyle(
+                                        fontFamily: 'Rubik',
+                                        color: AppColors.thirdColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  'Modul',
+                                  style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColors.secondaryColor),
+                                  child: Text(
+                                    _historyList[index]['setnum'],
+                                    style: TextStyle(
+                                        fontFamily: 'Rubik',
+                                        color: AppColors.thirdColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Modul: ${_historyList[index]['setnum']}',
-                          style: TextStyle(fontSize: 16),
+                        SizedBox(
+                          height: 10,
                         ),
-                        Text(
-                          'Jumlah Betul: ${_historyList[index]['correctCount']}',
-                          style: TextStyle(fontSize: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  'Betul',
+                                  style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              width: 5,
+                                              color: AppColors.primaryColor),
+                                          left: BorderSide(
+                                              width: 3,
+                                              color: AppColors.primaryColor)),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.green),
+                                  child: Text(
+                                    _historyList[index]['correctCount']
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontFamily: 'Rubik',
+                                        color: AppColors.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 30),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  'Tidak dijawab',
+                                  style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              width: 5,
+                                              color: AppColors.primaryColor),
+                                          left: BorderSide(
+                                              width: 3,
+                                              color: AppColors.primaryColor)),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColors.thirdColor),
+                                  child: Text(
+                                    _historyList[index]['unansweredCount']
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontFamily: 'Rubik',
+                                        color: AppColors.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 30),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  'Salah',
+                                  style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              width: 5,
+                                              color: AppColors.primaryColor),
+                                          left: BorderSide(
+                                              width: 3,
+                                              color: AppColors.primaryColor)),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.redAccent),
+                                  child: Text(
+                                    _historyList[index]['wrongCount']
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontFamily: 'Rubik',
+                                        color: AppColors.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 30),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Jumlah Salah: ${_historyList[index]['wrongCount']}',
-                          style: TextStyle(fontSize: 16),
+                        SizedBox(
+                          height: 20,
                         ),
-                        Text(
-                          'Soalan Tidak Dijawab: ${_historyList[index]['unansweredCount']}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Masa Diambil: ${_historyList[index]['timeSpent']}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Markah: ${_historyList[index]['score']}',
-                          style: TextStyle(fontSize: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              width: 170,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: AppColors.secondaryColor),
+                              child: Text(
+                                'Masa Diambil: ${_historyList[index]['timeSpent']}',
+                                style: TextStyle(
+                                    fontFamily: 'Rubik',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.thirdColor),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              width: 160,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: AppColors.secondaryColor),
+                              child: Text(
+                                'Markah: ${_historyList[index]['score']}',
+                                style: TextStyle(
+                                    fontFamily: 'Rubik',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.thirdColor),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

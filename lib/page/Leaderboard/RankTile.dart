@@ -20,19 +20,19 @@ class RankTile extends StatelessWidget {
   Color _getBorderColor(int rank) {
     switch (rank) {
       case 1:
-        return Color(0xFFd4af37);
+        return Color.fromARGB(255, 233, 195, 71);
       case 2:
-        return Color(0xffC0C0C0);
+        return Color.fromARGB(255, 219, 212, 212);
       case 3:
-        return Color.fromARGB(255, 182, 113, 44);
+        return Color.fromARGB(255, 227, 132, 36);
       default:
-        return AppColors.secondaryColor;
+        return AppColors.backgroundColor;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final borderColor = _getBorderColor(rank);
+    final bgColor = _getBorderColor(rank);
 
     return Container(
       width: 150,
@@ -41,8 +41,10 @@ class RankTile extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(20)),
-        color: AppColors.backgroundColor,
-        border: Border.all(color: borderColor, width: 5),
+        border: Border(
+            bottom: BorderSide(width: 10, color: AppColors.secondaryColor),
+            left: BorderSide(width: 6, color: AppColors.secondaryColor)),
+        color: bgColor,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.8),
@@ -59,7 +61,7 @@ class RankTile extends StatelessWidget {
             style: TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.bold,
-                color: borderColor,
+                color: AppColors.primaryColor,
                 fontFamily: 'Rubik'),
           ),
           Row(
