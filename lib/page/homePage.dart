@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,6 +28,7 @@ class _HomeViewState extends State<HomeView> {
   late int _currentIndex = 1;
   late PageController _pageController;
   late PageController _historyPageController;
+  final player = AudioPlayer();
 
   @override
   void initState() {
@@ -88,53 +90,59 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _navigateToHistoryView() {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 400),
-        reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, __, ___) => const HistoryView(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          final begin = const Offset(0.0, 1.0);
-          final end = Offset.zero;
-          final curve = Curves.easeInOut;
+    player.play(AssetSource('audio/button.mp3'));
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 400),
+          reverseTransitionDuration: const Duration(milliseconds: 400),
+          pageBuilder: (_, __, ___) => const HistoryView(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final begin = const Offset(0.0, 1.0);
+            final end = Offset.zero;
+            final curve = Curves.easeInOut;
 
-          var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          var offsetAnimation = animation.drive(tween);
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
 
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        },
-      ),
-    );
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        ),
+      );
+    });
   }
 
   void _navigateToFactsView() {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 400),
-        reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, __, ___) => const FactsView(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          final begin = const Offset(0.0, 1.0);
-          final end = Offset.zero;
-          final curve = Curves.easeInOut;
+    player.play(AssetSource('audio/button.mp3'));
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 400),
+          reverseTransitionDuration: const Duration(milliseconds: 400),
+          pageBuilder: (_, __, ___) => const FactsView(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final begin = const Offset(0.0, 1.0);
+            final end = Offset.zero;
+            final curve = Curves.easeInOut;
 
-          var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          var offsetAnimation = animation.drive(tween);
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
 
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        },
-      ),
-    );
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        ),
+      );
+    });
   }
 
   void resetPage() {
@@ -526,8 +534,15 @@ class _HomeViewState extends State<HomeView> {
                                           else
                                             GestureDetector(
                                               onTap: () {
-                                                _chapterDescribe(
-                                                    context, chapter);
+                                                player.play(AssetSource(
+                                                    'audio/pop.mp3'));
+
+                                                Future.delayed(
+                                                    Duration(milliseconds: 500),
+                                                    () {
+                                                  _chapterDescribe(
+                                                      context, chapter);
+                                                });
                                               },
                                               child: Container(
                                                 height: 170,
@@ -688,29 +703,33 @@ class _HomeViewState extends State<HomeView> {
 }
 
 Future _chapterDescribe(BuildContext context, DocumentSnapshot chapter) {
+  final sound = AudioPlayer();
   void _navigateToListView() {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 400),
-        reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, __, ___) => SetListView(chapterId: chapter.id),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          final begin = const Offset(0.0, 1.0);
-          final end = Offset.zero;
-          final curve = Curves.easeInOut;
+    sound.play(AssetSource('audio/button.mp3'));
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 400),
+          reverseTransitionDuration: const Duration(milliseconds: 400),
+          pageBuilder: (_, __, ___) => SetListView(chapterId: chapter.id),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final begin = const Offset(0.0, 1.0);
+            final end = Offset.zero;
+            final curve = Curves.easeInOut;
 
-          var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          var offsetAnimation = animation.drive(tween);
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
 
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        },
-      ),
-    );
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        ),
+      );
+    });
   }
 
   return showModalBottomSheet(

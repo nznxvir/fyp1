@@ -333,24 +333,25 @@ class _ResultViewState extends State<ResultView> {
                                   context,
                                   PageRouteBuilder(
                                     transitionDuration:
-                                        const Duration(milliseconds: 500),
+                                        const Duration(milliseconds: 400),
+                                    reverseTransitionDuration:
+                                        const Duration(milliseconds: 400),
                                     pageBuilder: (_, __, ___) =>
                                         const HomeView(),
-                                    transitionsBuilder:
-                                        (_, animation, __, child) {
-                                      return ScaleTransition(
-                                        scale:
-                                            Tween<double>(begin: 0.0, end: 1.0)
-                                                .animate(
-                                          CurvedAnimation(
-                                            parent: animation,
-                                            curve: Curves.fastOutSlowIn,
-                                          ),
-                                        ),
-                                        child: FadeTransition(
-                                          opacity: animation,
-                                          child: child,
-                                        ),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      final begin = const Offset(0.0, 1.0);
+                                      final end = Offset.zero;
+                                      final curve = Curves.easeInOut;
+
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+                                      var offsetAnimation =
+                                          animation.drive(tween);
+
+                                      return SlideTransition(
+                                        position: offsetAnimation,
+                                        child: child,
                                       );
                                     },
                                   ),

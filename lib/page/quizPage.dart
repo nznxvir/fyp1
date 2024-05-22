@@ -79,26 +79,29 @@ class _QuizViewState extends State<QuizView> {
   }
 
   _navigateResult() {
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (_, __, ___) => ResultView(
-            score: _score,
-            correctCount: _correctCount,
-            wrongCount: _wrongCount,
-            unansweredCount: _unansweredCount,
-            setnum: widget.setnum,
-            chapter: widget.chapternum,
-            elapsedTime: _elapsedTime),
-        transitionsBuilder: (_, animation, __, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
-        },
-      ),
-    );
+    player.play(AssetSource('audio/finishquiz.mp3'));
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 500),
+          pageBuilder: (_, __, ___) => ResultView(
+              score: _score,
+              correctCount: _correctCount,
+              wrongCount: _wrongCount,
+              unansweredCount: _unansweredCount,
+              setnum: widget.setnum,
+              chapter: widget.chapternum,
+              elapsedTime: _elapsedTime),
+          transitionsBuilder: (_, animation, __, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
+    });
   }
 
   @override
@@ -270,54 +273,51 @@ class _QuizViewState extends State<QuizView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: 70,
-                height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: AppColors.secondaryColor,
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.keyboard_double_arrow_left),
-                  color: AppColors.backgroundColor,
-                  onPressed: () {
+              GestureDetector(
+                onTap: () {
+                  player.play(AssetSource('audio/pop.mp3'));
+                  Future.delayed(Duration(milliseconds: 500), () {
                     Navigator.pop(context);
-                  },
+                  });
+                },
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: Image.asset('assets/quit.png'),
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 2,
               ),
               GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _unansweredCount++; // Increment unanswered count
-                    if (_currentQuestionIndex < _questions.length - 1) {
-                      _pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut);
-                    } else {
-                      _navigateResult();
-                    }
-                  });
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 250,
-                  height: 70,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: AppColors.secondaryColor),
-                  child: const Text(
-                    'Soalan Seterusnya',
-                    style: TextStyle(
-                        fontFamily: 'Rubik',
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.backgroundColor),
-                  ),
-                ),
-              )
+                  onTap: () {
+                    setState(() {
+                      _unansweredCount++; // Increment unanswered count
+                      if (_currentQuestionIndex < _questions.length - 1) {
+                        player.play(AssetSource('audio/skip.mp3'));
+                        Future.delayed(Duration(milliseconds: 500), () {
+                          _pageController.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut);
+                        });
+                      } else {
+                        _navigateResult();
+                      }
+                    });
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 250,
+                    height: 55,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: AppColors.secondaryColor),
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Image.asset('assets/skip.png'),
+                    ),
+                  ))
             ],
           ),
         ],
@@ -364,7 +364,7 @@ class _QuizViewState extends State<QuizView> {
         setState(() {
           _selectedOption = option;
           if (isCorrect) {
-            player.play(AssetSource('audio/correct.mp3'));
+            player.play(AssetSource('audio/correctanswer.mp3'));
             _score += 10;
             _correctCount++;
           } else {

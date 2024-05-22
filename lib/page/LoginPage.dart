@@ -1,6 +1,10 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fyp1/page/Colors.dart';
 import 'package:fyp1/page/RegisterPage.dart';
+import 'package:fyp1/page/resetPassword.dart';
 import 'package:fyp1/page/verifySplash.dart';
 import '../Constructor/AuthService.dart';
 import '../Constructor/appvalidator.dart';
@@ -17,6 +21,8 @@ class _SignInPageState extends State<SignInPage> {
 
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  bool _isPasswordVisible = false;
+  final player = AudioPlayer();
 
   @override
   void initState() {
@@ -40,11 +46,12 @@ class _SignInPageState extends State<SignInPage> {
       };
 
       await authService.validateUser(data, context, () {
-        Future.delayed(const Duration(seconds: 1), () {
+        player.play(AssetSource('audio/intro.mp3'));
+        Future.delayed(Duration(milliseconds: 500), () {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              transitionDuration: const Duration(milliseconds: 500),
+              transitionDuration: const Duration(milliseconds: 1000),
               pageBuilder: (_, __, ___) => const VerifySplash(),
               transitionsBuilder: (_, animation, __, child) {
                 return FadeTransition(
@@ -132,27 +139,93 @@ class _SignInPageState extends State<SignInPage> {
                         child: TextFormField(
                           controller: _passwordController,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: appValidator.validatePassword,
-                          obscureText: true,
+                          validator: appValidator
+                              .validatePassword, // Ensure this validator is defined in your code
+                          obscureText: !_isPasswordVisible,
                           decoration: InputDecoration(
-                              hoverColor: const Color(0xFF074173),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              prefixIcon: const Icon(
-                                Icons.password,
-                                color: AppColors.secondaryColor,
+                            hoverColor: const Color(0xFF074173),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.password,
+                              color: AppColors
+                                  .secondaryColor, // Ensure AppColors is defined in your code
+                            ),
+                            hintText: 'Password',
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 4,
+                                color: AppColors
+                                    .secondaryColor, // Ensure AppColors is defined in your code
                               ),
-                              hintText: 'Password',
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    width: 4,
-                                    color: AppColors.secondaryColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10))),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: AppColors
+                                    .secondaryColor, // Ensure AppColors is defined in your code
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                            ),
+                          ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                            onTap: () {
+                              player.play(AssetSource('audio/button.mp3'));
+                              Future.delayed(Duration(milliseconds: 500), () {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 500),
+                                    pageBuilder: (_, __, ___) =>
+                                        ResetPasswordPage(),
+                                    transitionsBuilder: (_, animation,
+                                        secondaryAnimation, child) {
+                                      var begin = Offset(
+                                          1.0, 0.0); // Start from right to left
+                                      var end = Offset.zero;
+                                      var curve = Curves.easeInOut;
+
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+                                      var offsetAnimation =
+                                          animation.drive(tween);
+
+                                      return SlideTransition(
+                                        position: offsetAnimation,
+                                        child: FadeTransition(
+                                          opacity: animation,
+                                          child: child,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              });
+                            },
+                            child: Text(
+                              'Terlupa kata laluan',
+                              style: TextStyle(
+                                  fontFamily: 'Rubik',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.primaryColor),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       Center(
                         child: GestureDetector(
@@ -164,6 +237,13 @@ class _SignInPageState extends State<SignInPage> {
                             width: 350,
                             height: 65,
                             decoration: BoxDecoration(
+                                border: Border(
+                                    left: BorderSide(
+                                        width: 6,
+                                        color: AppColors.primaryColor),
+                                    bottom: BorderSide(
+                                        width: 10,
+                                        color: AppColors.primaryColor)),
                                 color: AppColors.secondaryColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20))),
@@ -181,7 +261,7 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                       ),
                       const SizedBox(
-                        height: 25,
+                        height: 15,
                       ),
                       const Center(
                         child: Text(
@@ -194,17 +274,20 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                       ),
                       const SizedBox(
-                        height: 25,
+                        height: 15,
                       ),
                       Center(
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const RegisterPage(),
-                              ),
-                            );
+                            player.play(AssetSource('audio/button.mp3'));
+                            Future.delayed(Duration(milliseconds: 500), () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (_) => RegisterPage(),
+                                ),
+                              );
+                            });
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -212,12 +295,19 @@ class _SignInPageState extends State<SignInPage> {
                             height: 65,
                             decoration: BoxDecoration(
                                 color: AppColors.secondaryColor,
+                                border: Border(
+                                    left: BorderSide(
+                                        width: 6,
+                                        color: AppColors.primaryColor),
+                                    bottom: BorderSide(
+                                        width: 10,
+                                        color: AppColors.primaryColor)),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20))),
                             child: const Text(
-                              "Daftar Pengguna",
+                              "Daftar pengguna",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontFamily: 'Rubik',
                                   color: AppColors.backgroundColor,
                                   fontSize: 20),
                             ),

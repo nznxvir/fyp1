@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -10,6 +11,7 @@ import 'package:fyp1/page/verifySplash.dart';
 
 import '../Constructor/AuthService.dart';
 import '../Constructor/appvalidator.dart';
+import '../alertBox.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -28,17 +30,20 @@ class _RegisterPageState extends State<RegisterPage> {
 
   var authService = AuthService();
   var isLoader = false;
+  bool _isPasswordVisible = false;
+  bool _isCPasswordVisible = false;
+  final player = AudioPlayer();
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       // Check if passwords match
       if (_passwordController.text != _confirmpasswordController.text) {
         // Show password mismatch error
-        const AlertDialog(
-          title: Text("Pengesahan kata laluan gagal"),
-          content: Text("Kata laluan tidak sepadan."),
-        );
-        return; // Do not proceed further
+
+        showAutoDismissAlertDialog(
+            context, 'Kata laluan tidak sepadan', 'assets/failed.png');
+
+        return;
       }
       setState(() {
         isLoader = true;
@@ -207,22 +212,40 @@ class _RegisterPageState extends State<RegisterPage> {
                       keyboardType: TextInputType.visiblePassword,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: appValidator.validatePassword,
-                      obscureText: true,
+                      obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
-                          fillColor: AppColors.backgroundColor,
-                          filled: true,
-                          hoverColor: AppColors.secondaryColor,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          prefixIcon: const Icon(
-                            Icons.password,
+                        fillColor: AppColors.backgroundColor,
+                        filled: true,
+                        hoverColor: AppColors.secondaryColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.password,
+                          color: AppColors.secondaryColor,
+                        ),
+                        hintText: 'Kata laluan',
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 4,
                             color: AppColors.secondaryColor,
                           ),
-                          hintText: 'Kata laluan',
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  width: 4, color: AppColors.secondaryColor),
-                              borderRadius: BorderRadius.circular(10))),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: AppColors.secondaryColor,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -235,22 +258,40 @@ class _RegisterPageState extends State<RegisterPage> {
                       keyboardType: TextInputType.visiblePassword,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: appValidator.validatePassword,
-                      obscureText: true,
+                      obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
-                          fillColor: AppColors.backgroundColor,
-                          filled: true,
-                          hoverColor: AppColors.secondaryColor,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          prefixIcon: const Icon(
-                            Icons.password,
+                        fillColor: AppColors.backgroundColor,
+                        filled: true,
+                        hoverColor: AppColors.secondaryColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.password,
+                          color: AppColors.secondaryColor,
+                        ),
+                        hintText: 'Kata laluan',
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 4,
                             color: AppColors.secondaryColor,
                           ),
-                          hintText: 'Sahkan kata laluan',
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  width: 4, color: AppColors.secondaryColor),
-                              borderRadius: BorderRadius.circular(10))),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isCPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: AppColors.secondaryColor,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isCPasswordVisible = !_isCPasswordVisible;
+                            });
+                          },
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -258,7 +299,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         CupertinoPageRoute(
                           builder: (_) => SignInPage(),
@@ -270,62 +311,61 @@ class _RegisterPageState extends State<RegisterPage> {
                       style: TextStyle(
                           fontFamily: 'Rubik',
                           fontSize: 16,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.primaryColor),
                     ),
                   ),
                   SizedBox(
                     height: 5,
                   ),
-                  Container(
-                    width: 500,
-                    height: 65,
-                    child: ElevatedButton(
-                      onPressed: isLoader
+                  Center(
+                    child: GestureDetector(
+                      onTap: isLoader
                           ? null
                           : () {
                               if (_formKey.currentState!.validate()) {
                                 if (_passwordController.text ==
                                     _confirmpasswordController.text) {
-                                  _submitForm();
+                                  player.play(AssetSource('audio/logout.mp3'));
+                                  Future.delayed(Duration(milliseconds: 500),
+                                      () {
+                                    _submitForm();
+                                  });
                                 } else {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text(
-                                            "Pengesahan Kata Laluan"),
-                                        content: const Text(
-                                            "Kata laluan tidak sepadan"),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: const Text("OK"),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
+                                  player.play(AssetSource('audio/wrong.mp3'));
+                                  Future.delayed(Duration(milliseconds: 500),
+                                      () {
+                                    showAutoDismissAlertDialog(
+                                        context,
+                                        'Kata laluan tidak sepadan',
+                                        'assets/failed.png');
+                                  });
                                 }
                               }
                             },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.secondaryColor,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 350,
+                        height: 65,
+                        decoration: BoxDecoration(
+                            border: Border(
+                                left: BorderSide(
+                                    width: 6, color: AppColors.primaryColor),
+                                bottom: BorderSide(
+                                    width: 10, color: AppColors.primaryColor)),
+                            color: AppColors.secondaryColor,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        child: isLoader
+                            ? const Center(child: CircularProgressIndicator())
+                            : const Text(
+                                "Daftar",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: AppColors.backgroundColor,
+                                    fontSize: 20),
+                              ),
                       ),
-                      child: isLoader
-                          ? const Center(child: CircularProgressIndicator())
-                          : const Text(
-                              "Daftar",
-                              style: TextStyle(
-                                  color: AppColors.backgroundColor,
-                                  fontFamily: 'Rubik',
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold),
-                            ),
                     ),
                   ),
                 ],

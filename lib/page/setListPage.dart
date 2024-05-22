@@ -75,20 +75,23 @@ class _SetListViewState extends State<SetListView> {
               QueryDocumentSnapshot<Object?> noteDoc = notes[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 500),
-                      pageBuilder: (_, __, ___) => NoteView(
-                          chapterid: noteDoc['chapter'], sub: noteDoc['sub']),
-                      transitionsBuilder: (_, animation, __, child) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
+                  player.play(AssetSource('audio/button.mp3'));
+                  Future.delayed(Duration(milliseconds: 500), () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (_, __, ___) => NoteView(
+                            chapterid: noteDoc['chapter'], sub: noteDoc['sub']),
+                        transitionsBuilder: (_, animation, __, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  });
                 },
                 child: Container(
                     margin:
@@ -207,7 +210,7 @@ class _SetListViewState extends State<SetListView> {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: AppColors.backgroundColor,
-                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.8),
@@ -294,9 +297,9 @@ class _SetListViewState extends State<SetListView> {
                           GestureDetector(
                             onTap: () {
                               player.play(AssetSource('audio/startquiz.mp3'));
-                              Future.delayed(Duration(seconds: 1), () {
+                              Future.delayed(Duration(milliseconds: 500), () {
                                 if (setDoc['type'] == 'mcq') {
-                                  Navigator.pushReplacement(
+                                  Navigator.push(
                                     context,
                                     PageRouteBuilder(
                                       transitionDuration:
@@ -444,7 +447,10 @@ class _SetListViewState extends State<SetListView> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pop(context);
+                            player.play(AssetSource('audio/pop.mp3'));
+                            Future.delayed(Duration(milliseconds: 500), () {
+                              Navigator.pop(context);
+                            });
                           },
                           child: Container(
                               width: 50,

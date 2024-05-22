@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +15,7 @@ class HistoryView extends StatefulWidget {
 
 class _HistoryViewState extends State<HistoryView> {
   late List<Map<String, dynamic>> _historyList = [];
+  final player = AudioPlayer();
 
   @override
   void initState() {
@@ -83,7 +85,10 @@ class _HistoryViewState extends State<HistoryView> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      player.play(AssetSource('audio/pop.mp3'));
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        Navigator.pop(context);
+                      });
                     },
                     child: Container(
                         margin: const EdgeInsets.only(left: 20),

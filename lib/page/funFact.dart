@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fyp1/page/Colors.dart';
@@ -13,6 +14,7 @@ class _FactsViewState extends State<FactsView> {
   final PageController _pageController = PageController();
   List<DocumentSnapshot> _facts = [];
   bool _isLoading = false;
+  final player = AudioPlayer();
 
   @override
   void initState() {
@@ -52,7 +54,10 @@ class _FactsViewState extends State<FactsView> {
           const SizedBox(width: 10),
           GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              player.play(AssetSource('audio/pop.mp3'));
+              Future.delayed(Duration(milliseconds: 500), () {
+                Navigator.pop(context);
+              });
             },
             child: Container(
                 width: 50,
@@ -107,7 +112,7 @@ class _FactsViewState extends State<FactsView> {
                 itemBuilder: (context, index) {
                   final fact = _facts[index];
                   return Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 150, 40, 150),
+                    padding: const EdgeInsets.fromLTRB(25, 80, 25, 80),
                     child: AnimatedContainer(
                       duration: Duration(seconds: 1),
                       curve: Curves.elasticInOut,

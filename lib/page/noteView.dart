@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
@@ -18,6 +19,7 @@ class _NoteViewState extends State<NoteView> {
   late String _sub = '';
   late String _pdf = '';
   bool _isPDFReady = false;
+  final player = AudioPlayer();
 
   @override
   void initState() {
@@ -67,7 +69,10 @@ class _NoteViewState extends State<NoteView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      player.play(AssetSource('audio/pop.mp3'));
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        Navigator.pop(context);
+                      });
                     },
                     child: Container(
                         width: 50,

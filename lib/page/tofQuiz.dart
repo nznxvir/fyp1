@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fyp1/page/Colors.dart';
 import 'resultPage.dart';
 
@@ -79,26 +80,29 @@ class _tofQuizState extends State<tofQuiz> {
   }
 
   _navigateResult() {
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (_, __, ___) => ResultView(
-            score: _score,
-            correctCount: _correctCount,
-            wrongCount: _wrongCount,
-            unansweredCount: _unansweredCount,
-            setnum: widget.setnum,
-            chapter: widget.chapternum,
-            elapsedTime: _elapsedTime),
-        transitionsBuilder: (_, animation, __, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
-        },
-      ),
-    );
+    player.play(AssetSource('audio/finishquiz.mp3'));
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 500),
+          pageBuilder: (_, __, ___) => ResultView(
+              score: _score,
+              correctCount: _correctCount,
+              wrongCount: _wrongCount,
+              unansweredCount: _unansweredCount,
+              setnum: widget.setnum,
+              chapter: widget.chapternum,
+              elapsedTime: _elapsedTime),
+          transitionsBuilder: (_, animation, __, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
+    });
   }
 
   @override
@@ -272,7 +276,7 @@ class _tofQuizState extends State<tofQuiz> {
                     _showValidationIcon = true;
                     currentAnswer = true;
                     if (_correctAnswer == currentAnswer) {
-                      player.play(AssetSource('audio/correct.mp3'));
+                      player.play(AssetSource('audio/correctanswer.mp3'));
                       _score += 5;
                       _correctCount++;
                       _selectedBetulColor = Colors.green;
@@ -322,7 +326,7 @@ class _tofQuizState extends State<tofQuiz> {
                     _showValidationIcon = true;
                     currentAnswer = false;
                     if (_correctAnswer == currentAnswer) {
-                      player.play(AssetSource('audio/correct.mp3'));
+                      player.play(AssetSource('audio/correctanswer.mp3'));
                       _score += 5;
                       _correctCount++;
                       _selectedSalahColor = Colors.green;
@@ -371,32 +375,33 @@ class _tofQuizState extends State<tofQuiz> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: 70,
-                height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: AppColors.secondaryColor,
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.keyboard_double_arrow_left),
-                  color: AppColors.backgroundColor,
-                  onPressed: () {
+              GestureDetector(
+                onTap: () {
+                  player.play(AssetSource('audio/pop.mp3'));
+                  Future.delayed(Duration(milliseconds: 500), () {
                     Navigator.pop(context);
-                  },
+                  });
+                },
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: Image.asset('assets/quit.png'),
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 2,
               ),
               GestureDetector(
                   onTap: () {
                     setState(() {
                       _unansweredCount++; // Increment unanswered count
                       if (_currentQuestionIndex < _questions.length - 1) {
-                        _pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut);
+                        player.play(AssetSource('audio/skip.mp3'));
+                        Future.delayed(Duration(milliseconds: 500), () {
+                          _pageController.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut);
+                        });
                       } else {
                         _navigateResult();
                       }
@@ -405,17 +410,14 @@ class _tofQuizState extends State<tofQuiz> {
                   child: Container(
                     alignment: Alignment.center,
                     width: 250,
-                    height: 70,
+                    height: 55,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: AppColors.secondaryColor),
-                    child: const Text(
-                      'Soalan Seterusnya',
-                      style: TextStyle(
-                          fontFamily: 'Rubik',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.backgroundColor),
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Image.asset('assets/skip.png'),
                     ),
                   ))
             ],

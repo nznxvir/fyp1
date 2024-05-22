@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp1/constructor/Database.dart';
 
+import '../alertBox.dart';
+
 class AuthService {
   var database = Database();
   Future<void> createUser(data, context, Function onSuccess) async {
@@ -14,23 +16,13 @@ class AuthService {
       showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text("Akaun Berjaya Dicipta"),
-            content: Text("Selamat Datang"),
-          );
+          return showAutoDismissAlertDialog(
+              context, 'Pendaftaran berjaya', 'assets/success.png');
         },
       );
-      onSuccess(); // Invoke the callback function after successful registration
+      onSuccess();
     } catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Pendaftaran gagal"),
-            content: Text(e.toString()),
-          );
-        },
-      );
+      showAutoDismissAlertDialog(context, e.toString(), 'assets/failed.png');
     }
   }
 
@@ -43,14 +35,8 @@ class AuthService {
 
       onSuccess();
     } catch (e) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Log masuk gagal"),
-              content: Text(e.toString()),
-            );
-          });
+      showAutoDismissAlertDialog(
+          context, 'Log masuk gagal. Sila cuba lagi', 'assets/failed.png');
     }
   }
 }

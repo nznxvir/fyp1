@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +11,7 @@ import 'package:fyp1/page/rankUtils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
+import '../alertBox.dart';
 import 'Leaderboard/rankPage.dart';
 import 'homePage.dart';
 import 'LoginPage.dart';
@@ -32,6 +34,7 @@ class _ProfileViewState extends State<ProfileView> {
   String? imageurl;
   File? _image;
   bool _isConfirming = false;
+  final player = AudioPlayer();
 
   final picker = ImagePicker();
 
@@ -53,29 +56,29 @@ class _ProfileViewState extends State<ProfileView> {
       imageurl = userDoc['imageurl'];
       score = userDoc['score'];
       email = userDoc['email'];
-      pass = userDoc['password'];
     });
   }
 
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 500),
+        transitionDuration: const Duration(milliseconds: 400),
+        reverseTransitionDuration: const Duration(milliseconds: 400),
         pageBuilder: (_, __, ___) => SignInPage(),
-        transitionsBuilder: (_, animation, __, child) {
-          return ScaleTransition(
-            scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Curves.fastOutSlowIn,
-              ),
-            ),
-            child: FadeTransition(
-              opacity: animation,
-              child: child,
-            ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final begin = const Offset(0.0, 1.0);
+          final end = Offset.zero;
+          final curve = Curves.easeInOut;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
           );
         },
       ),
@@ -94,51 +97,14 @@ class _ProfileViewState extends State<ProfileView> {
         setState(() {
           username = newUsername;
         });
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10.0),
-              topRight: Radius.circular(10.0),
-            ),
-            side: BorderSide(width: 4, color: AppColors.secondaryColor),
-          ),
-          content: Text(
-            'Proses berjaya',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Rubik',
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.secondaryColor,
-            ),
-          ),
-        ));
+        showAutoDismissAlertDialog(
+            context, 'Proses berjaya', 'assets/success.png');
       }
     } catch (error) {
       print("Error changing password: $error");
 
-      // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10.0),
-            topRight: Radius.circular(10.0),
-          ),
-          side: BorderSide(width: 4, color: AppColors.secondaryColor),
-        ),
-        content: Text(
-          'Gagal untuk menukar nama, Sila cuba lagi',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Rubik',
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: AppColors.secondaryColor,
-          ),
-        ),
-      ));
+      showAutoDismissAlertDialog(
+          context, 'Proses gagal. Sila cuba lagi', 'assets/failed.png');
     }
   }
 
@@ -147,36 +113,12 @@ class _ProfileViewState extends State<ProfileView> {
     try {
       if (user != null) {
         print(user);
-        // Update password in Firestore
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .update({'password': newPassword});
-
         // Update password in FirebaseAuth
         await user.updatePassword(newPassword);
 
         // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10.0),
-              topRight: Radius.circular(10.0),
-            ),
-            side: BorderSide(width: 4, color: AppColors.secondaryColor),
-          ),
-          content: Text(
-            'Proses berjaya',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Rubik',
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.secondaryColor,
-            ),
-          ),
-        ));
+        showAutoDismissAlertDialog(
+            context, 'Proses berjaya', 'assets/success.png');
 
         // Update local password variable
         setState(() {
@@ -186,27 +128,8 @@ class _ProfileViewState extends State<ProfileView> {
     } catch (error) {
       print("Error changing password: $error");
 
-      // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10.0),
-            topRight: Radius.circular(10.0),
-          ),
-          side: BorderSide(width: 4, color: AppColors.secondaryColor),
-        ),
-        content: Text(
-          'Gagal untuk menukar kata laluan, Sila cuba lagi',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Rubik',
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: AppColors.secondaryColor,
-          ),
-        ),
-      ));
+      showAutoDismissAlertDialog(context,
+          'Gagal menukar kata laluan. Sila cuba lagi', 'assets/failed.png');
     }
   }
 
@@ -215,6 +138,12 @@ class _ProfileViewState extends State<ProfileView> {
         .collection('users')
         .doc(user.uid)
         .update({'score': 0});
+    Navigator.pop(context);
+
+    Future.delayed(Duration(seconds: 2), () {
+      showAutoDismissAlertDialog(
+          context, 'Proses berjaya', 'assets/success.png');
+    });
   }
 
   Future<void> _getImage() async {
@@ -255,8 +184,8 @@ class _ProfileViewState extends State<ProfileView> {
         });
       } catch (e) {
         print(e);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Failed to upload image. Please try again.')));
+        showAutoDismissAlertDialog(context,
+            'Gagal memuat naik gambar. Sila cuba lagi', 'assets/failed.png');
       }
     }
   }
@@ -317,9 +246,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     imageurl!,
                                     fit: BoxFit.cover,
                                   )
-                                : const Image(
-                                    image: AssetImage('assets/rentap.png'),
-                                  ),
+                                : CircularProgressIndicator(),
                           ),
                         ),
                         Positioned(
@@ -589,15 +516,25 @@ class _ProfileViewState extends State<ProfileView> {
               ),
               GestureDetector(
                 onTap: () {
-                  logout();
+                  player.play(AssetSource('audio/logout.mp3'));
+                  Future.delayed(Duration(milliseconds: 500), () {
+                    logout();
+                  });
                 },
                 child: Container(
                     alignment: Alignment.center,
                     width: 280,
                     height: 60,
                     decoration: const BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                              width: 8,
+                              color: AppColors.primaryColor,
+                            ),
+                            left: BorderSide(
+                                width: 4, color: AppColors.primaryColor)),
                         borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: AppColors.secondaryColor),
+                        color: AppColors.thirdColor),
                     child: const Text(
                       'Log Keluar',
                       textAlign: TextAlign.center,
@@ -605,7 +542,7 @@ class _ProfileViewState extends State<ProfileView> {
                         fontFamily: 'Rubik',
                         fontSize: 25,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.backgroundColor,
+                        color: AppColors.primaryColor,
                       ),
                     )),
               )
@@ -648,7 +585,10 @@ class _ProfileViewState extends State<ProfileView> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            player.play(AssetSource('audio/pop.mp3'));
+                            Future.delayed(Duration(milliseconds: 500), () {
+                              Navigator.pop(context);
+                            });
                           },
                           icon: Icon(Icons.cancel_rounded),
                           iconSize: 40,
@@ -700,8 +640,11 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        changeUsername(newUsernameController.text);
-                        Navigator.pop(context);
+                        player.play(AssetSource('audio/button.mp3'));
+                        Future.delayed(Duration(milliseconds: 500), () {
+                          changeUsername(newUsernameController.text);
+                          Navigator.pop(context);
+                        });
                       },
                       child: Container(
                         width: 200,
@@ -763,7 +706,10 @@ class _ProfileViewState extends State<ProfileView> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            player.play(AssetSource('audio/pop.mp3'));
+                            Future.delayed(Duration(milliseconds: 500), () {
+                              Navigator.pop(context);
+                            });
                           },
                           icon: Icon(Icons.cancel_rounded),
                           iconSize: 40,
@@ -815,8 +761,11 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        changePassword(newPasswordController.text);
-                        Navigator.pop(context);
+                        player.play(AssetSource('audio/button.mp3'));
+                        Future.delayed(Duration(milliseconds: 500), () {
+                          changePassword(newPasswordController.text);
+                          Navigator.pop(context);
+                        });
                       },
                       child: Container(
                         width: 200,
@@ -878,7 +827,10 @@ class _ProfileViewState extends State<ProfileView> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            player.play(AssetSource('audio/pop.mp3'));
+                            Future.delayed(Duration(milliseconds: 500), () {
+                              Navigator.pop(context);
+                            });
                           },
                           icon: const Icon(Icons.cancel_rounded),
                           iconSize: 40,
@@ -920,9 +872,11 @@ class _ProfileViewState extends State<ProfileView> {
                         setState(() {
                           _isConfirming = true;
                         });
-
+                        player.play(AssetSource('audio/logout.mp3'));
                         resetScore();
                         await updateRank();
+                        showAutoDismissAlertDialog(context,
+                            'Markah berjaya di set', 'assets/success.png');
 
                         setState(() {
                           _isConfirming = false;
