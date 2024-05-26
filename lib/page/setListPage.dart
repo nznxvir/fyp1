@@ -70,106 +70,115 @@ class _SetListViewState extends State<SetListView> {
         notes.sort((a, b) => a['sub'].compareTo(b['sub']));
 
         return ListView.builder(
-            itemCount: notes.length,
-            itemBuilder: (BuildContext context, int index) {
-              QueryDocumentSnapshot<Object?> noteDoc = notes[index];
-              return GestureDetector(
-                onTap: () {
-                  player.play(AssetSource('audio/button.mp3'));
-                  Future.delayed(Duration(milliseconds: 500), () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: const Duration(milliseconds: 500),
-                        pageBuilder: (_, __, ___) => NoteView(
-                            chapterid: noteDoc['chapter'], sub: noteDoc['sub']),
-                        transitionsBuilder: (_, animation, __, child) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          );
-                        },
-                      ),
-                    );
-                  });
-                },
-                child: Container(
-                    margin:
-                        const EdgeInsets.only(bottom: 40, right: 10, left: 10),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.backgroundColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(15)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.8),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        )
-                      ],
+          itemCount: notes.length,
+          itemBuilder: (BuildContext context, int index) {
+            QueryDocumentSnapshot<Object?> noteDoc = notes[index];
+            return GestureDetector(
+              onTap: () {
+                player.play(AssetSource('audio/button.mp3'));
+                Future.delayed(Duration(milliseconds: 500), () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (_, __, ___) => NoteView(
+                          chapterid: noteDoc['chapter'], sub: noteDoc['sub']),
+                      transitionsBuilder: (_, animation, __, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
                     ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: const BoxDecoration(
-                              color: AppColors.secondaryColor,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15))),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'SubTopik',
-                                style: TextStyle(
-                                    fontFamily: 'Rubik',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w900,
-                                    color: AppColors.thirdColor),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 10),
-                                alignment: Alignment.center,
-                                width: 70,
-                                height: 60,
-                                decoration: const BoxDecoration(
-                                    color: AppColors.thirdColor,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15))),
-                                child: Text(
-                                  noteDoc['chapter'] + '.' + noteDoc['sub'],
-                                  style: const TextStyle(
-                                      fontFamily: 'Rubik',
-                                      fontSize: 42,
-                                      color: AppColors.primaryColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
+                  );
+                });
+              },
+              child: Container(
+                margin: EdgeInsets.only(bottom: 40, right: 10, left: 10),
+                width: MediaQuery.of(context).size.width * 0.9,
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundColor,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.8),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    )
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.width * 0.3,
+                      decoration: BoxDecoration(
+                        color: AppColors.secondaryColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15),
                         ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          width: 260,
-                          child: Text(
-                            noteDoc['title'],
-                            textAlign: TextAlign.start,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'SubTopik',
                             style: TextStyle(
-                                fontFamily: 'Rubik',
-                                fontSize: 20,
-                                color: AppColors.primaryColor,
-                                fontWeight: FontWeight.w600),
+                              fontFamily: 'Rubik',
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
+                              fontWeight: FontWeight.w900,
+                              color: AppColors.thirdColor,
+                            ),
                           ),
-                        )
-                      ],
-                    )),
-              );
-            });
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.width * 0.02),
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            height: MediaQuery.of(context).size.width * 0.15,
+                            decoration: BoxDecoration(
+                              color: AppColors.thirdColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: Text(
+                              noteDoc['chapter'] + '.' + noteDoc['sub'],
+                              style: TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.08,
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      width: MediaQuery.of(context).size.width * 0.63,
+                      child: Text(
+                        noteDoc['title'],
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontFamily: 'Rubik',
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
+                          color: AppColors.primaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
       },
     );
   }
@@ -206,17 +215,24 @@ class _SetListViewState extends State<SetListView> {
             QueryDocumentSnapshot<Object?> setDoc = sets[index];
             // Build each list item here
             return Container(
-              margin: const EdgeInsets.only(bottom: 40, right: 10, left: 10),
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).size.width * 0.1,
+                right: MediaQuery.of(context).size.width * 0.05,
+                left: MediaQuery.of(context).size.width * 0.05,
+              ),
               width: double.infinity,
+              height: MediaQuery.of(context).size.width * 0.36,
               decoration: BoxDecoration(
                 color: AppColors.backgroundColor,
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.width * 0.05,
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.8),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3), // changes position of shadow
+                    spreadRadius: MediaQuery.of(context).size.width * 0.003,
+                    blurRadius: MediaQuery.of(context).size.width * 0.01,
+                    offset: Offset(0, MediaQuery.of(context).size.width * 0.01),
                   )
                 ],
               ),
@@ -224,75 +240,96 @@ class _SetListViewState extends State<SetListView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    width: 120,
-                    height: 160,
-                    decoration: const BoxDecoration(
-                        color: AppColors.secondaryColor,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            bottomLeft: Radius.circular(15))),
+                    width: MediaQuery.of(context).size.width * 0.24,
+                    height: MediaQuery.of(context).size.width * 0.36,
+                    decoration: BoxDecoration(
+                      color: AppColors.secondaryColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(
+                          MediaQuery.of(context).size.width * 0.04,
+                        ),
+                        bottomLeft: Radius.circular(
+                          MediaQuery.of(context).size.width * 0.04,
+                        ),
+                      ),
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Modul',
                           style: TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              color: AppColors.thirdColor),
+                            fontFamily: 'Rubik',
+                            fontSize: MediaQuery.of(context).size.width * 0.055,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.thirdColor,
+                          ),
                         ),
                         Container(
-                          margin: const EdgeInsets.only(top: 10),
+                          margin: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.width * 0.025),
                           alignment: Alignment.center,
-                          width: 70,
-                          height: 70,
-                          decoration: const BoxDecoration(
-                              color: AppColors.thirdColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
+                          width: MediaQuery.of(context).size.width * 0.15,
+                          height: MediaQuery.of(context).size.width * 0.15,
+                          decoration: BoxDecoration(
+                            color: AppColors.thirdColor,
+                            borderRadius: BorderRadius.circular(
+                              MediaQuery.of(context).size.width * 0.04,
+                            ),
+                          ),
                           child: Text(
                             setDoc['setnum'],
-                            style: const TextStyle(
-                                fontFamily: 'Rubik',
-                                fontSize: 52,
-                                color: AppColors.primaryColor,
-                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: MediaQuery.of(context).size.width * 0.1,
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 15),
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.03),
                     child: Container(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.02,
+                          ),
                           Text(
                             'Bilangan Soalan: ' + setDoc['question'].toString(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Rubik',
-                              fontSize: 18,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.045,
                               color: AppColors.primaryColor,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
                             'Tahap: ' + setDoc['difficulty'],
-                            style: const TextStyle(
-                                fontFamily: 'Rubik',
-                                fontSize: 18,
-                                color: AppColors.primaryColor,
-                                fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.045,
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           Text(
                             'Markah: ' + setDoc['mark'].toString(),
-                            style: const TextStyle(
-                                fontFamily: 'Rubik',
-                                fontSize: 18,
-                                color: AppColors.primaryColor,
-                                fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.045,
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -305,18 +342,17 @@ class _SetListViewState extends State<SetListView> {
                                       transitionDuration:
                                           const Duration(milliseconds: 500),
                                       pageBuilder: (_, __, ___) => QuizView(
-                                          setnum: setDoc['setnum'],
-                                          chapternum: setDoc['chapter']),
+                                        setnum: setDoc['setnum'],
+                                        chapternum: setDoc['chapter'],
+                                      ),
                                       transitionsBuilder:
                                           (_, animation, __, child) {
                                         var begin = const Offset(1.0, 0.0);
                                         var end = Offset.zero;
                                         var curve = Curves.easeInOut;
-
                                         var tween = Tween(
                                                 begin: begin, end: end)
                                             .chain(CurveTween(curve: curve));
-
                                         return SlideTransition(
                                           position: animation.drive(tween),
                                           child: FadeTransition(
@@ -334,18 +370,17 @@ class _SetListViewState extends State<SetListView> {
                                       transitionDuration:
                                           const Duration(milliseconds: 500),
                                       pageBuilder: (_, __, ___) => FillQuiz(
-                                          setnum: setDoc['setnum'],
-                                          chapternum: setDoc['chapter']),
+                                        setnum: setDoc['setnum'],
+                                        chapternum: setDoc['chapter'],
+                                      ),
                                       transitionsBuilder:
                                           (_, animation, __, child) {
                                         var begin = const Offset(1.0, 0.0);
                                         var end = Offset.zero;
                                         var curve = Curves.easeInOut;
-
                                         var tween = Tween(
                                                 begin: begin, end: end)
                                             .chain(CurveTween(curve: curve));
-
                                         return SlideTransition(
                                           position: animation.drive(tween),
                                           child: FadeTransition(
@@ -363,18 +398,17 @@ class _SetListViewState extends State<SetListView> {
                                       transitionDuration:
                                           const Duration(milliseconds: 500),
                                       pageBuilder: (_, __, ___) => tofQuiz(
-                                          setnum: setDoc['setnum'],
-                                          chapternum: setDoc['chapter']),
+                                        setnum: setDoc['setnum'],
+                                        chapternum: setDoc['chapter'],
+                                      ),
                                       transitionsBuilder:
                                           (_, animation, __, child) {
                                         var begin = const Offset(1.0, 0.0);
                                         var end = Offset.zero;
                                         var curve = Curves.easeInOut;
-
                                         var tween = Tween(
                                                 begin: begin, end: end)
                                             .chain(CurveTween(curve: curve));
-
                                         return SlideTransition(
                                           position: animation.drive(tween),
                                           child: FadeTransition(
@@ -389,20 +423,27 @@ class _SetListViewState extends State<SetListView> {
                               });
                             },
                             child: Container(
-                              margin: EdgeInsets.only(top: 10),
+                              margin: EdgeInsets.only(
+                                  top:
+                                      MediaQuery.of(context).size.width * 0.02),
                               alignment: Alignment.center,
-                              width: 230,
-                              height: 40,
+                              width: MediaQuery.of(context).size.width * 0.58,
+                              height: MediaQuery.of(context).size.width * 0.08,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(13),
-                                  color: AppColors.secondaryColor),
-                              child: const Text(
+                                borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.width * 0.02,
+                                ),
+                                color: AppColors.secondaryColor,
+                              ),
+                              child: Text(
                                 'Mula',
                                 style: TextStyle(
-                                    fontFamily: 'Rubik',
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.thirdColor),
+                                  fontFamily: 'Rubik',
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.055,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.thirdColor,
+                                ),
                               ),
                             ),
                           )
@@ -431,20 +472,25 @@ class _SetListViewState extends State<SetListView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.01,
+                      left: MediaQuery.of(context).size.width * 0.04,
+                      right: MediaQuery.of(context).size.width * 0.04,
+                      bottom: MediaQuery.of(context).size.height * 0.01,
+                    ),
                     width: double.infinity,
-                    height: 80,
+                    height: MediaQuery.of(context).size.height * 0.1,
                     alignment: Alignment.topCenter,
                     decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 4, color: AppColors.secondaryColor),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: AppColors.thirdColor),
+                      border: Border.all(
+                        width: 4,
+                        color: AppColors.secondaryColor,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: AppColors.thirdColor,
+                    ),
                     child: Row(
                       children: [
-                        const SizedBox(
-                          width: 10,
-                        ),
                         GestureDetector(
                           onTap: () {
                             player.play(AssetSource('audio/pop.mp3'));
@@ -453,38 +499,42 @@ class _SetListViewState extends State<SetListView> {
                             });
                           },
                           child: Container(
-                              width: 50,
-                              height: 50,
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                color: AppColors.secondaryColor,
-                              ),
-                              child: const Icon(
-                                Icons.arrow_back_rounded,
-                                size: 30,
-                                weight: 5,
-                                color: AppColors.thirdColor,
-                              )),
-                        ),
-                        const SizedBox(width: 10),
-                        Container(
-                          alignment: Alignment.center,
-                          height: 90,
-                          width: 300,
-                          child: Text(
-                            _chapterTitle,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                                fontFamily: 'Rubik',
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primaryColor),
+                            margin: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.05,
+                            ),
+                            width: MediaQuery.of(context).size.width * 0.12,
+                            height: MediaQuery.of(context).size.width * 0.12,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              color: AppColors.secondaryColor,
+                            ),
+                            child: Icon(
+                              Icons.arrow_back_rounded,
+                              size: MediaQuery.of(context).size.width * 0.05,
+                              color: AppColors.thirdColor,
+                            ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        )
+                        Container(
+                          margin: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.05,
+                          ),
+                          alignment: Alignment.centerLeft,
+                          height: MediaQuery.of(context).size.height * 0.12,
+                          width: MediaQuery.of(context).size.width * 0.67,
+                          child: Text(
+                            _chapterTitle,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.057,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -499,7 +549,11 @@ class _SetListViewState extends State<SetListView> {
                             )
                           : Container(
                               width: double.infinity,
-                              height: 765,
+                              height: MediaQuery.of(context).size.height -
+                                  10 -
+                                  80 -
+                                  MediaQuery.of(context).padding.top -
+                                  MediaQuery.of(context).padding.bottom,
                               color: AppColors.backgroundColor,
                               child: _selectedIndex == 0
                                   ? _buildQuizList()
@@ -515,12 +569,16 @@ class _SetListViewState extends State<SetListView> {
               left: 0,
               right: 0,
               child: Container(
-                margin: const EdgeInsets.fromLTRB(30, 0, 30, 10),
-                height: 80,
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.07,
+                    0,
+                    MediaQuery.of(context).size.width * 0.07,
+                    MediaQuery.of(context).size.width * 0.02),
+                height: MediaQuery.of(context).size.width * 0.215,
                 decoration: BoxDecoration(
                     border:
                         Border.all(width: 5, color: AppColors.secondaryColor),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(30),
                     color: AppColors.thirdColor),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -528,6 +586,7 @@ class _SetListViewState extends State<SetListView> {
                     Column(
                       children: <Widget>[
                         IconButton(
+                            iconSize: MediaQuery.of(context).size.width * 0.06,
                             icon: Icon(Icons.quiz),
                             onPressed: () {
                               setState(() {
@@ -542,13 +601,15 @@ class _SetListViewState extends State<SetListView> {
                               style: TextStyle(
                                   color: AppColors.primaryColor,
                                   fontFamily: 'Rubik',
-                                  fontSize: 14,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.035,
                                   fontWeight: FontWeight.bold)),
                       ],
                     ),
                     Column(
                       children: <Widget>[
                         IconButton(
+                            iconSize: MediaQuery.of(context).size.width * 0.06,
                             icon: Icon(Icons.note),
                             onPressed: () {
                               setState(() {
@@ -563,7 +624,8 @@ class _SetListViewState extends State<SetListView> {
                               style: TextStyle(
                                   color: AppColors.primaryColor,
                                   fontFamily: 'Rubik',
-                                  fontSize: 14,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.035,
                                   fontWeight: FontWeight.bold)),
                       ],
                     ),

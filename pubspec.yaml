@@ -128,7 +128,11 @@ flutter:
   - assets/audio/finishquiz.mp3
   - assets/quit.png
   - assets/skip.png
+  - assets/forgot.png
   - assets/skip1.png
+  - assets/reg.png
+  - assets/head.png
+  - assets/tar.png
   - assets/audio/intro.mp3
 
 

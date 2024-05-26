@@ -105,7 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     width: 200,
                     height: 200,
                     child: const Image(
-                      image: AssetImage('assets/scroll.png'),
+                      image: AssetImage('assets/reg.png'),
                     ),
                   ),
                   SizedBox(

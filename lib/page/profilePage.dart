@@ -219,301 +219,185 @@ class _ProfileViewState extends State<ProfileView> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 10),
-                  width: double.infinity,
-                  height: 240,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
+              Stack(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.01),
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15)),
-                    color: AppColors.primaryColor,
-                  ),
-                  child: Column(
-                    children: [
-                      Stack(children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
-                              color: AppColors.backgroundColor),
-                          width: 120,
-                          height: 120,
-                          child: ClipOval(
-                            child: imageurl != null
-                                ? Image.network(
-                                    imageurl!,
-                                    fit: BoxFit.cover,
-                                  )
-                                : CircularProgressIndicator(),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.thirdColor),
-                            child: IconButton(
-                              icon: const Icon(Icons.edit),
-                              color: AppColors.primaryColor,
-                              onPressed: () {
-                                _getImage();
-                              },
-                            ),
-                          ),
-                        ),
-                      ]),
-                      const SizedBox(
-                        height: 10,
+                        bottomRight: Radius.circular(15),
                       ),
-                      Container(
-                        width: 350,
-                        height: 45,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(20)),
+                      color: AppColors.primaryColor,
+                    ),
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100)),
+                                color: AppColors.backgroundColor,
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              height: MediaQuery.of(context).size.width * 0.3,
+                              child: ClipOval(
+                                child: imageurl != null
+                                    ? Image.network(
+                                        imageurl!,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : CircularProgressIndicator(),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.thirdColor,
+                                ),
+                                child: IconButton(
+                                  icon: Icon(Icons.edit),
+                                  color: AppColors.primaryColor,
+                                  onPressed: () {
+                                    _getImage();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.height * 0.045,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.5),
                                 spreadRadius: 3,
                                 blurRadius: 10,
-                                offset: const Offset(0, 3),
-                              )
+                                offset: Offset(0, 3),
+                              ),
                             ],
-                            color: AppColors.backgroundColor),
-                        child: Text(
-                          username,
-                          style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Rubik',
-                              color: AppColors.primaryColor),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(30, 205, 30, 30),
-                    width: 390,
-                    height: 130,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      color: AppColors.backgroundColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        )
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 130,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
                             color: AppColors.backgroundColor,
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text('Tukar nama',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: 'Rubik',
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.primaryColor)),
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                color: AppColors.secondaryColor,
-                                iconSize: 40,
-                                onPressed: () {
-                                  _changeName(context);
-                                },
-                              ),
-                            ],
+                          child: Text(
+                            username,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.075,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Rubik',
+                              color: AppColors.primaryColor,
+                            ),
                           ),
                         ),
-                        Container(
-                          width: 100,
-                          height: 130,
-                          decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              color: AppColors.backgroundColor),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text('Tukar kata laluan',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: 'Rubik',
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.primaryColor)),
-                              IconButton(
-                                icon: const Icon(Icons.password_rounded),
-                                color: AppColors.secondaryColor,
-                                iconSize: 40,
-                                onPressed: () {
-                                  _ChangePassword(context);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: 120,
-                          height: 130,
-                          decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              color: AppColors.backgroundColor),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text('Set semula markah',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: 'Rubik',
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.primaryColor)),
-                              IconButton(
-                                icon: const Icon(Icons.refresh),
-                                color: AppColors.secondaryColor,
-                                iconSize: 40,
-                                onPressed: () {
-                                  _ResetScore(context);
-                                },
-                              ),
-                            ],
-                          ),
-                        )
                       ],
                     ),
                   ),
-                )
-              ]),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(
+                        30,
+                        MediaQuery.of(context).size.height * 0.24,
+                        30,
+                        30,
+                      ),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: AppColors.backgroundColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          buildOptionContainer(
+                            context,
+                            'Tukar nama',
+                            Icons.edit,
+                            () {
+                              _changeName(context);
+                            },
+                          ),
+                          buildOptionContainer(
+                            context,
+                            'Tukar kata laluan',
+                            Icons.password_rounded,
+                            () {
+                              _ChangePassword(context);
+                            },
+                          ),
+                          buildOptionContainer(
+                            context,
+                            'Set semula markah',
+                            Icons.refresh,
+                            () {
+                              _ResetScore(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Container(
-                margin: const EdgeInsets.only(right: 35, left: 35),
-                padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                margin: EdgeInsets.symmetric(horizontal: 35),
+                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                 width: double.infinity,
-                height: 300,
+                height: MediaQuery.of(context).size.height * 0.3,
                 decoration: BoxDecoration(
                   color: AppColors.backgroundColor,
                   border: Border.all(width: 7, color: AppColors.secondaryColor),
-                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.8),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: const Offset(0, 3), // changes position of shadow
-                    )
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
                   ],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Text(
+                    Text(
                       'Maklumat Pengguna',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontFamily: 'Rubik',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700),
+                        fontFamily: 'Rubik',
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Nama',
-                          style: TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 19,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Text(username,
-                            style: const TextStyle(
-                                fontFamily: 'Rubik',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.grey))
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Email',
-                          style: TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 19,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Text(email,
-                            style: const TextStyle(
-                                fontFamily: 'Rubik',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.grey))
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Umur',
-                          style: TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 19,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Text(age,
-                            style: const TextStyle(
-                                fontFamily: 'Rubik',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.grey))
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Skor',
-                          style: TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 19,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Text(score.toString(),
-                            style: const TextStyle(
-                                fontFamily: 'Rubik',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.grey))
-                      ],
-                    )
+                    buildInfoRow(context, 'Nama', username),
+                    buildInfoRow(context, 'Email', email),
+                    buildInfoRow(context, 'Umur', age),
+                    buildInfoRow(context, 'Skor', score.toString()),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
+              SizedBox(height: 30),
               GestureDetector(
                 onTap: () {
                   player.play(AssetSource('audio/logout.mp3'));
@@ -522,34 +406,97 @@ class _ProfileViewState extends State<ProfileView> {
                   });
                 },
                 child: Container(
-                    alignment: Alignment.center,
-                    width: 280,
-                    height: 60,
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                              width: 8,
-                              color: AppColors.primaryColor,
-                            ),
-                            left: BorderSide(
-                                width: 4, color: AppColors.primaryColor)),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: AppColors.thirdColor),
-                    child: const Text(
-                      'Log Keluar',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Rubik',
-                        fontSize: 25,
-                        fontWeight: FontWeight.w700,
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.75,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 8,
                         color: AppColors.primaryColor,
                       ),
-                    )),
-              )
+                      left: BorderSide(
+                        width: 4,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: AppColors.thirdColor,
+                  ),
+                  child: Text(
+                    'Log Keluar',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Rubik',
+                      fontSize: MediaQuery.of(context).size.width * 0.065,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildOptionContainer(BuildContext context, String label, IconData icon,
+      VoidCallback onPressed) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.25,
+      height: MediaQuery.of(context).size.height * 0.15,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        color: AppColors.backgroundColor,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Rubik',
+              fontSize: MediaQuery.of(context).size.width * 0.045,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primaryColor,
+            ),
+          ),
+          IconButton(
+            icon: Icon(icon),
+            color: AppColors.secondaryColor,
+            iconSize: MediaQuery.of(context).size.width * 0.1,
+            onPressed: onPressed,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildInfoRow(BuildContext context, String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Rubik',
+            fontSize: MediaQuery.of(context).size.width * 0.045,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontFamily: 'Rubik',
+            fontSize: MediaQuery.of(context).size.width * 0.04,
+            fontWeight: FontWeight.w300,
+            color: Colors.grey,
+          ),
+        ),
+      ],
     );
   }
 

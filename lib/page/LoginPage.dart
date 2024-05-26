@@ -89,9 +89,9 @@ class _SignInPageState extends State<SignInPage> {
                   alignment: Alignment.center,
                   child: const Image(
                     alignment: Alignment.center,
-                    image: AssetImage('assets/history.png'),
-                    width: 300,
-                    height: 300,
+                    image: AssetImage('assets/tar.png'),
+                    width: 250,
+                    height: 250,
                   ),
                 ),
                 Padding(

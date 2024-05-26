@@ -46,52 +46,38 @@ class _ResultViewState extends State<ResultView> {
     _fetchUserData();
   }
 
-  // Function to fetch user data from Firestore
   void _fetchUserData() async {
     try {
-      // Get Firestore instance
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
               .collection('users')
               .doc(user.uid)
               .get();
-      // Access the data from the snapshot and store it in variables
       var userData = snapshot.data();
       _userId = snapshot.id;
       _username = userData!['username'];
       _score = userData['score'];
-
-      // Update the state to reflect the changes
       setState(() {});
     } catch (error) {
-      // Handle any errors that occur during fetching data
       print('Error fetching user data: $error');
     }
   }
 
-  // Function to update user score in Firestore
   void _updateUserScore(int newScore) async {
     try {
-      // Get the reference to the document for the current user
       DocumentReference userRef =
           FirebaseFirestore.instance.collection('users').doc(user.uid);
-      // Update the score field with the new value
       await userRef.update({'score': newScore});
     } catch (error) {
-      // Handle any errors that occur during updating
       print('Error updating user score: $error');
     }
   }
 
   void _storeInHistory() async {
     try {
-      // Get the current date and time
       DateTime now = DateTime.now();
-
-      // Extract the date and time components
       String currentDate = '${now.year}-${now.month}-${now.day}';
       String currentTime = '${now.hour}:${now.minute}:${now.second}';
-      // Store the result data in the "history" collection
       await FirebaseFirestore.instance.collection('history').add({
         'userId': user.uid,
         'username': _username,
@@ -103,10 +89,9 @@ class _ResultViewState extends State<ResultView> {
         'chapter': widget.chapter,
         'timeSpent': widget.elapsedTime,
         'currentDate': currentDate,
-        'currentTime': currentTime, // This adds the current timestamp
+        'currentTime': currentTime,
       });
     } catch (error) {
-      // Handle any errors that occur during storing in history
       print('Error storing in history: $error');
     }
   }
@@ -115,270 +100,261 @@ class _ResultViewState extends State<ResultView> {
   Widget build(BuildContext context) {
     int answered = 5 - widget.unansweredCount;
     int currentScore = widget.score + _score;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.secondaryColor,
-        body: Column(
-          children: [
-            Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 130, left: 15, right: 15),
-                  child: Container(
-                    width: 600,
-                    height: 640,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: AppColors.backgroundColor),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'Tahniah',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 50,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        Text(
-                          'Markah Diperoleh',
-                          style: TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          widget.score.toString(),
-                          style: TextStyle(fontSize: 110, fontFamily: 'Rubik'),
-                        ),
-                        Text(
-                          'Masa menjawab: ${widget.elapsedTime}',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'Rubik',
-                              fontWeight: FontWeight.w700),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                                width: 110,
-                                height: 130,
-                                decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 244, 216, 138),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      answered.toString(),
-                                      style: TextStyle(
-                                          fontSize: 50, fontFamily: 'Rubik'),
-                                    ),
-                                    Container(
-                                      width: 60,
-                                      child: Text(
-                                        'Soalan Dijawab',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontFamily: 'Rubik',
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    )
-                                  ],
-                                )),
-                            Container(
-                                width: 110,
-                                height: 130,
-                                decoration: BoxDecoration(
-                                    color: Colors.green[400],
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      widget.correctCount.toString(),
-                                      style: TextStyle(
-                                          fontSize: 50, fontFamily: 'Rubik'),
-                                    ),
-                                    Container(
-                                      width: 60,
-                                      child: Text(
-                                        'Betul',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontFamily: 'Rubik',
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    )
-                                  ],
-                                )),
-                            Container(
-                                width: 110,
-                                height: 130,
-                                decoration: BoxDecoration(
-                                    color: Colors.red[400],
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      widget.wrongCount.toString(),
-                                      style: TextStyle(
-                                          fontSize: 50, fontFamily: 'Rubik'),
-                                    ),
-                                    Container(
-                                      width: 60,
-                                      child: Text(
-                                        'Salah',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontFamily: 'Rubik',
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    )
-                                  ],
-                                )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Column(
-                          children: [
-                            Container(
-                              width: 250,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          width: 7,
-                                          color: AppColors.primaryColor),
-                                      left: BorderSide(
-                                          width: 5,
-                                          color: AppColors.primaryColor)),
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: AppColors.thirdColor),
-                              child: Row(
+        body: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              width: screenWidth * 0.88,
+              margin: EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 130),
+                        child: Container(
+                          width: screenWidth * 0.9,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              color: AppColors.backgroundColor),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 20),
+                              Text(
+                                'Tahniah',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'Rubik',
+                                    fontSize: screenHeight * 0.05,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              Text(
+                                'Markah Diperoleh',
+                                style: TextStyle(
+                                    fontFamily: 'Rubik',
+                                    fontSize: screenHeight * 0.02,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                widget.score.toString(),
+                                style: TextStyle(
+                                    fontSize: screenHeight * 0.15,
+                                    fontFamily: 'Rubik'),
+                              ),
+                              Text(
+                                'Masa menjawab: ${widget.elapsedTime}',
+                                style: TextStyle(
+                                    fontSize: screenHeight * 0.025,
+                                    fontFamily: 'Rubik',
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              SizedBox(height: 20),
+                              Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text(
-                                    'Skor terkini',
-                                    style: TextStyle(
-                                        fontSize: 23, fontFamily: 'Rubik'),
+                                  StatCard(
+                                    label: 'Soalan Dijawab',
+                                    value: answered.toString(),
+                                    color: Color.fromARGB(255, 244, 216, 138),
                                   ),
-                                  Text(
-                                    currentScore.toString(),
-                                    style: TextStyle(
-                                        fontSize: 40, fontFamily: 'Rubik'),
+                                  StatCard(
+                                    label: 'Betul',
+                                    value: widget.correctCount.toString(),
+                                    color: Colors.green[400]!,
+                                  ),
+                                  StatCard(
+                                    label: 'Salah',
+                                    value: widget.wrongCount.toString(),
+                                    color: Colors.red[400]!,
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            GestureDetector(
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 100,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  color: AppColors.secondaryColor,
-                                ),
-                                child: _isLoading
-                                    ? CircularProgressIndicator(
-                                        color: AppColors.thirdColor)
-                                    : Icon(
-                                        Icons.home,
-                                        color: AppColors.thirdColor,
-                                        size: 40,
+                              SizedBox(height: 20),
+                              Column(
+                                children: [
+                                  Container(
+                                    width: 250,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                width: 7,
+                                                color: AppColors.primaryColor),
+                                            left: BorderSide(
+                                                width: 5,
+                                                color: AppColors.primaryColor)),
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: AppColors.thirdColor),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text(
+                                          'Skor terkini',
+                                          style: TextStyle(
+                                              fontSize: 23,
+                                              fontFamily: 'Rubik'),
+                                        ),
+                                        Text(
+                                          currentScore.toString(),
+                                          style: TextStyle(
+                                              fontSize: 40,
+                                              fontFamily: 'Rubik'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  GestureDetector(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 100,
+                                      height: 55,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                        color: AppColors.secondaryColor,
                                       ),
-                              ),
-                              onTap: () async {
-                                setState(() {
-                                  _isLoading = true;
-                                });
+                                      child: _isLoading
+                                          ? CircularProgressIndicator(
+                                              color: AppColors.thirdColor)
+                                          : Icon(
+                                              Icons.home,
+                                              color: AppColors.thirdColor,
+                                              size: 40,
+                                            ),
+                                    ),
+                                    onTap: () async {
+                                      setState(() {
+                                        _isLoading = true;
+                                      });
 
-                                _updateUserScore(currentScore);
-                                await updateRank();
-                                _storeInHistory();
+                                      _updateUserScore(currentScore);
+                                      await updateRank();
+                                      _storeInHistory();
 
-                                setState(() {
-                                  _isLoading = false;
-                                });
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
 
-                                Navigator.pushReplacement(
-                                  context,
-                                  PageRouteBuilder(
-                                    transitionDuration:
-                                        const Duration(milliseconds: 400),
-                                    reverseTransitionDuration:
-                                        const Duration(milliseconds: 400),
-                                    pageBuilder: (_, __, ___) =>
-                                        const HomeView(),
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      final begin = const Offset(0.0, 1.0);
-                                      final end = Offset.zero;
-                                      final curve = Curves.easeInOut;
+                                      Navigator.pushReplacement(
+                                        context,
+                                        PageRouteBuilder(
+                                          transitionDuration:
+                                              const Duration(milliseconds: 400),
+                                          reverseTransitionDuration:
+                                              const Duration(milliseconds: 400),
+                                          pageBuilder: (_, __, ___) =>
+                                              const HomeView(),
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child) {
+                                            final begin =
+                                                const Offset(0.0, 1.0);
+                                            final end = Offset.zero;
+                                            final curve = Curves.easeInOut;
 
-                                      var tween = Tween(begin: begin, end: end)
-                                          .chain(CurveTween(curve: curve));
-                                      var offsetAnimation =
-                                          animation.drive(tween);
+                                            var tween = Tween(
+                                                    begin: begin, end: end)
+                                                .chain(
+                                                    CurveTween(curve: curve));
+                                            var offsetAnimation =
+                                                animation.drive(tween);
 
-                                      return SlideTransition(
-                                        position: offsetAnimation,
-                                        child: child,
+                                            return SlideTransition(
+                                              position: offsetAnimation,
+                                              child: child,
+                                            );
+                                          },
+                                        ),
                                       );
                                     },
-                                  ),
-                                );
-                              },
-                            )
-                          ],
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      Lottie.asset('assets/animation/congrat.json',
+                          repeat: false),
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: Image(
+                          image: AssetImage('assets/quiz_bulb.png'),
+                          width: screenWidth * 0.8,
+                          height: screenHeight * 0.2,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Lottie.asset('assets/animation/congrat.json', repeat: false),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Image(
-                    image: AssetImage('assets/quiz_bulb.png'),
-                    width: 300,
-                    height: 170,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class StatCard extends StatelessWidget {
+  final String label;
+  final String value;
+  final Color color;
+
+  const StatCard({
+    Key? key,
+    required this.label,
+    required this.value,
+    required this.color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    return Container(
+      width: 110,
+      height: 130,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: screenHeight * 0.05,
+              fontFamily: 'Rubik',
+            ),
+          ),
+          Container(
+            width: 60,
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: screenHeight * 0.017,
+                fontFamily: 'Rubik',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

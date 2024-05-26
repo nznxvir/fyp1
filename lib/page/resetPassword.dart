@@ -47,7 +47,7 @@ class ResetPasswordPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'assets/history.png',
+                        'assets/forgot.png',
                         width: 200,
                         height: 200,
                       ),

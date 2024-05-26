@@ -41,17 +41,24 @@ class _FactsViewState extends State<FactsView> {
 
   Widget _buildCustomAppBar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+      margin: EdgeInsets.only(
+        top: MediaQuery.of(context).size.height * 0.02,
+        left: MediaQuery.of(context).size.width * 0.04,
+        right: MediaQuery.of(context).size.width * 0.04,
+      ),
       width: double.infinity,
-      height: 80,
+      height: MediaQuery.of(context).size.height * 0.1,
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(
-          border: Border.all(width: 4, color: AppColors.secondaryColor),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          color: AppColors.thirdColor),
+        border: Border.all(
+          width: 4,
+          color: AppColors.secondaryColor,
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        color: AppColors.thirdColor,
+      ),
       child: Row(
         children: [
-          const SizedBox(width: 10),
           GestureDetector(
             onTap: () {
               player.play(AssetSource('audio/pop.mp3'));
@@ -60,35 +67,40 @@ class _FactsViewState extends State<FactsView> {
               });
             },
             child: Container(
-                width: 50,
-                height: 50,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: AppColors.secondaryColor,
-                ),
-                child: const Icon(
-                  Icons.arrow_back_rounded,
-                  size: 30,
-                  weight: 5,
-                  color: AppColors.thirdColor,
-                )),
-          ),
-          const SizedBox(width: 10),
-          Container(
-            alignment: Alignment.center,
-            height: 90,
-            width: 300,
-            child: Text(
-              'Fakta menarik',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontFamily: 'Rubik',
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryColor),
+              margin: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * 0.05,
+              ),
+              width: MediaQuery.of(context).size.width * 0.12,
+              height: MediaQuery.of(context).size.width * 0.12,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: AppColors.secondaryColor,
+              ),
+              child: Icon(
+                Icons.arrow_back_rounded,
+                size: MediaQuery.of(context).size.width * 0.05,
+                color: AppColors.thirdColor,
+              ),
             ),
           ),
-          const SizedBox(height: 10),
+          Container(
+            margin: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width * 0.05,
+            ),
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height * 0.12,
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: Text(
+              'Fakta Menarik',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Rubik',
+                fontSize: MediaQuery.of(context).size.width * 0.06,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryColor,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -111,22 +123,34 @@ class _FactsViewState extends State<FactsView> {
                 itemCount: _facts.length,
                 itemBuilder: (context, index) {
                   final fact = _facts[index];
+                  final screenWidth = MediaQuery.of(context).size.width;
+                  final screenHeight = MediaQuery.of(context).size.height;
                   return Padding(
-                    padding: const EdgeInsets.fromLTRB(25, 80, 25, 80),
+                    padding: EdgeInsets.fromLTRB(
+                      screenWidth * 0.06,
+                      screenHeight * 0.1,
+                      screenWidth * 0.06,
+                      screenHeight * 0.1,
+                    ),
                     child: AnimatedContainer(
                       duration: Duration(seconds: 1),
                       curve: Curves.elasticInOut,
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                              width: 16, color: AppColors.secondaryColor),
+                            width: screenWidth * 0.04,
+                            color: AppColors.secondaryColor,
+                          ),
                           left: BorderSide(
-                              width: 10, color: AppColors.secondaryColor),
+                            width:
+                                screenWidth * 0.025, // 2.5% of the screen width
+                            color: AppColors.secondaryColor,
+                          ),
                         ),
                         color: AppColors.thirdColor,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(screenWidth * 0.05),
                       ),
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(screenWidth * 0.04),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -135,19 +159,20 @@ class _FactsViewState extends State<FactsView> {
                             fact['title'],
                             style: TextStyle(
                               fontFamily: 'Rubik',
-                              fontSize: 27,
+                              fontSize: screenWidth * 0.07,
                               fontWeight: FontWeight.w800,
                               color: AppColors.primaryColor,
                             ),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: screenHeight * 0.01),
                           Text(
                             fact['fact'],
                             style: TextStyle(
-                                fontFamily: 'Rubik',
-                                fontSize: 21,
-                                color: AppColors.secondaryColor,
-                                fontWeight: FontWeight.w600),
+                              fontFamily: 'Rubik',
+                              fontSize: screenWidth * 0.047,
+                              color: AppColors.secondaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),

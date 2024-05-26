@@ -19,10 +19,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-      height: 65,
+      margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.05, 0,
+          MediaQuery.of(context).size.width * 0.05, 10),
+      height: MediaQuery.of(context).size.width * 0.16,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(25),
         color: AppColors.primaryColor,
       ),
       child: Row(

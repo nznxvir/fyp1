@@ -2,6 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_launcher_icons/main.dart';
 import 'package:fyp1/page/Colors.dart';
 import 'package:fyp1/page/funFact.dart';
 
@@ -188,58 +189,73 @@ class _HomeViewState extends State<HomeView> {
                               const SizedBox(
                                 height: 15,
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Selamat Datang ',
-                                        style: TextStyle(
-                                            color: AppColors.thirdColor,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w900,
-                                            fontFamily: 'Rubik'),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 30,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Selamat Datang ',
+                                            style: TextStyle(
+                                              color: AppColors.thirdColor,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.04,
+                                              fontWeight: FontWeight.w900,
+                                              fontFamily: 'Rubik',
+                                            ),
+                                          ),
+                                          Text(
+                                            username,
+                                            style: TextStyle(
+                                              color: AppColors.thirdColor,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.109,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Rubik',
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        username,
-                                        style: const TextStyle(
-                                            color: AppColors.thirdColor,
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Rubik'),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    width: 110,
-                                    height: 110,
-                                    decoration: BoxDecoration(
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.25,
+                                      decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                            width: 4,
-                                            color: AppColors.thirdColor),
+                                          width: 4,
+                                          color: AppColors.thirdColor,
+                                        ),
                                         color: AppColors.secondaryColor,
                                         image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(image))),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  )
-                                ],
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(image),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -343,7 +359,7 @@ class _HomeViewState extends State<HomeView> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             GestureDetector(
                               onTap: () {
@@ -351,8 +367,8 @@ class _HomeViewState extends State<HomeView> {
                               },
                               child: Container(
                                   alignment: Alignment.center,
-                                  width: 140,
-                                  height: 180,
+                                  width: 120,
+                                  height: 160,
                                   decoration: BoxDecoration(
                                     border: const Border(
                                         bottom: BorderSide(
@@ -406,8 +422,8 @@ class _HomeViewState extends State<HomeView> {
                               },
                               child: Container(
                                   alignment: Alignment.center,
-                                  width: 140,
-                                  height: 180,
+                                  width: 120,
+                                  height: 160,
                                   decoration: BoxDecoration(
                                     border: const Border(
                                         bottom: BorderSide(
@@ -481,18 +497,31 @@ class _HomeViewState extends State<HomeView> {
                                 bool isUnlock = chapter['isUnlock'];
                                 String imageUrl = chapter[
                                     'imageurl']; // Get the image URL from the database
+
+                                // Calculate dynamic sizes based on screen width and height
+                                double containerWidth =
+                                    MediaQuery.of(context).size.width * 0.90;
+                                double containerHeight =
+                                    MediaQuery.of(context).size.height * 0.25;
+                                double padding =
+                                    MediaQuery.of(context).size.width * 0.05;
+
                                 return Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10),
+                                  padding: EdgeInsets.only(
+                                      top: 10,
+                                      bottom: 10,
+                                      left: padding,
+                                      right: padding / 2),
                                   child: Row(
                                     children: [
-                                      const SizedBox(width: 20),
                                       Stack(
                                         children: [
                                           if (!isUnlock)
                                             Container(
-                                              height: 170,
-                                              width: 370,
+                                              margin: EdgeInsets.only(
+                                                  top: containerHeight * 0.15),
+                                              height: containerHeight,
+                                              width: containerWidth,
                                               decoration: BoxDecoration(
                                                 color: AppColors.thirdColor
                                                     .withAlpha(200),
@@ -500,27 +529,30 @@ class _HomeViewState extends State<HomeView> {
                                                     width: 10,
                                                     color:
                                                         AppColors.primaryColor),
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(20)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
                                               ),
-                                              child: const Center(
+                                              child: Center(
                                                 child: Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Icon(
                                                       Icons.lock_rounded,
-                                                      size: 50,
+                                                      size:
+                                                          containerHeight * 0.3,
                                                       color: AppColors
                                                           .primaryColor,
                                                     ),
+                                                    SizedBox(height: 10),
                                                     Text(
                                                       'Kumpul lebih markah untuk membuka topik ini',
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: TextStyle(
-                                                        fontSize: 20,
+                                                        fontSize:
+                                                            containerHeight *
+                                                                0.10,
                                                         color: AppColors
                                                             .secondaryColor,
                                                         fontWeight:
@@ -536,7 +568,6 @@ class _HomeViewState extends State<HomeView> {
                                               onTap: () {
                                                 player.play(AssetSource(
                                                     'audio/pop.mp3'));
-
                                                 Future.delayed(
                                                     Duration(milliseconds: 500),
                                                     () {
@@ -545,21 +576,25 @@ class _HomeViewState extends State<HomeView> {
                                                 });
                                               },
                                               child: Container(
-                                                height: 170,
-                                                width: 370,
+                                                margin: EdgeInsets.only(
+                                                    top:
+                                                        containerHeight * 0.15),
+                                                height: containerHeight,
+                                                width: containerWidth,
                                                 decoration: BoxDecoration(
                                                   color: Colors.transparent,
-                                                  border: const Border(
-                                                      bottom: BorderSide(
-                                                          width: 12,
-                                                          color: AppColors
-                                                              .primaryColor),
-                                                      left: BorderSide(
-                                                          width: 9,
-                                                          color: AppColors
-                                                              .primaryColor)),
+                                                  border: Border(
+                                                    bottom: BorderSide(
+                                                        width: 12,
+                                                        color: AppColors
+                                                            .primaryColor),
+                                                    left: BorderSide(
+                                                        width: 9,
+                                                        color: AppColors
+                                                            .primaryColor),
+                                                  ),
                                                   borderRadius:
-                                                      const BorderRadius.all(
+                                                      BorderRadius.all(
                                                           Radius.circular(20)),
                                                   boxShadow: [
                                                     BoxShadow(
@@ -567,8 +602,7 @@ class _HomeViewState extends State<HomeView> {
                                                           .withOpacity(0.8),
                                                       spreadRadius: 2,
                                                       blurRadius: 5,
-                                                      offset:
-                                                          const Offset(0, 3),
+                                                      offset: Offset(0, 3),
                                                     )
                                                   ],
                                                   image: DecorationImage(
@@ -582,11 +616,11 @@ class _HomeViewState extends State<HomeView> {
                                                   children: [
                                                     Padding(
                                                       padding:
-                                                          const EdgeInsets.only(
-                                                              left: 20,
-                                                              right: 10,
-                                                              top: 5,
-                                                              bottom: 10),
+                                                          EdgeInsets.symmetric(
+                                                              horizontal:
+                                                                  padding / 2,
+                                                              vertical:
+                                                                  padding / 4),
                                                       child: Column(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
@@ -600,7 +634,7 @@ class _HomeViewState extends State<HomeView> {
                                                                 MainAxisAlignment
                                                                     .spaceBetween,
                                                             children: [
-                                                              const Text(
+                                                              Text(
                                                                 'Topik',
                                                                 textAlign:
                                                                     TextAlign
@@ -611,17 +645,23 @@ class _HomeViewState extends State<HomeView> {
                                                                       'Rubik',
                                                                   color: AppColors
                                                                       .backgroundColor,
-                                                                  fontSize: 30,
+                                                                  fontSize:
+                                                                      containerHeight *
+                                                                          0.15,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
                                                                 ),
                                                               ),
                                                               Container(
-                                                                width: 60,
-                                                                height: 60,
+                                                                width:
+                                                                    containerHeight *
+                                                                        0.28,
+                                                                height:
+                                                                    containerHeight *
+                                                                        0.28,
                                                                 decoration:
-                                                                    const BoxDecoration(
+                                                                    BoxDecoration(
                                                                   borderRadius:
                                                                       BorderRadius.all(
                                                                           Radius.circular(
@@ -629,41 +669,47 @@ class _HomeViewState extends State<HomeView> {
                                                                   color: AppColors
                                                                       .thirdColor,
                                                                 ),
-                                                                child: Text(
-                                                                  chapter[
-                                                                      'chapter'],
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    fontFamily:
-                                                                        'Rubik',
-                                                                    fontSize:
-                                                                        42,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: AppColors
-                                                                        .primaryColor,
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    chapter[
+                                                                        'chapter'],
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontFamily:
+                                                                          'Rubik',
+                                                                      fontSize:
+                                                                          containerHeight *
+                                                                              0.2,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: AppColors
+                                                                          .primaryColor,
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              )
+                                                              ),
                                                             ],
                                                           ),
                                                           Text(
                                                             chapter['title'],
                                                             textAlign:
                                                                 TextAlign.left,
-                                                            style: const TextStyle(
-                                                                fontFamily:
-                                                                    'Rubik',
-                                                                fontSize: 23,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: AppColors
-                                                                    .backgroundColor),
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Rubik',
+                                                              fontSize:
+                                                                  containerHeight *
+                                                                      0.13,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w900,
+                                                              color: AppColors
+                                                                  .backgroundColor,
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
@@ -674,9 +720,7 @@ class _HomeViewState extends State<HomeView> {
                                             ),
                                         ],
                                       ),
-                                      const SizedBox(
-                                        width: 20,
-                                      ),
+                                      SizedBox(width: padding),
                                     ],
                                   ),
                                 );
