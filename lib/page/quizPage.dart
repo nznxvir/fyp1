@@ -56,8 +56,19 @@ class _QuizViewState extends State<QuizView> {
       });
     });
     _startTimer();
+    _updateProgress();
 
     _pageController = PageController();
+  }
+
+  void _updateProgress() {
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        if (_progress < 1.0) {
+          _updateProgress();
+        }
+      });
+    });
   }
 
   @override
@@ -119,110 +130,130 @@ class _QuizViewState extends State<QuizView> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    width: 100,
-                    height: 50,
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    height: MediaQuery.of(context).size.height * 0.07,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                            width: 4, color: AppColors.backgroundColor),
-                        color: Colors.transparent),
+                      color: Colors.transparent,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.timer,
-                            color: AppColors.backgroundColor),
-                        const SizedBox(
-                          width: 5,
-                        ),
+                        const Icon(Icons.timer, color: Color(0xFF874CCC)),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.02),
                         Text(
                           _elapsedTime,
-                          style: const TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.backgroundColor),
+                          style: TextStyle(
+                            fontFamily: 'Rubik',
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFFFFC23C),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Text(
-                    'Soalan: ${_currentQuestionIndex + 1}',
-                    style: const TextStyle(
-                        fontFamily: 'Rubik',
-                        fontSize: 23,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.backgroundColor),
-                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                   Container(
                     alignment: Alignment.center,
-                    width: 100,
-                    height: 45,
+                    width: MediaQuery.of(context).size.width * 0.28,
+                    height: MediaQuery.of(context).size.height * 0.07,
                     decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border.all(
-                            width: 3, color: AppColors.backgroundColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Text(
-                      'Skor: $_score',
-                      style: const TextStyle(
-                          fontFamily: 'Rubik',
-                          fontSize: 20,
-                          color: AppColors.backgroundColor),
+                      color: Colors.transparent,
+                      border: Border.all(width: 4, color: Color(0xFFFFC23C)),
+                      borderRadius: BorderRadius.circular(20),
                     ),
+                    child: Text(
+                      'Soalan: ${_currentQuestionIndex + 1}',
+                      style: TextStyle(
+                        fontFamily: 'Rubik',
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        color: AppColors.backgroundColor,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        _score.toString(),
+                        style: TextStyle(
+                          fontFamily: 'Rubik',
+                          fontSize: MediaQuery.of(context).size.width * 0.06,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFFFFC23C),
+                        ),
+                      ),
+                      Container(
+                          width: MediaQuery.of(context).size.width * 0.19,
+                          height: MediaQuery.of(context).size.height * 0.05,
+                          child: Image.asset(
+                            'assets/point.png',
+                          )),
+                    ],
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-              child: LinearProgressIndicator(
-                value: _progress,
-                minHeight: 20,
-                borderRadius: BorderRadius.circular(10),
-                backgroundColor: AppColors.backgroundColor,
-                valueColor:
-                    const AlwaysStoppedAnimation<Color>(Colors.tealAccent),
-              ),
-            ),
-            SizedBox(
+                padding: const EdgeInsets.fromLTRB(25, 20, 25, 10),
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween<double>(begin: 0.0, end: _progress),
+                  duration: Duration(seconds: 1),
+                  builder: (context, value, child) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: LinearProgressIndicator(
+                        value: value,
+                        minHeight: 20,
+                        backgroundColor: AppColors.backgroundColor,
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Color(0xFFFFC23C)),
+                      ),
+                    );
+                  },
+                )),
+            const SizedBox(
               height: 10,
             ),
-            Container(
-              height: 700,
-              width: double.infinity,
-              color: AppColors.primaryColor,
-              child: StreamBuilder<QuerySnapshot>(
-                stream: _questionsStream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                color: AppColors.primaryColor,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _questionsStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                  if (snapshot.data!.docs.isEmpty) {
-                    return const Center(child: Text('No questions found.'));
-                  }
+                    if (snapshot.data!.docs.isEmpty) {
+                      return const Center(child: Text('No questions found.'));
+                    }
 
-                  _questions = snapshot.data!.docs;
+                    _questions = snapshot.data!.docs;
 
-                  return PageView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: _pageController,
-                    itemCount: _questions.length,
-                    itemBuilder: (context, index) {
-                      return buildQuestionWidget(_questions[index]);
-                    },
-                    onPageChanged: (index) {
-                      setState(() {
-                        _currentQuestionIndex = index;
-                        _progress = (index) / _questions.length;
-                      });
-                    },
-                  );
-                },
+                    return PageView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _pageController,
+                      itemCount: _questions.length,
+                      itemBuilder: (context, index) {
+                        return buildQuestionWidget(_questions[index]);
+                      },
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentQuestionIndex = index;
+                          _progress = index / _questions.length;
+                        });
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],
@@ -238,38 +269,45 @@ class _QuizViewState extends State<QuizView> {
     _option4 = question['option4'];
     _correctAnswer = question['answer'];
 
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+      padding: EdgeInsets.only(
+          left: screenWidth * 0.03,
+          right: screenWidth * 0.03,
+          bottom: screenHeight * 0.01),
       decoration: BoxDecoration(
         color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const SizedBox(
-            height: 15,
+          SizedBox(
+            height: screenHeight * 0.01,
           ),
           Text(
             question['questString'],
-            style: const TextStyle(
-                fontFamily: 'Rubik',
-                fontSize: 20,
-                color: AppColors.secondaryColor,
-                fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontFamily: 'Rubik',
+              fontSize: screenWidth * 0.05,
+              color: AppColors.secondaryColor,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: screenHeight * 0.015),
           buildOptionWidget(_option1),
-          const SizedBox(height: 10),
+          SizedBox(height: screenHeight * 0.015),
           buildOptionWidget(_option2),
-          const SizedBox(height: 10),
+          SizedBox(height: screenHeight * 0.015),
           buildOptionWidget(_option3),
-          const SizedBox(height: 10),
+          SizedBox(height: screenHeight * 0.015),
           buildOptionWidget(_option4),
-          const SizedBox(height: 20),
+          SizedBox(height: screenHeight * 0.02),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -281,43 +319,46 @@ class _QuizViewState extends State<QuizView> {
                   });
                 },
                 child: SizedBox(
-                  width: 40,
-                  height: 40,
+                  width: screenWidth * 0.1,
+                  height: screenWidth * 0.1,
                   child: Image.asset('assets/quit.png'),
                 ),
               ),
-              const SizedBox(
-                width: 2,
+              SizedBox(
+                width: screenWidth * 0.005,
               ),
               GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _unansweredCount++; // Increment unanswered count
-                      if (_currentQuestionIndex < _questions.length - 1) {
-                        player.play(AssetSource('audio/skip.mp3'));
-                        Future.delayed(Duration(milliseconds: 500), () {
-                          _pageController.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut);
-                        });
-                      } else {
-                        _navigateResult();
-                      }
-                    });
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 250,
-                    height: 55,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: AppColors.secondaryColor),
-                    child: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: Image.asset('assets/skip.png'),
-                    ),
-                  ))
+                onTap: () {
+                  setState(() {
+                    _unansweredCount++; // Increment unanswered count
+                    if (_currentQuestionIndex < _questions.length - 1) {
+                      player.play(AssetSource('audio/skip.mp3'));
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                      });
+                    } else {
+                      _navigateResult();
+                    }
+                  });
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  width: screenWidth * 0.6,
+                  height: screenHeight * 0.06,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: AppColors.secondaryColor,
+                  ),
+                  child: SizedBox(
+                    width: screenWidth * 0.1,
+                    height: screenWidth * 0.1,
+                    child: Image.asset('assets/skip1.png'),
+                  ),
+                ),
+              ),
             ],
           ),
         ],
@@ -357,7 +398,8 @@ class _QuizViewState extends State<QuizView> {
               : AppColors.secondaryColor;
     }
 
-    // Define the icon based on the isCorrect condition
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return GestureDetector(
       onTap: () {
@@ -385,12 +427,12 @@ class _QuizViewState extends State<QuizView> {
       },
       child: Container(
         alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.only(left: 15),
+        padding: EdgeInsets.only(left: screenWidth * 0.02),
         width: double.infinity,
-        height: 80,
+        height: screenHeight * 0.1,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          borderRadius: BorderRadius.circular(15),
           border: Border.all(
             width: 4,
             color: borderColor,
@@ -399,29 +441,33 @@ class _QuizViewState extends State<QuizView> {
         child: Row(
           children: [
             Container(
-              width: 260,
+              width: screenWidth * 0.65,
               color: Colors.transparent,
               child: Text(
                 option,
-                style: const TextStyle(
-                    fontFamily: 'Rubik',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontFamily: 'Rubik',
+                  fontSize: screenWidth * 0.051,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             Container(
-              width: 60,
-              height: 60,
+              width: screenWidth * 0.12,
+              height: screenWidth * 0.12,
               decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.transparent),
+                shape: BoxShape.circle,
+                color: Colors.transparent,
+              ),
               child: Center(
                 child: Icon(
                   iconData,
                   color: iconColor,
-                  size: 40,
+                  size: screenWidth * 0.1,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

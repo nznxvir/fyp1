@@ -2,17 +2,14 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fyp1/page/Colors.dart';
 import 'resultPage.dart';
 
 class FillQuiz extends StatefulWidget {
   final String setnum;
   final String chapternum;
-  const FillQuiz({Key? key, required this.setnum, required this.chapternum})
-      : super(key: key);
+  const FillQuiz({super.key, required this.setnum, required this.chapternum});
 
   @override
   State<FillQuiz> createState() => _FillQuizState();
@@ -34,7 +31,6 @@ class _FillQuizState extends State<FillQuiz> {
   String _elapsedTime = '';
   double _progress = 0;
 
-  late bool _showValidationIcon;
   late PageController _pageController;
 
   Color _answerContainerColor = AppColors.backgroundColor;
@@ -43,7 +39,6 @@ class _FillQuizState extends State<FillQuiz> {
   @override
   void initState() {
     super.initState();
-    _showValidationIcon = false;
     _questionsStream = FirebaseFirestore.instance
         .collection('questions')
         .where('setnum', isEqualTo: widget.setnum)
@@ -54,8 +49,19 @@ class _FillQuizState extends State<FillQuiz> {
         _elapsedTime = _formatTime(_stopwatch.elapsed);
       });
     });
+    _updateProgress();
     _startTimer();
     _pageController = PageController();
+  }
+
+  void _updateProgress() {
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        if (_progress < 1.0) {
+          _updateProgress();
+        }
+      });
+    });
   }
 
   @override
@@ -78,7 +84,7 @@ class _FillQuizState extends State<FillQuiz> {
 
   _navigateResult() {
     player.play(AssetSource('audio/finishquiz.mp3'));
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
@@ -112,88 +118,108 @@ class _FillQuizState extends State<FillQuiz> {
             color: AppColors.primaryColor,
             child: Column(
               children: [
-                const SizedBox(height: 15),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.05),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         alignment: Alignment.center,
-                        width: 100,
-                        height: 50,
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        height: MediaQuery.of(context).size.height * 0.07,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(
-                                width: 3, color: AppColors.backgroundColor),
-                            color: Colors.transparent),
+                          color: Colors.transparent,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.timer,
-                                color: AppColors.backgroundColor),
-                            const SizedBox(
-                              width: 5,
-                            ),
+                            const Icon(Icons.timer, color: Color(0xFF874CCC)),
+                            SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.02),
                             Text(
                               _elapsedTime,
-                              style: const TextStyle(
-                                  fontFamily: 'Rubik',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.backgroundColor),
+                              style: TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.05,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFFFFC23C),
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      Text(
-                        'Soalan: ${_currentQuestionIndex + 1}',
-                        style: const TextStyle(
-                            fontFamily: 'Rubik',
-                            fontSize: 23,
-                            fontWeight: FontWeight.normal,
-                            color: AppColors.backgroundColor),
-                      ),
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                       Container(
                         alignment: Alignment.center,
-                        width: 100,
-                        height: 45,
+                        width: MediaQuery.of(context).size.width * 0.28,
+                        height: MediaQuery.of(context).size.height * 0.07,
                         decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(
-                                width: 3, color: AppColors.backgroundColor),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Text(
-                          'Skor: $_unansweredCount',
-                          style: const TextStyle(
-                              fontFamily: 'Rubik',
-                              fontSize: 20,
-                              color: AppColors.backgroundColor),
+                          color: Colors.transparent,
+                          border:
+                              Border.all(width: 4, color: Color(0xFFFFC23C)),
+                          borderRadius: BorderRadius.circular(20),
                         ),
+                        child: Text(
+                          'Soalan: ${_currentQuestionIndex + 1}',
+                          style: TextStyle(
+                            fontFamily: 'Rubik',
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                            color: AppColors.backgroundColor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            _score.toString(),
+                            style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.06,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFFFFC23C),
+                            ),
+                          ),
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.19,
+                              height: MediaQuery.of(context).size.height * 0.05,
+                              child: Image.asset(
+                                'assets/point.png',
+                              )),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                  child: LinearProgressIndicator(
-                    value: _progress,
-                    minHeight: 20,
-                    borderRadius: BorderRadius.circular(10),
-                    backgroundColor: AppColors.backgroundColor,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                        AppColors.thirdColor),
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
+                    padding: const EdgeInsets.fromLTRB(25, 20, 25, 10),
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0.0, end: _progress),
+                      duration: Duration(seconds: 1),
+                      builder: (context, value, child) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: LinearProgressIndicator(
+                            value: value,
+                            minHeight: 20,
+                            backgroundColor: AppColors.backgroundColor,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Color(0xFFFFC23C)),
+                          ),
+                        );
+                      },
+                    )),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                 Container(
                   width: double.infinity,
-                  height: 620,
+                  height: MediaQuery.of(context).size.height * 0.73,
                   child: StreamBuilder<QuerySnapshot>(
                     stream: _questionsStream,
                     builder: (context, snapshot) {
@@ -202,20 +228,19 @@ class _FillQuizState extends State<FillQuiz> {
                       }
 
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return Center(child: CircularProgressIndicator());
                       }
 
                       if (snapshot.data!.docs.isEmpty) {
-                        return const Center(child: Text('No questions found.'));
+                        return Center(child: Text('No questions found.'));
                       }
 
                       _questions = snapshot.data!.docs;
                       var question = _questions[_currentQuestionIndex];
-
                       _correctAnswer = question['answer'];
 
                       return PageView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         controller: _pageController,
                         itemCount: _questions.length,
                         itemBuilder: (context, index) {
@@ -225,7 +250,6 @@ class _FillQuizState extends State<FillQuiz> {
                           setState(() {
                             _currentQuestionIndex = index;
                             _progress = (index) / _questions.length;
-                            _showValidationIcon = false;
                             fillAnswerController.clear();
                             _answerContainerColor = AppColors.backgroundColor;
                           });
@@ -234,6 +258,9 @@ class _FillQuizState extends State<FillQuiz> {
                     },
                   ),
                 ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                )
               ],
             ),
           ),
@@ -242,73 +269,40 @@ class _FillQuizState extends State<FillQuiz> {
     );
   }
 
-  Widget validateAnswerWidget(String currentAnswer) {
-    IconData icon = CupertinoIcons.add;
-    Color iconColor = Colors.transparent;
-
-    if (currentAnswer.isNotEmpty) {
-      String userInputLowercase = currentAnswer.toLowerCase();
-      String correctAnswerLowercase = _correctAnswer.toLowerCase();
-      if (userInputLowercase == correctAnswerLowercase) {
-        icon = CupertinoIcons.check_mark_circled_solid;
-        iconColor = Colors.green;
-      } else {
-        icon = CupertinoIcons.xmark_circle_fill;
-        iconColor = Colors.red;
-      }
-    }
-
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.transparent,
-      ),
-      child: Center(
-        child: Icon(
-          icon,
-          color: iconColor,
-          size: 40,
-        ),
-      ),
-    );
-  }
-
   Widget buildFillQuestionWidget(DocumentSnapshot<Object?> question) {
-    String currentAnswer = fillAnswerController.text.trim();
+    fillAnswerController.text.trim();
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+      padding: EdgeInsets.all(screenWidth * 0.025),
       decoration: BoxDecoration(
         color: _answerContainerColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
         width: double.infinity,
-        height: 750,
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(screenWidth * 0.03),
         decoration: BoxDecoration(
           color: AppColors.backgroundColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const SizedBox(height: 15),
             Text(
               question['questString'],
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Rubik',
-                fontSize: 20,
+                fontSize: screenWidth * 0.05,
                 color: AppColors.primaryColor,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.03),
             TextField(
               controller: fillAnswerController,
               decoration: InputDecoration(
@@ -318,9 +312,7 @@ class _FillQuizState extends State<FillQuiz> {
                 ),
               ),
               onChanged: (value) {
-                setState(() {
-                  currentAnswer = value.trim();
-                });
+                setState(() {});
               },
             ),
             Center(
@@ -335,18 +327,20 @@ class _FillQuizState extends State<FillQuiz> {
                           return AlertDialog(
                             backgroundColor: AppColors.backgroundColor,
                             shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
                                   "Tuliskan jawapan anda.",
                                   style: TextStyle(
-                                      fontFamily: 'Rubik',
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.primaryColor),
+                                    fontFamily: 'Rubik',
+                                    fontSize: screenWidth * 0.05,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.primaryColor,
+                                  ),
                                 ),
                               ],
                             ),
@@ -354,8 +348,6 @@ class _FillQuizState extends State<FillQuiz> {
                         },
                       );
                     } else {
-                      _showValidationIcon = true;
-                      // Convert both user's input and correct answer to lowercase
                       String userInputLowercase = currentAnswer.toLowerCase();
                       String correctAnswerLowercase =
                           _correctAnswer.toLowerCase();
@@ -384,19 +376,19 @@ class _FillQuizState extends State<FillQuiz> {
                   });
                 },
                 child: Container(
-                  width: 310,
-                  height: 60,
+                  width: screenWidth * 0.7,
+                  height: screenHeight * 0.07,
                   decoration: BoxDecoration(
                     border: Border(
-                        bottom:
-                            BorderSide(width: 6, color: AppColors.primaryColor),
-                        left: BorderSide(
-                            width: 4, color: AppColors.primaryColor)),
+                      bottom:
+                          BorderSide(width: 6, color: AppColors.primaryColor),
+                      left: BorderSide(width: 4, color: AppColors.primaryColor),
+                    ),
                     borderRadius: BorderRadius.circular(15),
                     color: AppColors.thirdColor,
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
+                  child: Padding(
+                    padding: EdgeInsets.all(screenWidth * 0.02),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -404,7 +396,7 @@ class _FillQuizState extends State<FillQuiz> {
                           'Semak jawapan',
                           style: TextStyle(
                             fontFamily: 'Rubik',
-                            fontSize: 20,
+                            fontSize: screenWidth * 0.05,
                             color: AppColors.primaryColor,
                             fontWeight: FontWeight.w600,
                           ),
@@ -415,7 +407,7 @@ class _FillQuizState extends State<FillQuiz> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.03),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -427,43 +419,44 @@ class _FillQuizState extends State<FillQuiz> {
                     });
                   },
                   child: SizedBox(
-                    width: 40,
-                    height: 40,
+                    width: screenWidth * 0.1,
+                    height: screenHeight * 0.05,
                     child: Image.asset('assets/quit.png'),
                   ),
                 ),
-                const SizedBox(
-                  width: 2,
-                ),
+                SizedBox(width: screenWidth * 0.005),
                 GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _unansweredCount++; // Increment unanswered count
-                        if (_currentQuestionIndex < _questions.length - 1) {
-                          player.play(AssetSource('audio/skip.mp3'));
-                          Future.delayed(Duration(milliseconds: 500), () {
-                            _pageController.nextPage(
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.easeInOut);
-                          });
-                        } else {
-                          _navigateResult();
-                        }
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 250,
-                      height: 55,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: AppColors.secondaryColor),
-                      child: SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: Image.asset('assets/skip1.png'),
-                      ),
-                    ))
+                  onTap: () {
+                    setState(() {
+                      _unansweredCount++; // Increment unanswered count
+                      if (_currentQuestionIndex < _questions.length - 1) {
+                        player.play(AssetSource('audio/skip.mp3'));
+                        Future.delayed(Duration(milliseconds: 500), () {
+                          _pageController.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        });
+                      } else {
+                        _navigateResult();
+                      }
+                    });
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: screenWidth * 0.5,
+                    height: screenHeight * 0.055,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: AppColors.secondaryColor,
+                    ),
+                    child: SizedBox(
+                      width: screenWidth * 0.1,
+                      height: screenHeight * 0.04,
+                      child: Image.asset('assets/skip1.png'),
+                    ),
+                  ),
+                )
               ],
             ),
           ],

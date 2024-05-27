@@ -33,11 +33,8 @@ class _tofQuizState extends State<tofQuiz> {
   String _elapsedTime = '';
   double _progress = 0;
 
-  late bool _showValidationIcon;
   late bool currentAnswer = false;
 
-  late Color _betulColor = AppColors.thirdColor;
-  late Color _salahColor = AppColors.thirdColor;
   late Color _selectedBetulColor = AppColors.thirdColor;
   late Color _selectedSalahColor = AppColors.thirdColor;
 
@@ -46,7 +43,6 @@ class _tofQuizState extends State<tofQuiz> {
   @override
   void initState() {
     super.initState();
-    _showValidationIcon = false;
     _questionsStream = FirebaseFirestore.instance
         .collection('tofquestions')
         .where('setnum', isEqualTo: widget.setnum)
@@ -57,8 +53,19 @@ class _tofQuizState extends State<tofQuiz> {
         _elapsedTime = _formatTime(_stopwatch.elapsed);
       });
     });
+    _updateProgress();
     _startTimer();
     _pageController = PageController();
+  }
+
+  void _updateProgress() {
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        if (_progress < 1.0) {
+          _updateProgress();
+        }
+      });
+    });
   }
 
   @override
@@ -111,131 +118,169 @@ class _tofQuizState extends State<tofQuiz> {
       child: Scaffold(
         body: Container(
           color: AppColors.primaryColor,
-          child: Column(
-            children: [
-              const SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      width: 100,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                              width: 3, color: AppColors.backgroundColor),
-                          color: Colors.transparent),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.timer,
-                              color: AppColors.backgroundColor),
-                          const SizedBox(
-                            width: 5,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              double screenWidth = constraints.maxWidth;
+              double screenHeight = constraints.maxHeight;
+
+              return Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.01),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          height: MediaQuery.of(context).size.height * 0.07,
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
                           ),
-                          Text(
-                            _elapsedTime,
-                            style: const TextStyle(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.timer, color: Color(0xFF874CCC)),
+                              SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.02),
+                              Text(
+                                _elapsedTime,
+                                style: TextStyle(
+                                  fontFamily: 'Rubik',
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.05,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFFFFC23C),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.01),
+                        Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width * 0.28,
+                          height: MediaQuery.of(context).size.height * 0.07,
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            border:
+                                Border.all(width: 4, color: Color(0xFFFFC23C)),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            'Soalan: ${_currentQuestionIndex + 1}',
+                            style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
+                              color: AppColors.backgroundColor,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.03),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              _score.toString(),
+                              style: TextStyle(
                                 fontFamily: 'Rubik',
-                                fontSize: 16,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.06,
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.backgroundColor),
-                          ),
-                        ],
+                                color: Color(0xFFFFC23C),
+                              ),
+                            ),
+                            Container(
+                                width: MediaQuery.of(context).size.width * 0.19,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05,
+                                child: Image.asset(
+                                  'assets/point.png',
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(25, 20, 25, 10),
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween<double>(begin: 0.0, end: _progress),
+                        duration: Duration(seconds: 1),
+                        builder: (context, value, child) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: LinearProgressIndicator(
+                              value: value,
+                              minHeight: 20,
+                              backgroundColor: AppColors.backgroundColor,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Color(0xFFFFC23C)),
+                            ),
+                          );
+                        },
+                      )),
+                  SizedBox(height: screenHeight * 0.03),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      color: AppColors.primaryColor,
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: _questionsStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          }
+
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+
+                          if (snapshot.data!.docs.isEmpty) {
+                            return const Center(
+                                child: Text('No questions found.'));
+                          }
+
+                          _questions = snapshot.data!.docs;
+                          var question = _questions[_currentQuestionIndex];
+                          _correctAnswer = question['answer'];
+
+                          return PageView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            controller: _pageController,
+                            itemCount: _questions.length,
+                            itemBuilder: (context, index) {
+                              return buildQuestionWidget(_questions[index]);
+                            },
+                            onPageChanged: (index) {
+                              setState(() {
+                                _currentQuestionIndex = index;
+                                _progress = (index) / _questions.length;
+                                _selectedBetulColor = AppColors.thirdColor;
+                                _selectedSalahColor = AppColors.thirdColor;
+                              });
+                            },
+                          );
+                        },
                       ),
                     ),
-                    Text(
-                      'Soalan: ${_currentQuestionIndex + 1}',
-                      style: const TextStyle(
-                          fontFamily: 'Rubik',
-                          fontSize: 23,
-                          fontWeight: FontWeight.normal,
-                          color: AppColors.backgroundColor),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: 100,
-                      height: 45,
-                      decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border.all(
-                              width: 3, color: AppColors.backgroundColor),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text(
-                        'Skor: $_unansweredCount',
-                        style: const TextStyle(
-                            fontFamily: 'Rubik',
-                            fontSize: 20,
-                            color: AppColors.backgroundColor),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                child: LinearProgressIndicator(
-                  value: _progress,
-                  minHeight: 20,
-                  borderRadius: BorderRadius.circular(10),
-                  backgroundColor: AppColors.backgroundColor,
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                      AppColors.secondaryColor),
-                ),
-              ),
-              const SizedBox(
-                height: 35,
-              ),
-              Container(
-                width: double.infinity,
-                height: 600,
-                color: AppColors.primaryColor,
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: _questionsStream,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    }
-
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    if (snapshot.data!.docs.isEmpty) {
-                      return const Center(child: Text('No questions found.'));
-                    }
-
-                    _questions = snapshot.data!.docs;
-                    var question = _questions[_currentQuestionIndex];
-                    _correctAnswer = question['answer'];
-
-                    return PageView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: _pageController,
-                      itemCount: _questions.length,
-                      itemBuilder: (context, index) {
-                        return buildQuestionWidget(_questions[index]);
-                      },
-                      onPageChanged: (index) {
-                        setState(() {
-                          _currentQuestionIndex = index;
-                          _progress = (index) / _questions.length;
-                          _showValidationIcon = false;
-                          _selectedBetulColor = AppColors.thirdColor;
-                          _selectedSalahColor = AppColors.thirdColor;
-                        });
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.03,
+                  )
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -243,10 +288,13 @@ class _tofQuizState extends State<tofQuiz> {
   }
 
   Widget buildQuestionWidget(DocumentSnapshot<Object?> question) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+      padding: EdgeInsets.all(screenWidth * 0.025),
       decoration: BoxDecoration(
         color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(20),
@@ -255,25 +303,23 @@ class _tofQuizState extends State<tofQuiz> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(
-            height: 55,
-          ),
+          SizedBox(height: screenHeight * 0.02),
           Text(
             question['questString'],
-            style: const TextStyle(
-                fontFamily: 'Rubik',
-                fontSize: 20,
-                color: AppColors.primaryColor,
-                fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontFamily: 'Rubik',
+              fontSize: screenWidth * 0.052,
+              color: AppColors.primaryColor,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: screenHeight * 0.01),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    _showValidationIcon = true;
                     currentAnswer = true;
                     if (_correctAnswer == currentAnswer) {
                       player.play(AssetSource('audio/correctanswer.mp3'));
@@ -299,31 +345,32 @@ class _tofQuizState extends State<tofQuiz> {
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  height: 70,
+                  margin: EdgeInsets.symmetric(
+                      vertical: screenHeight * 0.015,
+                      horizontal: screenWidth * 0.05),
+                  height: screenHeight * 0.08,
                   decoration: BoxDecoration(
-                      border: Border(
+                      border: const Border(
                           bottom: BorderSide(
                               width: 7, color: AppColors.primaryColor),
                           left: BorderSide(
                               width: 4, color: AppColors.primaryColor)),
                       borderRadius: BorderRadius.circular(20),
                       color: _selectedBetulColor),
-                  child: const Text('Betul',
+                  child: Text('Betul',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontFamily: 'Rubik',
-                          fontSize: 23,
+                          fontSize: screenWidth * 0.06,
                           fontWeight: FontWeight.w600)),
                 ),
               ),
-              const SizedBox(
-                width: 50,
+              SizedBox(
+                width: screenWidth * 0.1,
               ),
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    _showValidationIcon = true;
                     currentAnswer = false;
                     if (_correctAnswer == currentAnswer) {
                       player.play(AssetSource('audio/correctanswer.mp3'));
@@ -349,26 +396,28 @@ class _tofQuizState extends State<tofQuiz> {
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  height: 70,
+                  margin: EdgeInsets.symmetric(
+                      vertical: screenHeight * 0.015,
+                      horizontal: screenWidth * 0.05), //
+                  height: screenHeight * 0.08,
                   decoration: BoxDecoration(
-                      border: Border(
+                      border: const Border(
                           bottom: BorderSide(
                               width: 7, color: AppColors.primaryColor),
                           left: BorderSide(
                               width: 4, color: AppColors.primaryColor)),
                       borderRadius: BorderRadius.circular(20),
                       color: _selectedSalahColor),
-                  child: const Text('Salah',
+                  child: Text('Salah',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontFamily: 'Rubik',
-                          fontSize: 23,
+                          fontSize: screenWidth * 0.06,
                           fontWeight: FontWeight.w600)),
                 ),
               ),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: screenHeight * 0.02,
               ),
             ],
           ),
@@ -383,43 +432,44 @@ class _tofQuizState extends State<tofQuiz> {
                   });
                 },
                 child: SizedBox(
-                  width: 40,
-                  height: 40,
+                  width: screenWidth * 0.1,
+                  height: screenWidth * 0.1,
                   child: Image.asset('assets/quit.png'),
                 ),
               ),
-              const SizedBox(
-                width: 2,
+              SizedBox(
+                width: screenWidth * 0.01,
               ),
               GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _unansweredCount++; // Increment unanswered count
-                      if (_currentQuestionIndex < _questions.length - 1) {
-                        player.play(AssetSource('audio/skip.mp3'));
-                        Future.delayed(Duration(milliseconds: 500), () {
-                          _pageController.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut);
-                        });
-                      } else {
-                        _navigateResult();
-                      }
-                    });
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 250,
-                    height: 55,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: AppColors.secondaryColor),
-                    child: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: Image.asset('assets/skip.png'),
-                    ),
-                  ))
+                onTap: () {
+                  setState(() {
+                    _unansweredCount++;
+                    if (_currentQuestionIndex < _questions.length - 1) {
+                      player.play(AssetSource('audio/skip.mp3'));
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        _pageController.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut);
+                      });
+                    } else {
+                      _navigateResult();
+                    }
+                  });
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  width: screenWidth * 0.6,
+                  height: screenHeight * 0.06,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: AppColors.secondaryColor),
+                  child: SizedBox(
+                    width: screenWidth * 0.1,
+                    height: screenWidth * 0.1,
+                    child: Image.asset('assets/skip1.png'),
+                  ),
+                ),
+              )
             ],
           ),
         ],
