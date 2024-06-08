@@ -213,10 +213,10 @@ class _ProfileViewState extends State<ProfileView> {
       });
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.backgroundColor,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Stack(

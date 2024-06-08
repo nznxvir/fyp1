@@ -61,12 +61,12 @@ class _RegisterPageState extends State<RegisterPage> {
       };
 
       await authService.createUser(data, context, () {
-        Future.delayed(const Duration(seconds: 1), () {
-          Navigator.pushReplacement(
+        Future.delayed(const Duration(seconds: 3), () {
+          Navigator.push(
             context,
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 500),
-              pageBuilder: (_, __, ___) => const VerifySplash(),
+              pageBuilder: (_, __, ___) => const HomeView(),
               transitionsBuilder: (_, animation, __, child) {
                 return FadeTransition(
                   opacity: animation,
@@ -87,10 +87,10 @@ class _RegisterPageState extends State<RegisterPage> {
   var appValidator = AppValidator();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.backgroundColor,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Padding(

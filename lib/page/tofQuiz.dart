@@ -44,7 +44,7 @@ class _tofQuizState extends State<tofQuiz> {
   void initState() {
     super.initState();
     _questionsStream = FirebaseFirestore.instance
-        .collection('tofquestions')
+        .collection('questions')
         .where('setnum', isEqualTo: widget.setnum)
         .snapshots();
     _stopwatch = Stopwatch();

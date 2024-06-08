@@ -13,10 +13,10 @@ class SplashView extends StatelessWidget {
     Timer(const Duration(seconds: 3), () {
       Get.to(AuthGate());
     });
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.primaryColor,
-        body: const Center(
+    return Scaffold(
+      backgroundColor: AppColors.primaryColor,
+      body: SafeArea(
+        child: const Center(
           child: Image(
             image: AssetImage('assets/hystologo.png'),
           ),

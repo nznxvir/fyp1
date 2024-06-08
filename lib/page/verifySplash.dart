@@ -20,12 +20,13 @@ class _VerifySplashState extends State<VerifySplash> {
       Get.to(HomeView());
     });
     return Scaffold(
-      backgroundColor: AppColors.secondaryColor,
-      body: Center(
-        child: Lottie.asset(
-          'assets/animation/test.json',
-        ),
-      ),
-    );
+        backgroundColor: AppColors.primaryColor,
+        body: SafeArea(
+          child: Center(
+            child: Lottie.asset(
+              'assets/animation/test.json',
+            ),
+          ),
+        ));
   }
 }

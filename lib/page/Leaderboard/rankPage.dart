@@ -36,10 +36,10 @@ class _RankViewState extends State<RankView> {
       });
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.backgroundColor,
-        body: Stack(
+    return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
+      body: SafeArea(
+        child: Stack(
           children: [
             Column(
               children: [

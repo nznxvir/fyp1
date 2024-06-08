@@ -13,13 +13,6 @@ class AuthService {
         password: data['password'],
       );
       await database.addUser(data, context);
-      showDialog(
-        context: context,
-        builder: (context) {
-          return showAutoDismissAlertDialog(
-              context, 'Pendaftaran berjaya', 'assets/success.png');
-        },
-      );
       onSuccess();
     } catch (e) {
       showAutoDismissAlertDialog(context, e.toString(), 'assets/failed.png');
