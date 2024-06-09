@@ -57,23 +57,23 @@ class _RankViewState extends State<RankView> {
             ),
             Positioned(
               top: 0,
-              right: 40,
-              left: 40,
+              right: 35,
+              left: 35,
               child: Container(
                 height: 60,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
                   ),
                   color: AppColors.primaryColor,
                 ),
                 child: Text(
-                  'Leaderboard',
+                  'Kedudukan Semasa',
                   style: TextStyle(
                     fontFamily: 'Rubik',
-                    fontSize: 35,
+                    fontSize: 33,
                     fontWeight: FontWeight.w900,
                     color: AppColors.thirdColor,
                   ),

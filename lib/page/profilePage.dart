@@ -61,7 +61,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       PageRouteBuilder(
         transitionDuration: const Duration(milliseconds: 400),
@@ -192,6 +192,8 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     void _onTap(int index) {
       setState(() {
         switch (index) {
@@ -222,180 +224,151 @@ class _ProfileViewState extends State<ProfileView> {
               Stack(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.01),
+                    padding: EdgeInsets.only(top: screenHeight * 0.01),
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.3,
+                    height: screenHeight * 0.3,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
                       ),
                       color: AppColors.primaryColor,
-                    ),
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100)),
-                                color: AppColors.backgroundColor,
-                              ),
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              height: MediaQuery.of(context).size.width * 0.3,
-                              child: ClipOval(
-                                child: imageurl != null
-                                    ? Image.network(
-                                        imageurl!,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : CircularProgressIndicator(),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.thirdColor,
-                                ),
-                                child: IconButton(
-                                  icon: Icon(Icons.edit),
-                                  color: AppColors.primaryColor,
-                                  onPressed: () {
-                                    _getImage();
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: MediaQuery.of(context).size.height * 0.045,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                spreadRadius: 3,
-                                blurRadius: 10,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                            color: AppColors.backgroundColor,
-                          ),
-                          child: Text(
-                            username,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.075,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Rubik',
-                              color: AppColors.primaryColor,
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   Center(
                     child: Container(
                       margin: EdgeInsets.fromLTRB(
-                        30,
-                        MediaQuery.of(context).size.height * 0.24,
-                        30,
-                        30,
+                        screenWidth * 0.065,
+                        screenHeight * 0.07,
+                        screenWidth * 0.065,
+                        screenHeight * 0.0,
                       ),
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.15,
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.66,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         color: AppColors.backgroundColor,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
+                            color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 2,
                             blurRadius: 5,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
                         ],
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      child: Column(
                         children: [
-                          buildOptionContainer(
-                            context,
-                            'Tukar nama',
-                            Icons.edit,
-                            () {
-                              _changeName(context);
-                            },
+                          SizedBox(
+                            height: screenHeight * 0.02,
                           ),
-                          buildOptionContainer(
-                            context,
-                            'Tukar kata laluan',
-                            Icons.password_rounded,
-                            () {
-                              _ChangePassword(context);
-                            },
+                          Text(
+                            'Maklumat Pengguna',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Rubik',
+                              fontSize: screenWidth * 0.07,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                          buildOptionContainer(
-                            context,
-                            'Set semula markah',
-                            Icons.refresh,
-                            () {
-                              _ResetScore(context);
-                            },
+                          SizedBox(
+                            height: screenHeight * 0.03,
+                          ),
+                          Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100)),
+                                  color: AppColors.backgroundColor,
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                height: MediaQuery.of(context).size.width * 0.3,
+                                child: ClipOval(
+                                  child: imageurl != null
+                                      ? Image.network(
+                                          imageurl!,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : CircularProgressIndicator(),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.thirdColor,
+                                  ),
+                                  child: IconButton(
+                                    icon: Icon(Icons.edit),
+                                    color: AppColors.primaryColor,
+                                    onPressed: () {
+                                      _getImage();
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: screenHeight * 0.03,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              buildOptionContainer(
+                                context,
+                                'Tukar nama',
+                                Icons.edit,
+                                () {
+                                  _changeName(context);
+                                },
+                              ),
+                              buildOptionContainer(
+                                context,
+                                'Tukar kata laluan',
+                                Icons.password_rounded,
+                                () {
+                                  _ChangePassword(context);
+                                },
+                              ),
+                              buildOptionContainer(
+                                context,
+                                'Set semula markah',
+                                Icons.refresh,
+                                () {
+                                  _ResetScore(context);
+                                },
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.03),
+                            padding: EdgeInsets.fromLTRB(
+                                screenWidth * 0.02,
+                                screenHeight * 0.01,
+                                screenWidth * 0.02,
+                                screenHeight * 0.02),
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.height * 0.28,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                buildInfoRow(context, 'Nama', username),
+                                buildInfoRow(context, 'Email', email),
+                                buildInfoRow(context, 'Umur', age),
+                                buildInfoRow(context, 'Skor', score.toString()),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
                 ],
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 35),
-                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.3,
-                decoration: BoxDecoration(
-                  color: AppColors.backgroundColor,
-                  border: Border.all(width: 7, color: AppColors.secondaryColor),
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.8),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      'Maklumat Pengguna',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Rubik',
-                        fontSize: MediaQuery.of(context).size.width * 0.05,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    buildInfoRow(context, 'Nama', username),
-                    buildInfoRow(context, 'Email', email),
-                    buildInfoRow(context, 'Umur', age),
-                    buildInfoRow(context, 'Skor', score.toString()),
-                  ],
-                ),
               ),
               SizedBox(height: 30),
               GestureDetector(
@@ -446,7 +419,7 @@ class _ProfileViewState extends State<ProfileView> {
       VoidCallback onPressed) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.25,
-      height: MediaQuery.of(context).size.height * 0.15,
+      height: MediaQuery.of(context).size.height * 0.1,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(15)),
         color: AppColors.backgroundColor,
@@ -459,7 +432,7 @@ class _ProfileViewState extends State<ProfileView> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Rubik',
-              fontSize: MediaQuery.of(context).size.width * 0.045,
+              fontSize: MediaQuery.of(context).size.width * 0.035,
               fontWeight: FontWeight.bold,
               color: AppColors.primaryColor,
             ),
@@ -467,7 +440,7 @@ class _ProfileViewState extends State<ProfileView> {
           IconButton(
             icon: Icon(icon),
             color: AppColors.secondaryColor,
-            iconSize: MediaQuery.of(context).size.width * 0.1,
+            iconSize: MediaQuery.of(context).size.width * 0.075,
             onPressed: onPressed,
           ),
         ],
@@ -484,14 +457,14 @@ class _ProfileViewState extends State<ProfileView> {
           style: TextStyle(
             fontFamily: 'Rubik',
             fontSize: MediaQuery.of(context).size.width * 0.045,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         Text(
           value,
           style: TextStyle(
             fontFamily: 'Rubik',
-            fontSize: MediaQuery.of(context).size.width * 0.04,
+            fontSize: MediaQuery.of(context).size.width * 0.043,
             fontWeight: FontWeight.w300,
             color: Colors.grey,
           ),

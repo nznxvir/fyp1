@@ -22,7 +22,7 @@ class RankTile extends StatelessWidget {
       case 1:
         return Color.fromARGB(255, 233, 195, 71);
       case 2:
-        return Color.fromARGB(255, 219, 212, 212);
+        return Color.fromARGB(255, 113, 113, 113);
       case 3:
         return Color.fromARGB(255, 227, 132, 36);
       default:
@@ -36,15 +36,24 @@ class RankTile extends StatelessWidget {
 
     return Container(
       width: 150,
-      height: 120,
+      height: 115,
       padding: EdgeInsets.all(8.0),
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10.0),
+      margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(30)),
         border: Border(
-            bottom: BorderSide(width: 10, color: AppColors.secondaryColor),
-            left: BorderSide(width: 6, color: AppColors.secondaryColor)),
-        color: bgColor,
+            bottom: BorderSide(
+                width: 5, color: AppColors.secondaryColor.withOpacity(0.2)),
+            left: BorderSide(
+                width: 3, color: AppColors.secondaryColor.withOpacity(0.2))),
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            bgColor,
+            bgColor.withOpacity(0.6),
+          ],
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.8),
@@ -57,7 +66,7 @@ class RankTile extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Rank ${rank == userRank ? userRank : rank}',
+            'Posisi ${rank == userRank ? userRank : rank}',
             style: TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.bold,
@@ -81,7 +90,7 @@ class RankTile extends StatelessWidget {
                   SizedBox(width: 15),
                   Text(username,
                       style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 23,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Rubik',
                           color: AppColors.primaryColor))

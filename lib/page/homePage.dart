@@ -155,6 +155,8 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     num currrank = rank;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeigh = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
           backgroundColor: AppColors.backgroundColor,
@@ -173,186 +175,187 @@ class _HomeViewState extends State<HomeView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Stack(children: [
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 20),
-                          decoration: const BoxDecoration(
-                              color: AppColors.primaryColor,
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15))),
+                      Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30),
+                          ),
+                          color: AppColors.primaryColor,
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(
+                              screenWidth * 0.04,
+                              screenHeigh * 0.025,
+                              screenWidth * 0.04,
+                              screenHeigh * 0.03),
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topRight,
+                                end: Alignment.bottomLeft,
+                                colors: [
+                                  Colors.white.withOpacity(0.9),
+                                  Colors.white.withOpacity(0.15),
+                                ],
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
                           alignment: Alignment.topCenter,
                           width: double.infinity,
-                          height: 240,
+                          height: screenHeigh * 0.275,
                           child: Column(
                             children: [
-                              const SizedBox(
-                                height: 15,
+                              SizedBox(
+                                height: screenHeigh * 0.02,
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 30,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flexible(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Selamat Datang ',
-                                            style: TextStyle(
+                                  padding: EdgeInsets.only(
+                                      left: screenWidth * 0.05,
+                                      right: screenWidth * 0.05),
+                                  child: Column(children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Selamat Datang ',
+                                              style: TextStyle(
+                                                color: AppColors.thirdColor,
+                                                fontSize: screenWidth * 0.04,
+                                                fontWeight: FontWeight.w900,
+                                                fontFamily: 'Rubik',
+                                              ),
+                                            ),
+                                            Text(
+                                              username,
+                                              style: TextStyle(
+                                                color: AppColors.thirdColor,
+                                                fontSize: screenWidth * 0.1,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Rubik',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.25,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.25,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              width: 4,
                                               color: AppColors.thirdColor,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.04,
-                                              fontWeight: FontWeight.w900,
-                                              fontFamily: 'Rubik',
+                                            ),
+                                            color: AppColors.secondaryColor,
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(image),
                                             ),
                                           ),
-                                          Text(
-                                            username,
-                                            style: TextStyle(
-                                              color: AppColors.thirdColor,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.109,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'Rubik',
-                                            ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: screenHeigh * 0.02,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          left: screenWidth * 0.13,
+                                          right: screenWidth * 0.13),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: AppColors.thirdColor
+                                              .withOpacity(0.7)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            children: <Widget>[
+                                              Text(
+                                                'Kedudukan',
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color:
+                                                        AppColors.primaryColor,
+                                                    fontSize:
+                                                        screenWidth * 0.036,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                currrank.toString(),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color:
+                                                        AppColors.primaryColor,
+                                                    fontFamily: 'Rubik',
+                                                    fontSize:
+                                                        screenWidth * 0.09,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: <Widget>[
+                                              Text(
+                                                'Markah',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color:
+                                                        AppColors.primaryColor,
+                                                    fontSize:
+                                                        screenWidth * 0.036,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    score.toString(),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                        fontFamily: 'Rubik',
+                                                        fontSize:
+                                                            screenWidth * 0.09,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.25,
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.25,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          width: 4,
-                                          color: AppColors.thirdColor,
-                                        ),
-                                        color: AppColors.secondaryColor,
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(image),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                  ])),
                             ],
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(
-                              bottom: 20, right: 20, left: 20, top: 140),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 10, color: AppColors.secondaryColor),
-                            color: AppColors.backgroundColor,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(0, 3),
-                              )
-                            ],
-                          ),
-                          alignment: Alignment.bottomCenter,
-                          height: 150,
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                alignment: Alignment.topCenter,
-                                color: AppColors.backgroundColor,
-                                width: 135,
-                                height: 150,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    const Text(
-                                      'Ranking',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      currrank.toString(),
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontFamily: 'Rubik',
-                                          fontSize: 60,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.topCenter,
-                                width: 135,
-                                height: 150,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    const Text(
-                                      'Markah',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          score.toString(),
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              fontFamily: 'Rubik',
-                                              fontSize: 50,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const Text(
-                                          'pts',
-                                          style: TextStyle(
-                                              fontFamily: 'Rubik',
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]),
+                      ),
                       const SizedBox(
                         height: 20,
                       ),

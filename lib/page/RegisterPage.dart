@@ -62,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       await authService.createUser(data, context, () {
         Future.delayed(const Duration(seconds: 3), () {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 500),
@@ -270,7 +270,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           Icons.password,
                           color: AppColors.secondaryColor,
                         ),
-                        hintText: 'Kata laluan',
+                        hintText: 'Sahkan Kata laluan',
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             width: 4,
